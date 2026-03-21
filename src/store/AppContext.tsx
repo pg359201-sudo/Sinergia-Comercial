@@ -1,0 +1,171 @@
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { User, Client, Mission, Alert, TacticalSale, Activation } from '../types';
+
+interface AppState {
+  currentUser: User | null;
+  users: User[];
+  clients: Client[];
+  missions: Mission[];
+  alerts: Alert[];
+  sales: TacticalSale[];
+  activations: Activation[];
+  login: (userId: string) => void;
+  logout: () => void;
+  addMission: (mission: Omit<Mission, 'id' | 'createdAt' | 'status'>) => void;
+  updateMissionStatus: (id: string, status: Mission['status'], evidenceUrl?: string, notes?: string) => void;
+  addAlert: (alert: Omit<Alert, 'id' | 'createdAt' | 'status'>) => void;
+  updateAlertStatus: (id: string, status: Alert['status']) => void;
+  addSale: (sale: Omit<TacticalSale, 'id' | 'createdAt'>) => void;
+  addActivation: (activation: Omit<Activation, 'id' | 'createdAt'>) => void;
+}
+
+const mockUsers: User[] = [
+  { id: 'u1', name: 'Carlos (Escritorio)', role: 'escritorio', avatar: 'https://i.pravatar.cc/150?u=u1' },
+  { id: 'u2', name: 'Ana (Terreno)', role: 'terreno', avatar: 'https://i.pravatar.cc/150?u=u2' },
+];
+
+const mockClients: Client[] = [
+  { id: 'c1', name: 'Supermercado El Sol', address: 'Av. Principal 123', route: 'Ruta Norte', visitDay: 'Lunes', channel: 'Supermercado', gec: 'GEC-001' },
+  { id: 'c2', name: 'Licorería La Esquina', address: 'Calle 4 #45', route: 'Ruta Sur', visitDay: 'Martes', channel: 'Licorería', gec: 'GEC-002' },
+  { id: 'c3', name: 'Minimarket Express', address: 'Av. Libertad 987', route: 'Ruta Centro', visitDay: 'Miércoles', channel: 'Minimarket', gec: 'GEC-003' },
+];
+
+const mockMissions: Mission[] = [
+  {
+    id: 'm1',
+    title: 'Ganar cabecera central',
+    description: 'Cerramos el ingreso de la línea de ginebras (Tanqueray, Gordon\'s); necesitamos ganar la cabecera central y armar la exhibición.',
+    clientId: 'c1',
+    assignedTo: 'u2',
+    createdBy: 'u1',
+    status: 'pending',
+    createdAt: new Date(Date.now() - 86400000).toISOString(),
+  },
+];
+
+const mockAlerts: Alert[] = [
+  {
+    id: 'a1',
+    type: 'competitor_action',
+    description: 'Oportunidad urgente: competencia sin stock en góndola principal, llamalo ahora para ofrecer volumen y tomar el espacio.',
+    clientId: 'c2',
+    createdBy: 'u2',
+    status: 'new',
+    createdAt: new Date(Date.now() - 3600000).toISOString(),
+  }
+];
+
+const mockSales: TacticalSale[] = [
+  {
+    id: 's1',
+    clientId: 'c1',
+    createdBy: 'u2',
+    product: 'Whisky White Horse 750ml',
+    quantity: 12,
+    amount: 150000,
+    createdAt: new Date(Date.now() - 7200000).toISOString(),
+  }
+];
+
+const mockActivations: Activation[] = [
+  {
+    id: 'act1',
+    title: 'Exhibición Powerade',
+    description: 'Armado de isla central con material POP de la nueva campaña.',
+    clientId: 'c1',
+    createdBy: 'u2',
+    createdAt: new Date(Date.now() - 14400000).toISOString(),
+    evidenceUrl: 'https://picsum.photos/seed/powerade/800/600',
+  }
+];
+
+const AppContext = createContext<AppState | undefined>(undefined);
+
+export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState<User | null>(mockUsers[0]);
+  const [users] = useState<User[]>(mockUsers);
+  const [clients] = useState<Client[]>(mockClients);
+  const [missions, setMissions] = useState<Mission[]>(mockMissions);
+  const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
+  const [sales, setSales] = useState<TacticalSale[]>(mockSales);
+  const [activations, setActivations] = useState<Activation[]>(mockActivations);
+
+  const login = (userId: string) => {
+    const user = users.find(u => u.id === userId);
+    if (user) setCurrentUser(user);
+  };
+
+  const logout = () => setCurrentUser(null);
+
+  const addMission = (mission: Omit<Mission, 'id' | 'createdAt' | 'status'>) => {
+    const newMission: Mission = {
+      ...mission,
+      id: `m${Date.now()}`,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    };
+    setMissions(prev => [newMission, ...prev]);
+  };
+
+  const updateMissionStatus = (id: string, status: Mission['status'], evidenceUrl?: string, notes?: string) => {
+    setMissions(prev => prev.map(m => {
+      if (m.id === id) {
+        return {
+          ...m,
+          status,
+          completedAt: status === 'completed' ? new Date().toISOString() : m.completedAt,
+          evidenceUrl: evidenceUrl || m.evidenceUrl,
+          notes: notes || m.notes,
+        };
+      }
+      return m;
+    }));
+  };
+
+  const addAlert = (alert: Omit<Alert, 'id' | 'createdAt' | 'status'>) => {
+    const newAlert: Alert = {
+      ...alert,
+      id: `a${Date.now()}`,
+      status: 'new',
+      createdAt: new Date().toISOString(),
+    };
+    setAlerts(prev => [newAlert, ...prev]);
+  };
+
+  const updateAlertStatus = (id: string, status: Alert['status']) => {
+    setAlerts(prev => prev.map(a => a.id === id ? { ...a, status } : a));
+  };
+
+  const addSale = (sale: Omit<TacticalSale, 'id' | 'createdAt'>) => {
+    const newSale: TacticalSale = {
+      ...sale,
+      id: `s${Date.now()}`,
+      createdAt: new Date().toISOString(),
+    };
+    setSales(prev => [newSale, ...prev]);
+  };
+
+  const addActivation = (activation: Omit<Activation, 'id' | 'createdAt'>) => {
+    const newActivation: Activation = {
+      ...activation,
+      id: `act${Date.now()}`,
+      createdAt: new Date().toISOString(),
+    };
+    setActivations(prev => [newActivation, ...prev]);
+  };
+
+  return (
+    <AppContext.Provider value={{
+      currentUser, users, clients, missions, alerts, sales, activations,
+      login, logout, addMission, updateMissionStatus, addAlert, updateAlertStatus, addSale, addActivation
+    }}>
+      {children}
+    </AppContext.Provider>
+  );
+};
+
+export const useAppStore = () => {
+  const context = useContext(AppContext);
+  if (!context) throw new Error('useAppStore must be used within an AppProvider');
+  return context;
+};

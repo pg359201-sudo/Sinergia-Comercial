@@ -1,0 +1,5 @@
+{
+  "name": "Sinergia Comercial",
+  "description": "App de Sinergia Comercial Bidireccional para perfiles de Escritorio y Terreno.",
+  "requestFramePermissions": ["camera", "geolocation"]
+}

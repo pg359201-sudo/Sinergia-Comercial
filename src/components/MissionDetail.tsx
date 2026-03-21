@@ -1,0 +1,165 @@
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useAppStore } from '../store/AppContext';
+import { Card, Badge, Button, Label, Input } from './ui';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { MapPin, Calendar, CheckCircle2, UploadCloud, ArrowLeft } from 'lucide-react';
+
+export const MissionDetail = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { currentUser, missions, clients, updateMissionStatus } = useAppStore();
+  
+  const mission = missions.find(m => m.id === id);
+  const client = clients.find(c => c?.id === mission?.clientId);
+  
+  const [evidenceUrl, setEvidenceUrl] = useState(mission?.evidenceUrl || '');
+  const [notes, setNotes] = useState(mission?.notes || '');
+  const [isUploading, setIsUploading] = useState(false);
+
+  if (!mission || !client) {
+    return <div>Misión no encontrada</div>;
+  }
+
+  const isEscritorio = currentUser?.role === 'escritorio';
+  const isTerreno = currentUser?.role === 'terreno';
+
+  const handleComplete = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!evidenceUrl) {
+      alert('Debes subir evidencia fotográfica.');
+      return;
+    }
+    updateMissionStatus(mission.id, 'completed', evidenceUrl, notes);
+    navigate('/missions');
+  };
+
+  const handleUpload = () => {
+    setIsUploading(true);
+    // Simulate upload to BLOB storage
+    setTimeout(() => {
+      setEvidenceUrl('https://picsum.photos/seed/exhibicion/800/600');
+      setIsUploading(false);
+    }, 1500);
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto space-y-8">
+      <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors">
+        <ArrowLeft className="w-4 h-4" />
+        Volver
+      </button>
+
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">{mission.title}</h1>
+          <p className="mt-2 text-slate-600">Detalle de la misión y ejecución.</p>
+        </div>
+        <Badge variant={mission.status === 'completed' ? 'success' : mission.status === 'in-progress' ? 'warning' : 'info'} className="text-sm px-3 py-1">
+          {mission.status === 'completed' ? 'Completada' : mission.status === 'in-progress' ? 'En Progreso' : 'Pendiente'}
+        </Badge>
+      </div>
+
+      <Card className="p-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <Label className="text-slate-500 mb-1 block">Cliente</Label>
+            <div className="flex items-center gap-2 text-slate-900 font-medium">
+              <MapPin className="w-4 h-4 text-slate-400" />
+              {client.name}
+            </div>
+            <p className="text-sm text-slate-500 mt-1 ml-6">{client.address}</p>
+          </div>
+          <div>
+            <Label className="text-slate-500 mb-1 block">Fecha de Creación</Label>
+            <div className="flex items-center gap-2 text-slate-900 font-medium">
+              <Calendar className="w-4 h-4 text-slate-400" />
+              {format(new Date(mission.createdAt), 'dd MMMM yyyy', { locale: es })}
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <Label className="text-slate-500 mb-2 block">Descripción de la Misión (Directiva)</Label>
+          <div className="bg-slate-50 p-4 rounded-xl text-slate-700 border border-slate-100">
+            {mission.description}
+          </div>
+        </div>
+      </Card>
+
+      {mission.status === 'completed' && (
+        <Card className="p-6 border-emerald-100 bg-emerald-50/30">
+          <div className="flex items-center gap-2 mb-6">
+            <CheckCircle2 className="w-6 h-6 text-emerald-600" />
+            <h2 className="text-xl font-bold text-slate-900">Ejecución Completada</h2>
+            <span className="text-sm text-slate-500 ml-auto">
+              {mission.completedAt && format(new Date(mission.completedAt), 'dd MMM yyyy HH:mm', { locale: es })}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <Label className="text-slate-500 mb-2 block">Evidencia Fotográfica</Label>
+              {mission.evidenceUrl ? (
+                <img src={mission.evidenceUrl} alt="Evidencia" className="rounded-xl w-full object-cover aspect-video border border-slate-200" referrerPolicy="no-referrer" />
+              ) : (
+                <div className="bg-slate-100 rounded-xl w-full aspect-video flex items-center justify-center text-slate-400">
+                  Sin evidencia
+                </div>
+              )}
+            </div>
+            <div>
+              <Label className="text-slate-500 mb-2 block">Notas del Ejecutor</Label>
+              <div className="bg-white p-4 rounded-xl text-slate-700 border border-slate-200 min-h-[100px]">
+                {mission.notes || 'Sin notas adicionales.'}
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {isTerreno && mission.status !== 'completed' && (
+        <Card className="p-6 border-indigo-100">
+          <h2 className="text-xl font-bold text-slate-900 mb-6">Reportar Ejecución</h2>
+          <form onSubmit={handleComplete} className="space-y-6">
+            <div>
+              <Label className="mb-2 block">Evidencia Fotográfica *</Label>
+              {evidenceUrl ? (
+                <div className="relative">
+                  <img src={evidenceUrl} alt="Evidencia" className="rounded-xl w-full object-cover aspect-video border border-slate-200" referrerPolicy="no-referrer" />
+                  <Button type="button" variant="secondary" className="absolute top-2 right-2 text-xs" onClick={() => setEvidenceUrl('')}>
+                    Cambiar Foto
+                  </Button>
+                </div>
+              ) : (
+                <div className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:bg-slate-50 transition-colors">
+                  <UploadCloud className="w-10 h-10 text-slate-400 mx-auto mb-3" />
+                  <p className="text-sm text-slate-600 mb-4">Sube una foto de la exhibición o material POP colocado.</p>
+                  <Button type="button" variant="outline" onClick={handleUpload} disabled={isUploading}>
+                    {isUploading ? 'Subiendo al BLOB Storage...' : 'Tomar Foto / Subir'}
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="notes" className="mb-2 block">Notas Adicionales</Label>
+              <textarea
+                id="notes"
+                className="flex w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent min-h-[100px]"
+                placeholder="Detalles sobre la ejecución, problemas encontrados, etc."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+              />
+            </div>
+
+            <Button type="submit" className="w-full" disabled={!evidenceUrl}>
+              Completar Misión y Enviar Retroalimentación
+            </Button>
+          </form>
+        </Card>
+      )}
+    </div>
+  );
+};
