@@ -1,24 +1,93 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useAppStore } from '../store/AppContext';
 import { Card, Badge, Button } from './ui';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { ClipboardList, BellRing, TrendingUp, CheckCircle2 } from 'lucide-react';
+import { ClipboardList, BellRing, TrendingUp, CheckCircle2, Upload } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import * as XLSX from 'xlsx';
+import { Client } from '../types';
 
 export const DashboardEscritorio = () => {
-  const { missions, alerts, sales } = useAppStore();
+  const { missions, alerts, sales, addClients } = useAppStore();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const pendingMissions = missions.filter(m => m.status !== 'completed').length;
   const completedMissions = missions.filter(m => m.status === 'completed').length;
   const newAlerts = alerts.filter(a => a.status === 'new').length;
   const totalSales = sales.reduce((acc, sale) => acc + sale.amount, 0);
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      try {
+        const bstr = evt.target?.result;
+        const wb = XLSX.read(bstr, { type: 'binary' });
+        const wsname = wb.SheetNames[0];
+        const ws = wb.Sheets[wsname];
+        const data = XLSX.utils.sheet_to_json(ws, { header: 1 }) as any[][];
+        
+        // Fila 2 (índice 1) y Columna C (índice 2)
+        if (data.length > 1 && data[1][2] === 'RazonSocial') {
+          const newClients: Client[] = [];
+          for (let i = 2; i < data.length; i++) {
+            const razonSocial = data[i][2];
+            if (razonSocial && typeof razonSocial === 'string') {
+              newClients.push({
+                id: `c${Date.now()}-${i}`,
+                name: razonSocial.trim(),
+                address: 'Sin dirección',
+                route: 'Sin ruta',
+                visitDay: 'Lunes',
+                channel: 'Sin canal',
+                gec: 'Sin GEC'
+              });
+            }
+          }
+          if (newClients.length > 0) {
+            addClients(newClients);
+            alert(`Se cargaron ${newClients.length} clientes exitosamente.`);
+          } else {
+            alert('No se encontraron clientes en la columna RazonSocial.');
+          }
+        } else {
+          alert('El formato del archivo no es correcto. Asegúrate de que "RazonSocial" esté en la columna C, fila 2.');
+        }
+      } catch (error) {
+        console.error("Error al procesar el archivo:", error);
+        alert('Hubo un error al procesar el archivo Excel.');
+      }
+      // Reset input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    };
+    reader.readAsBinaryString(file);
+  };
+
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">Visión Estratégica</h1>
-        <p className="mt-2 text-slate-600">Monitorea la ejecución y capitaliza las oportunidades del terreno.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Visión Estratégica</h1>
+          <p className="mt-2 text-slate-600">Monitorea la ejecución y capitaliza las oportunidades del terreno.</p>
+        </div>
+        <div>
+          <input 
+            type="file" 
+            accept=".xlsx, .xls, .csv" 
+            className="hidden" 
+            ref={fileInputRef}
+            onChange={handleFileUpload}
+          />
+          <Button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-2">
+            <Upload className="w-4 h-4" />
+            Cargar Clientes (Excel)
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

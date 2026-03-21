@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { User, Client, Mission, Alert, TacticalSale, Activation } from '../types';
 
 interface AppState {
@@ -17,6 +17,7 @@ interface AppState {
   updateAlertStatus: (id: string, status: Alert['status']) => void;
   addSale: (sale: Omit<TacticalSale, 'id' | 'createdAt'>) => void;
   addActivation: (activation: Omit<Activation, 'id' | 'createdAt'>) => void;
+  addClients: (newClients: Client[]) => void;
 }
 
 const mockUsers: User[] = [
@@ -84,11 +85,48 @@ const AppContext = createContext<AppState | undefined>(undefined);
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(mockUsers[0]);
   const [users] = useState<User[]>(mockUsers);
-  const [clients] = useState<Client[]>(mockClients);
+  const [clients, setClients] = useState<Client[]>(mockClients);
   const [missions, setMissions] = useState<Mission[]>(mockMissions);
   const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
   const [sales, setSales] = useState<TacticalSale[]>(mockSales);
   const [activations, setActivations] = useState<Activation[]>(mockActivations);
+  const [dbConfigured, setDbConfigured] = useState(true);
+
+  // Inicializar DB y cargar clientes
+  useEffect(() => {
+    const initDb = async () => {
+      try {
+        const healthRes = await fetch('/api/health');
+        const healthData = await healthRes.json();
+        
+        if (healthData.postgresConfigured) {
+          // Crear tablas si no existen
+          await fetch('/api/init-db', { method: 'POST' });
+          
+          // Cargar clientes
+          const clientsRes = await fetch('/api/clients');
+          const clientsData = await clientsRes.json();
+          if (Array.isArray(clientsData) && clientsData.length > 0) {
+            const mappedClients = clientsData.map((c: any) => ({
+              id: c.id,
+              name: c.name,
+              address: c.address,
+              route: c.route,
+              visitDay: c.visit_day,
+              channel: c.channel,
+              gec: c.gec
+            }));
+            setClients(mappedClients);
+          }
+        } else {
+          setDbConfigured(false);
+        }
+      } catch (error) {
+        console.error("Error conectando con el servidor:", error);
+      }
+    };
+    initDb();
+  }, []);
 
   const login = (userId: string) => {
     const user = users.find(u => u.id === userId);
@@ -154,10 +192,32 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setActivations(prev => [newActivation, ...prev]);
   };
 
+  const addClients = async (newClients: Client[]) => {
+    // Optimistic UI update
+    setClients(prev => [...prev, ...newClients]);
+
+    // Guardar en Postgres
+    try {
+      const res = await fetch('/api/clients/bulk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clients: newClients })
+      });
+      
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error("Error guardando clientes en DB:", errorData);
+        alert(`Error al guardar en Postgres: ${errorData.error}`);
+      }
+    } catch (error) {
+      console.error("Error de red al guardar clientes:", error);
+    }
+  };
+
   return (
     <AppContext.Provider value={{
       currentUser, users, clients, missions, alerts, sales, activations,
-      login, logout, addMission, updateMissionStatus, addAlert, updateAlertStatus, addSale, addActivation
+      login, logout, addMission, updateMissionStatus, addAlert, updateAlertStatus, addSale, addActivation, addClients
     }}>
       {children}
     </AppContext.Provider>
