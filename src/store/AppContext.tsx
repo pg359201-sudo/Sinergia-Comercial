@@ -92,7 +92,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [activations, setActivations] = useState<Activation[]>(mockActivations);
   const [dbConfigured, setDbConfigured] = useState(true);
 
-  // Inicializar DB y cargar clientes
+  // Inicializar DB y cargar datos
   useEffect(() => {
     const initDb = async () => {
       try {
@@ -108,15 +108,38 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
           const clientsData = await clientsRes.json();
           if (Array.isArray(clientsData) && clientsData.length > 0) {
             const mappedClients = clientsData.map((c: any) => ({
-              id: c.id,
-              name: c.name,
-              address: c.address,
-              route: c.route,
-              visitDay: c.visit_day,
-              channel: c.channel,
-              gec: c.gec
+              id: c.id, name: c.name, address: c.address, route: c.route,
+              visitDay: c.visit_day, channel: c.channel, gec: c.gec
             }));
             setClients(mappedClients);
+          }
+
+          // Cargar misiones
+          const missionsRes = await fetch('/api/missions');
+          const missionsData = await missionsRes.json();
+          if (Array.isArray(missionsData)) {
+            setMissions(missionsData);
+          }
+
+          // Cargar alertas
+          const alertsRes = await fetch('/api/alerts');
+          const alertsData = await alertsRes.json();
+          if (Array.isArray(alertsData)) {
+            setAlerts(alertsData);
+          }
+
+          // Cargar ventas
+          const salesRes = await fetch('/api/sales');
+          const salesData = await salesRes.json();
+          if (Array.isArray(salesData)) {
+            setSales(salesData);
+          }
+
+          // Cargar activaciones
+          const activationsRes = await fetch('/api/activations');
+          const activationsData = await activationsRes.json();
+          if (Array.isArray(activationsData)) {
+            setActivations(activationsData);
           }
         } else {
           setDbConfigured(false);
@@ -135,7 +158,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   const logout = () => setCurrentUser(null);
 
-  const addMission = (mission: Omit<Mission, 'id' | 'createdAt' | 'status'>) => {
+  const addMission = async (mission: Omit<Mission, 'id' | 'createdAt' | 'status'>) => {
     const newMission: Mission = {
       ...mission,
       id: `m${Date.now()}`,
@@ -143,24 +166,51 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       createdAt: new Date().toISOString(),
     };
     setMissions(prev => [newMission, ...prev]);
+    try {
+      await fetch('/api/missions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newMission)
+      });
+    } catch (error) { console.error("Error saving mission:", error); }
   };
 
-  const updateMissionStatus = (id: string, status: Mission['status'], evidenceUrl?: string, notes?: string) => {
+  const updateMissionStatus = async (id: string, status: Mission['status'], evidenceUrl?: string, notes?: string) => {
+    const completedAt = status === 'completed' ? new Date().toISOString() : undefined;
+    
+    let updatedMission: Mission | null = null;
+    
     setMissions(prev => prev.map(m => {
       if (m.id === id) {
-        return {
+        updatedMission = {
           ...m,
           status,
-          completedAt: status === 'completed' ? new Date().toISOString() : m.completedAt,
+          completedAt: completedAt || m.completedAt,
           evidenceUrl: evidenceUrl || m.evidenceUrl,
           notes: notes || m.notes,
         };
+        return updatedMission;
       }
       return m;
     }));
+
+    if (updatedMission) {
+      try {
+        await fetch(`/api/missions/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            status: (updatedMission as Mission).status, 
+            evidenceUrl: (updatedMission as Mission).evidenceUrl, 
+            notes: (updatedMission as Mission).notes, 
+            completedAt: (updatedMission as Mission).completedAt 
+          })
+        });
+      } catch (error) { console.error("Error updating mission:", error); }
+    }
   };
 
-  const addAlert = (alert: Omit<Alert, 'id' | 'createdAt' | 'status'>) => {
+  const addAlert = async (alert: Omit<Alert, 'id' | 'createdAt' | 'status'>) => {
     const newAlert: Alert = {
       ...alert,
       id: `a${Date.now()}`,
@@ -168,28 +218,56 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       createdAt: new Date().toISOString(),
     };
     setAlerts(prev => [newAlert, ...prev]);
+    try {
+      await fetch('/api/alerts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newAlert)
+      });
+    } catch (error) { console.error("Error saving alert:", error); }
   };
 
-  const updateAlertStatus = (id: string, status: Alert['status']) => {
+  const updateAlertStatus = async (id: string, status: Alert['status']) => {
     setAlerts(prev => prev.map(a => a.id === id ? { ...a, status } : a));
+    try {
+      await fetch(`/api/alerts/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+    } catch (error) { console.error("Error updating alert:", error); }
   };
 
-  const addSale = (sale: Omit<TacticalSale, 'id' | 'createdAt'>) => {
+  const addSale = async (sale: Omit<TacticalSale, 'id' | 'createdAt'>) => {
     const newSale: TacticalSale = {
       ...sale,
       id: `s${Date.now()}`,
       createdAt: new Date().toISOString(),
     };
     setSales(prev => [newSale, ...prev]);
+    try {
+      await fetch('/api/sales', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newSale)
+      });
+    } catch (error) { console.error("Error saving sale:", error); }
   };
 
-  const addActivation = (activation: Omit<Activation, 'id' | 'createdAt'>) => {
+  const addActivation = async (activation: Omit<Activation, 'id' | 'createdAt'>) => {
     const newActivation: Activation = {
       ...activation,
       id: `act${Date.now()}`,
       createdAt: new Date().toISOString(),
     };
     setActivations(prev => [newActivation, ...prev]);
+    try {
+      await fetch('/api/activations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newActivation)
+      });
+    } catch (error) { console.error("Error saving activation:", error); }
   };
 
   const addClients = async (newClients: Client[]) => {
@@ -214,20 +292,48 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   };
 
-  const deleteMissions = (ids: string[]) => {
+  const deleteMissions = async (ids: string[]) => {
     setMissions(prev => prev.filter(m => !ids.includes(m.id)));
+    try {
+      await fetch('/api/missions', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids })
+      });
+    } catch (error) { console.error("Error deleting missions:", error); }
   };
 
-  const deleteAlerts = (ids: string[]) => {
+  const deleteAlerts = async (ids: string[]) => {
     setAlerts(prev => prev.filter(a => !ids.includes(a.id)));
+    try {
+      await fetch('/api/alerts', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids })
+      });
+    } catch (error) { console.error("Error deleting alerts:", error); }
   };
 
-  const deleteSales = (ids: string[]) => {
+  const deleteSales = async (ids: string[]) => {
     setSales(prev => prev.filter(s => !ids.includes(s.id)));
+    try {
+      await fetch('/api/sales', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids })
+      });
+    } catch (error) { console.error("Error deleting sales:", error); }
   };
 
-  const deleteActivations = (ids: string[]) => {
+  const deleteActivations = async (ids: string[]) => {
     setActivations(prev => prev.filter(a => !ids.includes(a.id)));
+    try {
+      await fetch('/api/activations', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids })
+      });
+    } catch (error) { console.error("Error deleting activations:", error); }
   };
 
   return (
