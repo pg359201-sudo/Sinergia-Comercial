@@ -5,6 +5,7 @@ import { Card, Badge, Button, Label, Input } from './ui';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { MapPin, Calendar, CheckCircle2, UploadCloud, ArrowLeft } from 'lucide-react';
+import { compressAndUploadImage } from '../utils/imageUpload';
 
 export const MissionDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -36,22 +37,20 @@ export const MissionDetail = () => {
     navigate('/missions');
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setIsUploading(true);
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      const base64 = evt.target?.result as string;
-      setEvidenceUrl(base64);
+    try {
+      const url = await compressAndUploadImage(file);
+      setEvidenceUrl(url);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Error al procesar y subir la imagen.');
+    } finally {
       setIsUploading(false);
-    };
-    reader.onerror = () => {
-      setIsUploading(false);
-      alert('Error al procesar la imagen.');
-    };
-    reader.readAsDataURL(file);
+    }
   };
 
   return (

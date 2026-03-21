@@ -301,6 +301,40 @@ async function startServer() {
     } catch (error) { res.status(500).json({ error: "Error eliminando activaciones" }); }
   });
 
+  // --- UPLOAD (Vercel Blob) ---
+  app.post("/api/upload", async (req, res) => {
+    try {
+      const { base64Image, filename } = req.body;
+      if (!base64Image) return res.status(400).json({ error: "No image provided" });
+
+      // Si no está configurado Vercel Blob, devolvemos el base64 comprimido
+      if (!process.env.BLOB_READ_WRITE_TOKEN) {
+        return res.json({ url: base64Image });
+      }
+
+      // Importar dinámicamente para no romper si no está instalado
+      const { put } = await import('@vercel/blob');
+
+      // Convertir base64 a buffer
+      const matches = base64Image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+      if (!matches || matches.length !== 3) {
+        return res.status(400).json({ error: "Invalid base64 string" });
+      }
+      const contentType = matches[1];
+      const buffer = Buffer.from(matches[2], 'base64');
+
+      const blob = await put(filename || `upload-${Date.now()}`, buffer, {
+        access: 'public',
+        contentType: contentType,
+      });
+
+      res.json({ url: blob.url });
+    } catch (error) {
+      console.error("Error uploading to blob:", error);
+      res.status(500).json({ error: "Error uploading file" });
+    }
+  });
+
   // --- INTEGRACIÓN CON VITE (Frontend) ---
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

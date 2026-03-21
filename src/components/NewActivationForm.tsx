@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/AppContext';
 import { Card, Button, Label, Input } from './ui';
 import { ArrowLeft, Camera, Upload, CheckCircle2 } from 'lucide-react';
+import { compressAndUploadImage } from '../utils/imageUpload';
 
 export const NewActivationForm = () => {
   const navigate = useNavigate();
@@ -15,22 +16,20 @@ export const NewActivationForm = () => {
   const [evidenceUrl, setEvidenceUrl] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setIsUploading(true);
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      const base64 = evt.target?.result as string;
-      setEvidenceUrl(base64);
+    try {
+      const url = await compressAndUploadImage(file);
+      setEvidenceUrl(url);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Error al procesar y subir la imagen.');
+    } finally {
       setIsUploading(false);
-    };
-    reader.onerror = () => {
-      setIsUploading(false);
-      alert('Error al procesar la imagen.');
-    };
-    reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
