@@ -30,35 +30,50 @@ export const DashboardEscritorio = () => {
         const ws = wb.Sheets[wsname];
         const data = XLSX.utils.sheet_to_json(ws, { header: 1 }) as any[][];
         
-        // Fila 2 (índice 1) y Columna C (índice 2)
-        const headerValue = data.length > 1 && data[1][2] ? String(data[1][2]) : '';
-        // Normalizamos el texto: quitamos tildes, espacios y pasamos a minúsculas
-        const normalizedHeader = headerValue.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '');
-
-        if (normalizedHeader === 'razonsocial') {
-          const newClients: Client[] = [];
-          for (let i = 2; i < data.length; i++) {
-            const razonSocial = data[i][2];
-            if (razonSocial && typeof razonSocial === 'string' && razonSocial.trim() !== '') {
-              newClients.push({
-                id: `c${Date.now()}-${i}`,
-                name: razonSocial.trim(),
-                address: 'Sin dirección',
-                route: 'Sin ruta',
-                visitDay: 'Lunes',
-                channel: 'Sin canal',
-                gec: 'Sin GEC'
-              });
+        if (data.length > 1) {
+          const row2 = data[1]; // Fila 2 (índice 1)
+          let razonSocialColIndex = -1;
+          
+          // Buscar dinámicamente en qué columna está "RazonSocial"
+          for (let c = 0; c < row2.length; c++) {
+            const cellValue = row2[c] ? String(row2[c]) : '';
+            const normalized = cellValue.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '');
+            if (normalized === 'razonsocial') {
+              razonSocialColIndex = c;
+              break;
             }
           }
-          if (newClients.length > 0) {
-            addClients(newClients);
-            alert(`Se cargaron ${newClients.length} clientes exitosamente.`);
+
+          if (razonSocialColIndex !== -1) {
+            const newClients: Client[] = [];
+            // Empezar desde la fila 3 (índice 2)
+            for (let i = 2; i < data.length; i++) {
+              const razonSocial = data[i][razonSocialColIndex];
+              if (razonSocial && typeof razonSocial === 'string' && razonSocial.trim() !== '') {
+                newClients.push({
+                  id: `c${Date.now()}-${i}`,
+                  name: razonSocial.trim(),
+                  address: 'Sin dirección',
+                  route: 'Sin ruta',
+                  visitDay: 'Lunes',
+                  channel: 'Sin canal',
+                  gec: 'Sin GEC'
+                });
+              }
+            }
+            if (newClients.length > 0) {
+              addClients(newClients);
+              alert(`Se cargaron ${newClients.length} clientes exitosamente.`);
+            } else {
+              alert('No se encontraron clientes debajo del título "RazonSocial".');
+            }
           } else {
-            alert('No se encontraron clientes debajo del título "Razón Social".');
+            // Mostrar los encabezados encontrados para ayudar a depurar
+            const foundHeaders = row2.map(h => String(h || '').trim()).filter(h => h).join(', ');
+            alert(`No se encontró la columna "RazonSocial" en la Fila 2. Encabezados encontrados: ${foundHeaders || 'Ninguno'}`);
           }
         } else {
-          alert(`El formato del archivo no es correcto. Encontramos "${headerValue}" en la Columna C, Fila 2, pero esperábamos "Razón Social".`);
+          alert('El archivo parece estar vacío o no tiene suficientes filas.');
         }
       } catch (error) {
         console.error("Error al procesar el archivo:", error);
