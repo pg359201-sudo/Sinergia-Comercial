@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/AppContext';
 import { Card, Badge, Button, Label, Input } from './ui';
@@ -17,6 +17,7 @@ export const MissionDetail = () => {
   const [evidenceUrl, setEvidenceUrl] = useState(mission?.evidenceUrl || '');
   const [notes, setNotes] = useState(mission?.notes || '');
   const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!mission || !client) {
     return <div>Misión no encontrada</div>;
@@ -35,13 +36,22 @@ export const MissionDetail = () => {
     navigate('/missions');
   };
 
-  const handleUpload = () => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
     setIsUploading(true);
-    // Simulate upload to BLOB storage
-    setTimeout(() => {
-      setEvidenceUrl('https://picsum.photos/seed/exhibicion/800/600');
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const base64 = evt.target?.result as string;
+      setEvidenceUrl(base64);
       setIsUploading(false);
-    }, 1500);
+    };
+    reader.onerror = () => {
+      setIsUploading(false);
+      alert('Error al procesar la imagen.');
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -125,19 +135,29 @@ export const MissionDetail = () => {
           <form onSubmit={handleComplete} className="space-y-6">
             <div>
               <Label className="mb-2 block">Evidencia Fotográfica *</Label>
+              <input 
+                type="file" 
+                accept="image/*" 
+                className="hidden" 
+                ref={fileInputRef}
+                onChange={handleFileChange}
+              />
               {evidenceUrl ? (
                 <div className="relative">
                   <img src={evidenceUrl} alt="Evidencia" className="rounded-xl w-full object-cover aspect-video border border-slate-200" referrerPolicy="no-referrer" />
-                  <Button type="button" variant="secondary" className="absolute top-2 right-2 text-xs" onClick={() => setEvidenceUrl('')}>
+                  <Button type="button" variant="secondary" className="absolute top-2 right-2 text-xs" onClick={() => fileInputRef.current?.click()}>
                     Cambiar Foto
                   </Button>
                 </div>
               ) : (
-                <div className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:bg-slate-50 transition-colors">
+                <div 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:bg-slate-50 transition-colors cursor-pointer"
+                >
                   <UploadCloud className="w-10 h-10 text-slate-400 mx-auto mb-3" />
                   <p className="text-sm text-slate-600 mb-4">Sube una foto de la exhibición o material POP colocado.</p>
-                  <Button type="button" variant="outline" onClick={handleUpload} disabled={isUploading}>
-                    {isUploading ? 'Subiendo al BLOB Storage...' : 'Tomar Foto / Subir'}
+                  <Button type="button" variant="outline" disabled={isUploading}>
+                    {isUploading ? 'Procesando imagen...' : 'Tomar Foto / Subir'}
                   </Button>
                 </div>
               )}

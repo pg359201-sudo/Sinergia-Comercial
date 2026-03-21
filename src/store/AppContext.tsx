@@ -25,11 +25,7 @@ const mockUsers: User[] = [
   { id: 'u2', name: 'Ana (Terreno)', role: 'terreno', avatar: 'https://i.pravatar.cc/150?u=u2' },
 ];
 
-const mockClients: Client[] = [
-  { id: 'c1', name: 'Supermercado El Sol', address: 'Av. Principal 123', route: 'Ruta Norte', visitDay: 'Lunes', channel: 'Supermercado', gec: 'GEC-001' },
-  { id: 'c2', name: 'Licorería La Esquina', address: 'Calle 4 #45', route: 'Ruta Sur', visitDay: 'Martes', channel: 'Licorería', gec: 'GEC-002' },
-  { id: 'c3', name: 'Minimarket Express', address: 'Av. Libertad 987', route: 'Ruta Centro', visitDay: 'Miércoles', channel: 'Minimarket', gec: 'GEC-003' },
-];
+const mockClients: Client[] = [];
 
 const mockMissions: Mission[] = [
   {
@@ -83,7 +79,7 @@ const mockActivations: Activation[] = [
 const AppContext = createContext<AppState | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(mockUsers[0]);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [users] = useState<User[]>(mockUsers);
   const [clients, setClients] = useState<Client[]>(mockClients);
   const [missions, setMissions] = useState<Mission[]>(mockMissions);

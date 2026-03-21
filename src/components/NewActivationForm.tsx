@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/AppContext';
 import { Card, Button, Label, Input } from './ui';
@@ -13,14 +13,24 @@ export const NewActivationForm = () => {
   const [clientId, setClientId] = useState(clients[0]?.id || '');
   const [isUploading, setIsUploading] = useState(false);
   const [evidenceUrl, setEvidenceUrl] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleUpload = () => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
     setIsUploading(true);
-    // Simulate upload delay
-    setTimeout(() => {
-      setEvidenceUrl(`https://picsum.photos/seed/${Date.now()}/800/600`);
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const base64 = evt.target?.result as string;
+      setEvidenceUrl(base64);
       setIsUploading(false);
-    }, 1500);
+    };
+    reader.onerror = () => {
+      setIsUploading(false);
+      alert('Error al procesar la imagen.');
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -64,7 +74,7 @@ export const NewActivationForm = () => {
               required
             >
               {clients.map(c => (
-                <option key={c.id} value={c.id}>{c.name} - {c.route}</option>
+                <option key={c.id} value={c.id}>{c.name}</option>
               ))}
             </select>
           </div>
@@ -94,9 +104,16 @@ export const NewActivationForm = () => {
 
           <div className="pt-2">
             <Label className="mb-2 block text-sm md:text-base">Registro Fotográfico (Requerido)</Label>
+            <input 
+              type="file" 
+              accept="image/*" 
+              className="hidden" 
+              ref={fileInputRef}
+              onChange={handleFileChange}
+            />
             {!evidenceUrl ? (
               <div 
-                onClick={handleUpload}
+                onClick={() => fileInputRef.current?.click()}
                 className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors ${
                   isUploading ? 'border-indigo-300 bg-indigo-50' : 'border-slate-300 hover:border-indigo-400 hover:bg-slate-50'
                 }`}
@@ -118,7 +135,7 @@ export const NewActivationForm = () => {
               <div className="relative rounded-xl overflow-hidden border border-slate-200">
                 <img src={evidenceUrl} alt="Evidencia" className="w-full h-48 object-cover" referrerPolicy="no-referrer" />
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                  <Button type="button" variant="secondary" onClick={() => setEvidenceUrl('')}>
+                  <Button type="button" variant="secondary" onClick={() => fileInputRef.current?.click()}>
                     Cambiar Foto
                   </Button>
                 </div>

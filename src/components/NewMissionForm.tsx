@@ -75,7 +75,7 @@ export const NewMissionForm = () => {
                 required
               >
                 {clients.map(c => (
-                  <option key={c.id} value={c.id}>{c.name} - {c.route}</option>
+                  <option key={c.id} value={c.id}>{c.name}</option>
                 ))}
               </select>
             </div>
