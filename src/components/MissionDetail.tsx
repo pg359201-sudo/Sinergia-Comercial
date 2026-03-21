@@ -45,9 +45,9 @@ export const MissionDetail = () => {
     try {
       const url = await compressAndUploadImage(file);
       setEvidenceUrl(url);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading image:', error);
-      alert('Error al procesar y subir la imagen.');
+      alert(`Error al procesar y subir la imagen: ${error.message || 'Error desconocido'}`);
     } finally {
       setIsUploading(false);
     }

@@ -14,6 +14,7 @@ async function startServer() {
 
   // Middleware para procesar JSON (con límite ampliado para archivos grandes)
   app.use(express.json({ limit: '50mb' }));
+  app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
   // --- RUTAS DE LA API ---
 
@@ -321,11 +322,11 @@ async function startServer() {
       const { put } = await import('@vercel/blob');
 
       // Convertir base64 a buffer
-      const matches = base64Image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+      const matches = base64Image.match(/^data:(.*?);base64,(.+)$/);
       if (!matches || matches.length !== 3) {
-        return res.status(400).json({ error: "Invalid base64 string" });
+        return res.status(400).json({ error: "Invalid base64 string format" });
       }
-      const contentType = matches[1];
+      const contentType = matches[1] || 'application/octet-stream';
       const buffer = Buffer.from(matches[2], 'base64');
 
       const blob = await put(filename || `upload-${Date.now()}`, buffer, {
