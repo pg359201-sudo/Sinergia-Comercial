@@ -6,7 +6,7 @@ export async function compressAndUploadImage(file: File): Promise<string> {
     const options = {
       maxSizeMB: 0.5, // Max size 500KB
       maxWidthOrHeight: 1080, // Max width/height 1080px
-      useWebWorker: true,
+      useWebWorker: false, // Desactivado para evitar problemas de seguridad en iframes (AI Studio)
     };
     
     const compressedFile = await imageCompression(file, options);
@@ -32,7 +32,8 @@ export async function compressAndUploadImage(file: File): Promise<string> {
     });
 
     if (!response.ok) {
-      throw new Error('Error uploading image');
+      const errorText = await response.text();
+      throw new Error(`Error del servidor (${response.status}): ${errorText}`);
     }
 
     const data = await response.json();

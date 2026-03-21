@@ -3,6 +3,11 @@ import { createServer as createViteServer } from "vite";
 import { sql } from "@vercel/postgres";
 import path from "path";
 
+// Sanitizar la variable de entorno en caso de que se haya copiado con un '=' al principio por error
+if (process.env.POSTGRES_URL) {
+  process.env.POSTGRES_URL = process.env.POSTGRES_URL.replace(/^=/, '').trim();
+}
+
 async function startServer() {
   const app = express();
   const PORT = 3000;
@@ -329,9 +334,9 @@ async function startServer() {
       });
 
       res.json({ url: blob.url });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error uploading to blob:", error);
-      res.status(500).json({ error: "Error uploading file" });
+      res.status(500).json({ error: "Error uploading file", details: error.message });
     }
   });
 
