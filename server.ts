@@ -1,5 +1,4 @@
 import express from "express";
-import { createServer as createViteServer } from "vite";
 import { sql } from "@vercel/postgres";
 import path from "path";
 
@@ -8,7 +7,7 @@ if (process.env.POSTGRES_URL) {
   process.env.POSTGRES_URL = process.env.POSTGRES_URL.replace(/^=/, '').trim();
 }
 
-async function startServer() {
+export async function startServer() {
   const app = express();
   const PORT = 3000;
 
@@ -343,12 +342,14 @@ async function startServer() {
 
   // --- INTEGRACIÓN CON VITE (Frontend) ---
   if (process.env.NODE_ENV !== "production") {
+    const viteModule = "vite";
+    const { createServer: createViteServer } = await import(viteModule);
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
     });
     app.use(vite.middlewares);
-  } else {
+  } else if (!process.env.VERCEL) {
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
     app.get("*", (req, res) => {
@@ -356,9 +357,15 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
+  return app;
 }
 
-startServer();
+// Iniciar el servidor solo si no estamos en Vercel (ej. AI Studio o local)
+if (!process.env.VERCEL) {
+  startServer().then(app => {
+    const PORT = 3000;
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  });
+}
