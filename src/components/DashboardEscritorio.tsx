@@ -31,11 +31,15 @@ export const DashboardEscritorio = () => {
         const data = XLSX.utils.sheet_to_json(ws, { header: 1 }) as any[][];
         
         // Fila 2 (índice 1) y Columna C (índice 2)
-        if (data.length > 1 && data[1][2] === 'RazonSocial') {
+        const headerValue = data.length > 1 && data[1][2] ? String(data[1][2]) : '';
+        // Normalizamos el texto: quitamos tildes, espacios y pasamos a minúsculas
+        const normalizedHeader = headerValue.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '');
+
+        if (normalizedHeader === 'razonsocial') {
           const newClients: Client[] = [];
           for (let i = 2; i < data.length; i++) {
             const razonSocial = data[i][2];
-            if (razonSocial && typeof razonSocial === 'string') {
+            if (razonSocial && typeof razonSocial === 'string' && razonSocial.trim() !== '') {
               newClients.push({
                 id: `c${Date.now()}-${i}`,
                 name: razonSocial.trim(),
@@ -51,10 +55,10 @@ export const DashboardEscritorio = () => {
             addClients(newClients);
             alert(`Se cargaron ${newClients.length} clientes exitosamente.`);
           } else {
-            alert('No se encontraron clientes en la columna RazonSocial.');
+            alert('No se encontraron clientes debajo del título "Razón Social".');
           }
         } else {
-          alert('El formato del archivo no es correcto. Asegúrate de que "RazonSocial" esté en la columna C, fila 2.');
+          alert(`El formato del archivo no es correcto. Encontramos "${headerValue}" en la Columna C, Fila 2, pero esperábamos "Razón Social".`);
         }
       } catch (error) {
         console.error("Error al procesar el archivo:", error);
