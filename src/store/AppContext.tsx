@@ -18,6 +18,10 @@ interface AppState {
   addSale: (sale: Omit<TacticalSale, 'id' | 'createdAt'>) => void;
   addActivation: (activation: Omit<Activation, 'id' | 'createdAt'>) => void;
   addClients: (newClients: Client[]) => void;
+  deleteMissions: (ids: string[]) => void;
+  deleteAlerts: (ids: string[]) => void;
+  deleteSales: (ids: string[]) => void;
+  deleteActivations: (ids: string[]) => void;
 }
 
 const mockUsers: User[] = [
@@ -210,10 +214,27 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   };
 
+  const deleteMissions = (ids: string[]) => {
+    setMissions(prev => prev.filter(m => !ids.includes(m.id)));
+  };
+
+  const deleteAlerts = (ids: string[]) => {
+    setAlerts(prev => prev.filter(a => !ids.includes(a.id)));
+  };
+
+  const deleteSales = (ids: string[]) => {
+    setSales(prev => prev.filter(s => !ids.includes(s.id)));
+  };
+
+  const deleteActivations = (ids: string[]) => {
+    setActivations(prev => prev.filter(a => !ids.includes(a.id)));
+  };
+
   return (
     <AppContext.Provider value={{
       currentUser, users, clients, missions, alerts, sales, activations,
-      login, logout, addMission, updateMissionStatus, addAlert, updateAlertStatus, addSale, addActivation, addClients
+      login, logout, addMission, updateMissionStatus, addAlert, updateAlertStatus, addSale, addActivation, addClients,
+      deleteMissions, deleteAlerts, deleteSales, deleteActivations
     }}>
       {children}
     </AppContext.Provider>

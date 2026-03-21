@@ -1,35 +1,104 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppStore } from '../store/AppContext';
 import { Card, Badge, Button } from './ui';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { MapPin, Calendar, Plus } from 'lucide-react';
+import { MapPin, Calendar, Plus, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const MissionsList = () => {
-  const { currentUser, missions, clients, users } = useAppStore();
+  const { currentUser, missions, clients, users, deleteMissions } = useAppStore();
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const isEscritorio = currentUser?.role === 'escritorio';
   const displayMissions = isEscritorio ? missions : missions.filter(m => m.assignedTo === currentUser?.id);
 
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedIds(new Set(displayMissions.map(m => m.id)));
+    } else {
+      setSelectedIds(new Set());
+    }
+  };
+
+  const handleSelectOne = (id: string) => {
+    const newSelected = new Set(selectedIds);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedIds(newSelected);
+  };
+
+  const handleDeleteSelected = () => {
+    deleteMissions(Array.from(selectedIds));
+    setSelectedIds(new Set());
+    setShowConfirm(false);
+  };
+
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6 relative">
+      {showConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full shadow-xl">
+            <h3 className="text-lg font-bold text-slate-900 mb-2">Confirmar eliminación</h3>
+            <p className="text-slate-600 mb-6">
+              ¿Estás seguro de que deseas eliminar las {selectedIds.size} misiones seleccionadas? Esta acción no se puede deshacer.
+            </p>
+            <div className="flex justify-end gap-3">
+              <Button variant="ghost" onClick={() => setShowConfirm(false)}>Cancelar</Button>
+              <Button className="bg-red-600 hover:bg-red-700 text-white" onClick={handleDeleteSelected}>
+                Eliminar
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Misiones</h1>
           <p className="mt-1 text-sm text-slate-600">
             {isEscritorio ? 'Gestiona y asigna misiones al equipo de terreno.' : 'Tus misiones asignadas para hoy.'}
           </p>
         </div>
-        {isEscritorio && (
-          <Link to="/missions/new">
-            <Button className="flex items-center gap-2">
-              <Plus className="w-4 h-4" />
-              Nueva Misión
+        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          {selectedIds.size > 0 && (
+            <Button 
+              onClick={() => setShowConfirm(true)} 
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 border border-red-200"
+            >
+              <Trash2 className="w-4 h-4" />
+              Eliminar ({selectedIds.size})
             </Button>
-          </Link>
-        )}
+          )}
+          {isEscritorio && (
+            <Link to="/missions/new" className="w-full sm:w-auto">
+              <Button className="w-full sm:w-auto flex items-center justify-center gap-2">
+                <Plus className="w-4 h-4" />
+                Nueva Misión
+              </Button>
+            </Link>
+          )}
+        </div>
       </div>
+
+      {displayMissions.length > 0 && (
+        <div className="flex items-center gap-2 px-1">
+          <input 
+            type="checkbox" 
+            id="selectAll"
+            className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer"
+            checked={selectedIds.size === displayMissions.length}
+            onChange={handleSelectAll}
+          />
+          <label htmlFor="selectAll" className="text-sm text-slate-600 cursor-pointer select-none">
+            Seleccionar todas
+          </label>
+        </div>
+      )}
 
       <div className={`grid gap-4 ${isEscritorio ? 'md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
         {displayMissions.map((mission) => {
@@ -37,8 +106,16 @@ export const MissionsList = () => {
           const assignedUser = users.find(u => u.id === mission.assignedTo);
           
           return (
-            <Card key={mission.id} className="p-5 flex flex-col">
-              <div className="flex justify-between items-start mb-3">
+            <Card key={mission.id} className={`p-5 flex flex-col relative ${selectedIds.has(mission.id) ? 'ring-2 ring-indigo-500' : ''}`}>
+              <div className="absolute top-3 right-3 z-10">
+                <input 
+                  type="checkbox" 
+                  className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer shadow-sm"
+                  checked={selectedIds.has(mission.id)}
+                  onChange={() => handleSelectOne(mission.id)}
+                />
+              </div>
+              <div className="flex justify-between items-start mb-3 pr-8">
                 <Badge variant={mission.status === 'completed' ? 'success' : mission.status === 'in-progress' ? 'warning' : 'info'}>
                   {mission.status === 'completed' ? 'Completada' : mission.status === 'in-progress' ? 'En Progreso' : 'Pendiente'}
                 </Badge>

@@ -1,35 +1,104 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppStore } from '../store/AppContext';
 import { Card, Button } from './ui';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { MapPin, Calendar, ShoppingCart, Plus } from 'lucide-react';
+import { MapPin, Calendar, ShoppingCart, Plus, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const SalesList = () => {
-  const { currentUser, sales, clients, users } = useAppStore();
+  const { currentUser, sales, clients, users, deleteSales } = useAppStore();
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const isEscritorio = currentUser?.role === 'escritorio';
   const displaySales = isEscritorio ? sales : sales.filter(s => s.createdBy === currentUser?.id);
 
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.checked) {
+      setSelectedIds(new Set(displaySales.map(s => s.id)));
+    } else {
+      setSelectedIds(new Set());
+    }
+  };
+
+  const handleSelectOne = (id: string) => {
+    const newSelected = new Set(selectedIds);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedIds(newSelected);
+  };
+
+  const handleDeleteSelected = () => {
+    deleteSales(Array.from(selectedIds));
+    setSelectedIds(new Set());
+    setShowConfirm(false);
+  };
+
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6 relative">
+      {showConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+          <div className="bg-white rounded-xl p-6 max-w-sm w-full shadow-xl">
+            <h3 className="text-lg font-bold text-slate-900 mb-2">Confirmar eliminación</h3>
+            <p className="text-slate-600 mb-6">
+              ¿Estás seguro de que deseas eliminar las {selectedIds.size} ventas seleccionadas? Esta acción no se puede deshacer.
+            </p>
+            <div className="flex justify-end gap-3">
+              <Button variant="ghost" onClick={() => setShowConfirm(false)}>Cancelar</Button>
+              <Button className="bg-red-600 hover:bg-red-700 text-white" onClick={handleDeleteSelected}>
+                Eliminar
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Ventas</h1>
           <p className="mt-1 text-sm text-slate-600">
             {isEscritorio ? 'Reposiciones y ventas rápidas ejecutadas en terreno.' : 'Tus ventas tácticas registradas.'}
           </p>
         </div>
-        {!isEscritorio && (
-          <Link to="/sales/new">
-            <Button className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700">
-              <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline">Registrar Venta</span>
+        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          {selectedIds.size > 0 && (
+            <Button 
+              onClick={() => setShowConfirm(true)} 
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 border border-red-200"
+            >
+              <Trash2 className="w-4 h-4" />
+              Eliminar ({selectedIds.size})
             </Button>
-          </Link>
-        )}
+          )}
+          {!isEscritorio && (
+            <Link to="/sales/new" className="w-full sm:w-auto">
+              <Button className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700">
+                <Plus className="w-4 h-4" />
+                Registrar Venta
+              </Button>
+            </Link>
+          )}
+        </div>
       </div>
+
+      {displaySales.length > 0 && (
+        <div className="flex items-center gap-2 px-1">
+          <input 
+            type="checkbox" 
+            id="selectAll"
+            className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer"
+            checked={selectedIds.size === displaySales.length}
+            onChange={handleSelectAll}
+          />
+          <label htmlFor="selectAll" className="text-sm text-slate-600 cursor-pointer select-none">
+            Seleccionar todas
+          </label>
+        </div>
+      )}
 
       <div className={`grid gap-4 ${isEscritorio ? 'md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
         {displaySales.map((sale) => {
@@ -37,8 +106,16 @@ export const SalesList = () => {
           const creator = users.find(u => u.id === sale.createdBy);
           
           return (
-            <Card key={sale.id} className="p-5 flex flex-col border-t-4 border-t-emerald-500">
-              <div className="flex justify-between items-start mb-3">
+            <Card key={sale.id} className={`p-5 flex flex-col border-t-4 border-t-emerald-500 relative ${selectedIds.has(sale.id) ? 'ring-2 ring-indigo-500' : ''}`}>
+              <div className="absolute top-3 right-3 z-10">
+                <input 
+                  type="checkbox" 
+                  className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer shadow-sm"
+                  checked={selectedIds.has(sale.id)}
+                  onChange={() => handleSelectOne(sale.id)}
+                />
+              </div>
+              <div className="flex justify-between items-start mb-3 pr-8">
                 <div className="p-2 bg-emerald-100 text-emerald-600 rounded-lg">
                   <ShoppingCart className="w-5 h-5" />
                 </div>
