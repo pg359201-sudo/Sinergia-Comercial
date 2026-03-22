@@ -81,12 +81,12 @@ export const ClientsList = () => {
                 <div className="mt-auto pt-3 border-t border-slate-100">
                   <div className="flex flex-wrap gap-x-4 gap-y-2 text-[11px] text-slate-400 mb-3">
                     <div className="flex flex-col">
-                      <span className="uppercase tracking-wider opacity-70">Canal</span>
-                      <span className="font-medium text-slate-500 truncate max-w-[100px]">{formatTextWithoutPrefix(client.channel)}</span>
-                    </div>
-                    <div className="flex flex-col">
                       <span className="uppercase tracking-wider opacity-70">Ruta</span>
                       <span className="font-medium text-slate-500 truncate max-w-[120px]">{client.route}</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="uppercase tracking-wider opacity-70">Canal</span>
+                      <span className="font-medium text-slate-500 truncate max-w-[100px]">{formatTextWithoutPrefix(client.channel)}</span>
                     </div>
                     <div className="flex flex-col">
                       <span className="uppercase tracking-wider opacity-70">GEC</span>
