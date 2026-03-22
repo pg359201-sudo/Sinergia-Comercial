@@ -48,28 +48,36 @@ export const ClientsList = () => {
             <Link key={client.id} to={`/clients/${client.id}`} className="block">
               <Card className="p-5 hover:border-indigo-300 transition-colors cursor-pointer h-full flex flex-col shadow-sm">
                 <div className="flex items-start gap-3 mb-3">
-                  <div className="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
-                    <Store className="w-6 h-6" />
+                  <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
+                    <Store className="w-5 h-5" />
                   </div>
-                  <div>
-                    <h3 className="font-bold text-slate-900 line-clamp-1">{client.name}</h3>
-                    <p className="text-sm text-slate-500">{client.channel}</p>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-slate-900 text-base line-clamp-1">{client.name}</h3>
+                    <div className="flex items-center gap-1 text-xs text-slate-400 mt-0.5">
+                      <MapPin className="w-3 h-3 shrink-0" />
+                      <span className="truncate">{client.address}</span>
+                    </div>
                   </div>
                 </div>
                 
-                <div className="space-y-3 mt-auto pt-4 border-t border-slate-100">
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
-                    <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
-                    <span className="truncate">{client.address}</span>
+                <div className="mt-auto pt-3 border-t border-slate-100">
+                  <div className="flex flex-wrap gap-x-4 gap-y-2 text-[11px] text-slate-400 mb-3">
+                    <div className="flex flex-col">
+                      <span className="uppercase tracking-wider opacity-70">Canal</span>
+                      <span className="font-medium text-slate-500 truncate max-w-[100px]">{client.channel}</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="uppercase tracking-wider opacity-70">GEC</span>
+                      <span className="font-medium text-slate-500 truncate max-w-[100px]">{client.gec}</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="uppercase tracking-wider opacity-70">Ruta</span>
+                      <span className="font-medium text-slate-500 truncate max-w-[120px]">{client.route}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
-                    <span className="font-medium text-slate-500">GEC:</span>
-                    <span className="truncate">{client.gec}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <Badge variant="secondary" className="bg-slate-100 text-slate-700">{client.route}</Badge>
-                    <span className="text-indigo-600 font-medium flex items-center gap-1">
-                      Ver historial <ChevronRight className="w-4 h-4" />
+                  <div className="flex items-center justify-end">
+                    <span className="text-indigo-600 font-medium flex items-center gap-1 text-xs hover:text-indigo-700 transition-colors">
+                      Ver historial <ChevronRight className="w-3 h-3" />
                     </span>
                   </div>
                 </div>
