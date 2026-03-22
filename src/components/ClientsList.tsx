@@ -66,6 +66,10 @@ export const ClientsList = () => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-slate-900 text-base line-clamp-1">{client.name}</h3>
+                    <div className="flex flex-col mt-1.5 text-[11px] text-slate-400">
+                      <span className="uppercase tracking-wider opacity-70">UC 12mm</span>
+                      <span className="font-medium text-slate-500 truncate max-w-[100px]">{formatUC12mm(client.uc12mm)}</span>
+                    </div>
                   </div>
                 </div>
                 
@@ -82,10 +86,6 @@ export const ClientsList = () => {
                     <div className="flex flex-col">
                       <span className="uppercase tracking-wider opacity-70">GEC</span>
                       <span className="font-medium text-slate-500 truncate max-w-[100px]">{client.gec}</span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="uppercase tracking-wider opacity-70">UC 12mm</span>
-                      <span className="font-medium text-slate-500 truncate max-w-[100px]">{formatUC12mm(client.uc12mm)}</span>
                     </div>
                   </div>
                   <div className="flex items-center justify-end">
