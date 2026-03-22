@@ -109,7 +109,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
           if (Array.isArray(clientsData) && clientsData.length > 0) {
             const mappedClients = clientsData.map((c: any) => ({
               id: c.id, name: c.name, address: c.address, route: c.route,
-              visitDay: c.visit_day, channel: c.channel, gec: c.gec
+              visitDay: c.visit_day, channel: c.channel, gec: c.gec, uc12mm: c.uc12mm
             }));
             setClients(mappedClients);
           }
@@ -271,8 +271,19 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   };
 
   const addClients = async (newClients: Client[]) => {
-    // Optimistic UI update
-    setClients(prev => [...prev, ...newClients]);
+    // Optimistic UI update: merge by name
+    setClients(prev => {
+      const merged = [...prev];
+      newClients.forEach(nc => {
+        const existingIndex = merged.findIndex(c => c.name === nc.name);
+        if (existingIndex >= 0) {
+          merged[existingIndex] = { ...merged[existingIndex], ...nc, id: merged[existingIndex].id };
+        } else {
+          merged.push(nc);
+        }
+      });
+      return merged;
+    });
 
     // Guardar en Postgres
     try {
@@ -286,6 +297,17 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         const errorData = await res.json();
         console.error("Error guardando clientes en DB:", errorData);
         alert(`Error al guardar en Postgres: ${errorData.error}`);
+      } else {
+        // Refetch to ensure we have the correct IDs from the DB
+        const clientsRes = await fetch('/api/clients');
+        const clientsData = await clientsRes.json();
+        if (Array.isArray(clientsData) && clientsData.length > 0) {
+          const mappedClients = clientsData.map((c: any) => ({
+            id: c.id, name: c.name, address: c.address, route: c.route,
+            visitDay: c.visit_day, channel: c.channel, gec: c.gec, uc12mm: c.uc12mm
+          }));
+          setClients(mappedClients);
+        }
       }
     } catch (error) {
       console.error("Error de red al guardar clientes:", error);

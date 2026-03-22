@@ -44,6 +44,9 @@ export async function startServer() {
         );
       `;
       await sql`
+        ALTER TABLE clients ADD COLUMN IF NOT EXISTS uc12mm VARCHAR(100);
+      `;
+      await sql`
         CREATE TABLE IF NOT EXISTS missions (
           id VARCHAR(255) PRIMARY KEY,
           title VARCHAR(255) NOT NULL,
@@ -126,14 +129,31 @@ export async function startServer() {
       let inserted = 0;
       for (const c of clients) {
         try {
-          await sql`
-            INSERT INTO clients (id, name, address, route, visit_day, channel, gec)
-            VALUES (${c.id}, ${c.name}, ${c.address}, ${c.route}, ${c.visitDay}, ${c.channel}, ${c.gec})
-            ON CONFLICT (id) DO NOTHING;
-          `;
+          // Check if client with same name exists
+          const existing = await sql`SELECT id FROM clients WHERE name = ${c.name} LIMIT 1`;
+          
+          if (existing.rows.length > 0) {
+            // Update existing client
+            await sql`
+              UPDATE clients SET 
+                address = ${c.address},
+                route = ${c.route},
+                visit_day = ${c.visitDay},
+                channel = ${c.channel},
+                gec = ${c.gec},
+                uc12mm = ${c.uc12mm}
+              WHERE id = ${existing.rows[0].id}
+            `;
+          } else {
+            // Insert new client
+            await sql`
+              INSERT INTO clients (id, name, address, route, visit_day, channel, gec, uc12mm)
+              VALUES (${c.id}, ${c.name}, ${c.address}, ${c.route}, ${c.visitDay}, ${c.channel}, ${c.gec}, ${c.uc12mm})
+            `;
+          }
           inserted++;
         } catch (err) {
-          console.error(`Error insertando cliente ${c.name}:`, err);
+          console.error(`Error procesando cliente ${c.name}:`, err);
         }
       }
       res.json({ message: `Se insertaron ${inserted} clientes en Postgres` });
