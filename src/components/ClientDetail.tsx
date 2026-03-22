@@ -28,6 +28,19 @@ export const ClientDetail = () => {
 
   const getUserName = (userId: string) => users.find(u => u.id === userId)?.name || 'Desconocido';
 
+  const formatUC12mm = (value: string | undefined) => {
+    if (!value || value === '0') return '0';
+    let cleanValue = value.toString();
+    if (cleanValue.includes('.') && cleanValue.includes(',')) {
+      cleanValue = cleanValue.replace(/\./g, '').replace(',', '.');
+    } else if (cleanValue.includes(',')) {
+      cleanValue = cleanValue.replace(',', '.');
+    }
+    const num = parseFloat(cleanValue);
+    if (isNaN(num)) return value;
+    return Math.round(num).toLocaleString('es-AR');
+  };
+
   return (
     <div className="space-y-6 pb-8">
       <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors">
@@ -49,7 +62,7 @@ export const ClientDetail = () => {
               <span className="flex items-center gap-2"><MapPin className="w-4 h-4 text-slate-400" /> {client.address}</span>
               <span className="flex items-center gap-2"><Calendar className="w-4 h-4 text-slate-400" /> Visita: {client.visitDay}</span>
               <span className="flex items-center gap-2 text-indigo-600 font-medium">{client.route}</span>
-              {client.uc12mm && <span className="flex items-center gap-2 text-slate-500 font-medium">UC 12mm: {client.uc12mm}</span>}
+              {client.uc12mm && <span className="flex items-center gap-2 text-slate-500 font-medium">UC 12mm: {formatUC12mm(client.uc12mm)}</span>}
             </div>
           </div>
         </div>

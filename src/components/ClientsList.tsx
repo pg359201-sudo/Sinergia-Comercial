@@ -12,6 +12,19 @@ export const ClientsList = () => {
     client.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const formatUC12mm = (value: string | undefined) => {
+    if (!value || value === '0') return '0';
+    let cleanValue = value.toString();
+    if (cleanValue.includes('.') && cleanValue.includes(',')) {
+      cleanValue = cleanValue.replace(/\./g, '').replace(',', '.');
+    } else if (cleanValue.includes(',')) {
+      cleanValue = cleanValue.replace(',', '.');
+    }
+    const num = parseFloat(cleanValue);
+    if (isNaN(num)) return value;
+    return Math.round(num).toLocaleString('es-AR');
+  };
+
   return (
     <div className="space-y-6 pb-8">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -72,7 +85,7 @@ export const ClientsList = () => {
                     </div>
                     <div className="flex flex-col">
                       <span className="uppercase tracking-wider opacity-70">UC 12mm</span>
-                      <span className="font-medium text-slate-500 truncate max-w-[100px]">{client.uc12mm || '0'}</span>
+                      <span className="font-medium text-slate-500 truncate max-w-[100px]">{formatUC12mm(client.uc12mm)}</span>
                     </div>
                   </div>
                   <div className="flex items-center justify-end">
