@@ -33,14 +33,22 @@ export const DashboardEscritorio = () => {
         if (data.length > 1) {
           const row2 = data[1]; // Fila 2 (índice 1)
           let razonSocialColIndex = -1;
+          let grupoCanalColIndex = -1;
+          let gecColIndex = -1;
+          let rutaVentaColIndex = -1;
           
-          // Buscar dinámicamente en qué columna está "RazonSocial"
+          // Buscar dinámicamente en qué columna están los datos
           for (let c = 0; c < row2.length; c++) {
             const cellValue = row2[c] ? String(row2[c]) : '';
             const normalized = cellValue.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '');
             if (normalized === 'razonsocial') {
               razonSocialColIndex = c;
-              break;
+            } else if (normalized === 'grupocanal') {
+              grupoCanalColIndex = c;
+            } else if (normalized === 'gec') {
+              gecColIndex = c;
+            } else if (normalized === 'rutaventa') {
+              rutaVentaColIndex = c;
             }
           }
 
@@ -49,15 +57,19 @@ export const DashboardEscritorio = () => {
             // Empezar desde la fila 3 (índice 2)
             for (let i = 2; i < data.length; i++) {
               const razonSocial = data[i][razonSocialColIndex];
+              const grupoCanal = grupoCanalColIndex !== -1 ? data[i][grupoCanalColIndex] : null;
+              const gec = gecColIndex !== -1 ? data[i][gecColIndex] : null;
+              const rutaVenta = rutaVentaColIndex !== -1 ? data[i][rutaVentaColIndex] : null;
+
               if (razonSocial && typeof razonSocial === 'string' && razonSocial.trim() !== '') {
                 newClients.push({
                   id: `c${Date.now()}-${i}`,
                   name: razonSocial.trim(),
                   address: 'Sin dirección',
-                  route: 'Sin ruta',
+                  route: rutaVenta ? String(rutaVenta).trim() : 'Sin ruta',
                   visitDay: 'Lunes',
-                  channel: 'Sin canal',
-                  gec: 'Sin GEC'
+                  channel: grupoCanal ? String(grupoCanal).trim() : 'Sin canal',
+                  gec: gec ? String(gec).trim() : 'Sin GEC'
                 });
               }
             }
@@ -142,8 +154,8 @@ export const DashboardEscritorio = () => {
             <TrendingUp className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-sm font-medium text-slate-500">Venta Táctica (Terreno)</p>
-            <p className="text-2xl font-bold text-slate-900">${totalSales.toLocaleString()}</p>
+            <p className="text-sm font-medium text-slate-500">Ventas Tácticas (Terreno)</p>
+            <p className="text-2xl font-bold text-slate-900">{sales.length}</p>
           </div>
         </Card>
       </div>
@@ -184,7 +196,7 @@ export const DashboardEscritorio = () => {
               <div key={sale.id} className="p-4 rounded-xl border border-slate-100 bg-slate-50 flex flex-col gap-2">
                 <div className="flex justify-between items-start">
                   <span className="text-sm font-bold text-slate-900">{sale.product}</span>
-                  <span className="text-sm font-bold text-emerald-600">${sale.amount.toLocaleString()}</span>
+                  {sale.amount > 0 && <span className="text-sm font-bold text-emerald-600">${sale.amount.toLocaleString()}</span>}
                 </div>
                 <div className="flex justify-between items-center text-xs text-slate-500">
                   <span>Cant: {sale.quantity}</span>

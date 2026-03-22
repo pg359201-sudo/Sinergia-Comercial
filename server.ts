@@ -336,6 +336,12 @@ export async function startServer() {
       res.json({ url: blob.url });
     } catch (error: any) {
       console.error("Error uploading to blob:", error);
+      if (error.message?.includes("private store")) {
+        return res.status(500).json({ 
+          error: "Configuración de Vercel Blob incorrecta", 
+          details: "Tu Vercel Blob está configurado como 'Privado'. Debes crear un Blob Store 'Público' en Vercel para que las imágenes puedan verse en la app." 
+        });
+      }
       res.status(500).json({ error: "Error uploading file", details: error.message });
     }
   });

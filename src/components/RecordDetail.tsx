@@ -147,10 +147,12 @@ export const RecordDetail = () => {
                   <p className="font-bold text-slate-900 text-lg">{recordData.quantity} unidades</p>
                 </div>
               </div>
-              <div className="pt-4 border-t border-slate-200">
-                <p className="text-sm text-slate-500 font-medium">Monto Total</p>
-                <p className="font-bold text-emerald-600 text-2xl">${recordData.amount.toLocaleString()}</p>
-              </div>
+              {recordData.amount > 0 && (
+                <div className="pt-4 border-t border-slate-200">
+                  <p className="text-sm text-slate-500 font-medium">Monto Total</p>
+                  <p className="font-bold text-emerald-600 text-2xl">${recordData.amount.toLocaleString()}</p>
+                </div>
+              )}
             </div>
           )}
 

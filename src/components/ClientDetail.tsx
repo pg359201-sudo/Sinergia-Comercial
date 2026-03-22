@@ -132,7 +132,7 @@ export const ClientDetail = () => {
                           <p className="text-slate-800 font-medium text-base">{s.product}</p>
                           <p className="text-slate-500 text-sm mt-1">Cantidad: {s.quantity}</p>
                         </div>
-                        <span className="text-xl font-bold text-emerald-600 mt-2 sm:mt-0">${s.amount.toLocaleString()}</span>
+                        {s.amount > 0 && <span className="text-xl font-bold text-emerald-600 mt-2 sm:mt-0">${s.amount.toLocaleString()}</span>}
                       </div>
                       <div className="pt-3 border-t border-slate-100 text-sm text-slate-500">
                         Vendido por: <span className="font-medium text-slate-700">{getUserName(s.createdBy)}</span>

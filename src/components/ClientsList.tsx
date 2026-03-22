@@ -62,6 +62,10 @@ export const ClientsList = () => {
                     <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
                     <span className="truncate">{client.address}</span>
                   </div>
+                  <div className="flex items-center gap-2 text-sm text-slate-600">
+                    <span className="font-medium text-slate-500">GEC:</span>
+                    <span className="truncate">{client.gec}</span>
+                  </div>
                   <div className="flex items-center justify-between text-sm">
                     <Badge variant="secondary" className="bg-slate-100 text-slate-700">{client.route}</Badge>
                     <span className="text-indigo-600 font-medium flex items-center gap-1">

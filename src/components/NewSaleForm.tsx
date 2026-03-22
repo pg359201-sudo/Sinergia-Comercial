@@ -10,17 +10,16 @@ export const NewSaleForm = () => {
   
   const [product, setProduct] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [amount, setAmount] = useState(0);
   const [clientId, setClientId] = useState(clients[0]?.id || '');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!product || !clientId || quantity <= 0 || amount <= 0) return;
+    if (!product || !clientId || quantity <= 0) return;
 
     addSale({
       product,
       quantity,
-      amount,
+      amount: 0,
       clientId,
       createdBy: currentUser!.id,
     });
@@ -71,32 +70,17 @@ export const NewSaleForm = () => {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="quantity" className="mb-2 block text-sm md:text-base">Cantidad</Label>
-              <Input
-                id="quantity"
-                type="number"
-                min="1"
-                className="py-3 h-12 text-base rounded-xl"
-                value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value))}
-                required
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="amount" className="mb-2 block text-sm md:text-base">Monto Total ($)</Label>
-              <Input
-                id="amount"
-                type="number"
-                min="1"
-                className="py-3 h-12 text-base rounded-xl"
-                value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
-                required
-              />
-            </div>
+          <div>
+            <Label htmlFor="quantity" className="mb-2 block text-sm md:text-base">Cantidad</Label>
+            <Input
+              id="quantity"
+              type="number"
+              min="1"
+              className="py-3 h-12 text-base rounded-xl"
+              value={quantity}
+              onChange={(e) => setQuantity(Number(e.target.value))}
+              required
+            />
           </div>
 
           <div className="pt-4 mt-6 border-t border-emerald-200 flex flex-col sm:flex-row justify-end gap-3">
