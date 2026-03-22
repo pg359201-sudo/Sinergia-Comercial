@@ -3,7 +3,7 @@ import { useAppStore } from '../store/AppContext';
 import { Card, Badge, Button } from './ui';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { MapPin, Calendar, AlertTriangle, Trash2 } from 'lucide-react';
+import { Store, Calendar, AlertTriangle, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const AlertsList = () => {
@@ -65,7 +65,7 @@ export const AlertsList = () => {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-          {selectedIds.size > 0 && (
+          {isEscritorio && selectedIds.size > 0 && (
             <Button 
               onClick={() => setShowConfirm(true)} 
               className="w-full sm:w-auto flex items-center justify-center gap-2 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 border border-red-200"
@@ -85,7 +85,7 @@ export const AlertsList = () => {
         </div>
       </div>
 
-      {displayAlerts.length > 0 && (
+      {isEscritorio && displayAlerts.length > 0 && (
         <div className="flex items-center gap-2 px-1">
           <input 
             type="checkbox" 
@@ -107,15 +107,17 @@ export const AlertsList = () => {
           
           return (
             <Card key={alert.id} className={`p-5 flex flex-col border-l-4 border-l-amber-500 relative ${selectedIds.has(alert.id) ? 'ring-2 ring-indigo-500' : ''}`}>
-              <div className="absolute top-3 right-3 z-10">
-                <input 
-                  type="checkbox" 
-                  className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer shadow-sm"
-                  checked={selectedIds.has(alert.id)}
-                  onChange={() => handleSelectOne(alert.id)}
-                />
-              </div>
-              <div className="flex justify-between items-start mb-3 pr-8">
+              {isEscritorio && (
+                <div className="absolute top-3 right-3 z-10">
+                  <input 
+                    type="checkbox" 
+                    className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer shadow-sm"
+                    checked={selectedIds.has(alert.id)}
+                    onChange={() => handleSelectOne(alert.id)}
+                  />
+                </div>
+              )}
+              <div className={`flex justify-between items-start mb-3 ${isEscritorio ? 'pr-8' : ''}`}>
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge variant={alert.status === 'new' ? 'warning' : alert.status === 'read' ? 'info' : 'success'}>
                     {alert.status === 'new' ? 'Nueva' : alert.status === 'read' ? 'Leída' : 'Accionada'}
@@ -134,7 +136,7 @@ export const AlertsList = () => {
               
               <div className="space-y-2 mt-auto pt-3 border-t border-slate-100">
                 <div className="flex items-center gap-2 text-sm text-slate-600">
-                  <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
+                  <Store className="w-4 h-4 text-slate-400 shrink-0" />
                   <span className="truncate font-medium">{client?.name}</span>
                 </div>
                 
@@ -145,16 +147,18 @@ export const AlertsList = () => {
                   </div>
                 )}
                 
-                {isEscritorio && alert.status !== 'actioned' && (
+                {alert.status !== 'actioned' && (
                   <div className="flex flex-col sm:flex-row gap-2 mt-4">
                     {alert.status === 'new' && (
                       <Button variant="outline" className="flex-1" onClick={() => updateAlertStatus(alert.id, 'read')}>
                         Marcar Leída
                       </Button>
                     )}
-                    <Button variant="primary" className="flex-1 bg-emerald-600 hover:bg-emerald-700" onClick={() => updateAlertStatus(alert.id, 'actioned')}>
-                      Marcar Accionada
-                    </Button>
+                    {isEscritorio && (
+                      <Button variant="primary" className="flex-1 bg-emerald-600 hover:bg-emerald-700" onClick={() => updateAlertStatus(alert.id, 'actioned')}>
+                        Marcar Accionada
+                      </Button>
+                    )}
                   </div>
                 )}
               </div>

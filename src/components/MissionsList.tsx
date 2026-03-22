@@ -3,7 +3,7 @@ import { useAppStore } from '../store/AppContext';
 import { Card, Badge, Button } from './ui';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { MapPin, Calendar, Plus, Trash2 } from 'lucide-react';
+import { Store, Calendar, Plus, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const MissionsList = () => {
@@ -65,7 +65,7 @@ export const MissionsList = () => {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-          {selectedIds.size > 0 && (
+          {isEscritorio && selectedIds.size > 0 && (
             <Button 
               onClick={() => setShowConfirm(true)} 
               className="w-full sm:w-auto flex items-center justify-center gap-2 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 border border-red-200"
@@ -85,7 +85,7 @@ export const MissionsList = () => {
         </div>
       </div>
 
-      {displayMissions.length > 0 && (
+      {isEscritorio && displayMissions.length > 0 && (
         <div className="flex items-center gap-2 px-1">
           <input 
             type="checkbox" 
@@ -107,15 +107,17 @@ export const MissionsList = () => {
           
           return (
             <Card key={mission.id} className={`p-5 flex flex-col relative ${selectedIds.has(mission.id) ? 'ring-2 ring-indigo-500' : ''}`}>
-              <div className="absolute top-3 right-3 z-10">
-                <input 
-                  type="checkbox" 
-                  className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer shadow-sm"
-                  checked={selectedIds.has(mission.id)}
-                  onChange={() => handleSelectOne(mission.id)}
-                />
-              </div>
-              <div className="flex justify-between items-start mb-3 pr-8">
+              {isEscritorio && (
+                <div className="absolute top-3 right-3 z-10">
+                  <input 
+                    type="checkbox" 
+                    className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer shadow-sm"
+                    checked={selectedIds.has(mission.id)}
+                    onChange={() => handleSelectOne(mission.id)}
+                  />
+                </div>
+              )}
+              <div className={`flex justify-between items-start mb-3 ${isEscritorio ? 'pr-8' : ''}`}>
                 <Badge variant={mission.status === 'completed' ? 'success' : mission.status === 'in-progress' ? 'warning' : 'info'}>
                   {mission.status === 'completed' ? 'Completada' : mission.status === 'in-progress' ? 'En Progreso' : 'Pendiente'}
                 </Badge>
@@ -130,7 +132,7 @@ export const MissionsList = () => {
               
               <div className="space-y-2 mt-auto pt-3 border-t border-slate-100">
                 <div className="flex items-center gap-2 text-sm text-slate-600">
-                  <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
+                  <Store className="w-4 h-4 text-slate-400 shrink-0" />
                   <span className="truncate font-medium">{client?.name}</span>
                 </div>
                 

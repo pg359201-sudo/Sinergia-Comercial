@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/AppContext';
 import { Card, Badge, Button } from './ui';
-import { ArrowLeft, Calendar, User, Store, MapPin, Camera } from 'lucide-react';
+import { ArrowLeft, Calendar, User, Store, Camera } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -61,9 +61,6 @@ export const RecordDetail = () => {
               <div>
                 <p className="text-sm text-slate-500 font-medium">Cliente</p>
                 <p className="font-bold text-slate-900">{client?.name || 'Desconocido'}</p>
-                <p className="text-sm text-slate-600 flex items-center gap-1 mt-1">
-                  <MapPin className="w-3 h-3" /> {client?.address}
-                </p>
               </div>
             </div>
           </div>

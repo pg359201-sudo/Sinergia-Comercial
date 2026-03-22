@@ -4,7 +4,7 @@ import { useAppStore } from '../store/AppContext';
 import { Card, Badge, Button, Label, Input } from './ui';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { MapPin, Calendar, CheckCircle2, UploadCloud, ArrowLeft } from 'lucide-react';
+import { Calendar, CheckCircle2, UploadCloud, ArrowLeft } from 'lucide-react';
 import { compressAndUploadImage } from '../utils/imageUpload';
 
 export const MissionDetail = () => {
@@ -75,10 +75,8 @@ export const MissionDetail = () => {
           <div>
             <Label className="text-slate-500 mb-1 block">Cliente</Label>
             <div className="flex items-center gap-2 text-slate-900 font-medium">
-              <MapPin className="w-4 h-4 text-slate-400" />
               {client.name}
             </div>
-            <p className="text-sm text-slate-500 mt-1 ml-6">{client.address}</p>
           </div>
           <div>
             <Label className="text-slate-500 mb-1 block">Fecha de Creación</Label>

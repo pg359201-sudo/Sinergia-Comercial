@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../store/AppContext';
 import { Card, Badge, Input } from './ui';
-import { MapPin, Store, ChevronRight, Search } from 'lucide-react';
+import { Store, ChevronRight, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const ClientsList = () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppStore } from '../store/AppContext';
 import { Card } from './ui';
-import { MapPin, CheckCircle2, AlertTriangle, ShoppingCart, ChevronRight, Camera } from 'lucide-react';
+import { Store, CheckCircle2, AlertTriangle, ShoppingCart, ChevronRight, Camera } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const DashboardTerreno = () => {
@@ -47,7 +47,7 @@ export const DashboardTerreno = () => {
               <Link key={mission.id} to={`/missions/${mission.id}`} className="block">
                 <Card className="p-4 flex items-center gap-4 active:bg-slate-50 transition-colors">
                   <div className="w-12 h-12 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
-                    <MapPin className="w-6 h-6" />
+                    <Store className="w-6 h-6" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-slate-900 truncate">{mission.title}</h3>

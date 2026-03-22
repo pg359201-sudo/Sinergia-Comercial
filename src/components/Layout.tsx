@@ -24,7 +24,7 @@ export const Layout = () => {
       { name: 'Misiones', path: '/missions', icon: ClipboardList },
       { name: 'Ventas', path: '/sales', icon: ShoppingCart },
       { name: 'Alertas', path: '/alerts', icon: BellRing },
-      { name: 'Fotos', path: '/activations', icon: Camera },
+      { name: 'Activaciones', path: '/activations', icon: Camera },
     ];
 
     return (

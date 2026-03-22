@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../store/AppContext';
 import { Card, Badge, Button } from './ui';
-import { Camera, Plus, MapPin, Calendar, User as UserIcon, Trash2 } from 'lucide-react';
+import { Camera, Plus, Store, Calendar, User as UserIcon, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -154,7 +154,7 @@ export const ActivationsList = () => {
                 
                 <div className="space-y-2 mb-4 flex-1">
                   <div className="flex items-start gap-2 text-sm text-slate-600">
-                    <MapPin className="w-4 h-4 mt-0.5 text-slate-400 shrink-0" />
+                    <Store className="w-4 h-4 mt-0.5 text-slate-400 shrink-0" />
                     <div>
                       <span className="font-medium text-slate-900 block">{getClientName(activation.clientId)}</span>
                       <span className="text-xs">{getClientRoute(activation.clientId)}</span>

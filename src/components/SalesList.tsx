@@ -3,7 +3,7 @@ import { useAppStore } from '../store/AppContext';
 import { Card, Button } from './ui';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { MapPin, Calendar, ShoppingCart, Plus, Trash2 } from 'lucide-react';
+import { Store, Calendar, ShoppingCart, Plus, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const SalesList = () => {
@@ -133,7 +133,7 @@ export const SalesList = () => {
               
               <div className="space-y-2 mt-auto pt-3 border-t border-slate-100">
                 <div className="flex items-center gap-2 text-sm text-slate-600">
-                  <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
+                  <Store className="w-4 h-4 text-slate-400 shrink-0" />
                   <span className="truncate font-medium">{client?.name}</span>
                 </div>
                 

@@ -74,7 +74,7 @@ export const NewMissionForm = () => {
                 onChange={(e) => setClientId(e.target.value)}
                 required
               >
-                {clients.map(c => (
+                {[...clients].sort((a, b) => a.name.localeCompare(b.name)).map(c => (
                   <option key={c.id} value={c.id}>{c.name}</option>
                 ))}
               </select>
