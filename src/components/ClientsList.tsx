@@ -53,9 +53,8 @@ export const ClientsList = () => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-slate-900 text-base line-clamp-1">{client.name}</h3>
-                    <div className="flex items-center gap-1 text-xs text-slate-400 mt-0.5">
-                      <MapPin className="w-3 h-3 shrink-0" />
-                      <span className="truncate">{client.address}</span>
+                    <div className="flex items-center gap-1 text-xs text-slate-500 mt-0.5 font-medium">
+                      <span className="truncate">GEC: {client.gec}</span>
                     </div>
                   </div>
                 </div>
@@ -65,10 +64,6 @@ export const ClientsList = () => {
                     <div className="flex flex-col">
                       <span className="uppercase tracking-wider opacity-70">Canal</span>
                       <span className="font-medium text-slate-500 truncate max-w-[100px]">{client.channel}</span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="uppercase tracking-wider opacity-70">GEC</span>
-                      <span className="font-medium text-slate-500 truncate max-w-[100px]">{client.gec}</span>
                     </div>
                     <div className="flex flex-col">
                       <span className="uppercase tracking-wider opacity-70">Ruta</span>
