@@ -25,6 +25,11 @@ export const ClientsList = () => {
     return Math.round(num).toLocaleString('es-AR');
   };
 
+  const formatTextWithoutPrefix = (text: string | undefined) => {
+    if (!text) return '';
+    return text.replace(/^\s*\d+\s*-\s*/, '').trim();
+  };
+
   return (
     <div className="space-y-6 pb-8">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -77,7 +82,7 @@ export const ClientsList = () => {
                   <div className="flex flex-wrap gap-x-4 gap-y-2 text-[11px] text-slate-400 mb-3">
                     <div className="flex flex-col">
                       <span className="uppercase tracking-wider opacity-70">Canal</span>
-                      <span className="font-medium text-slate-500 truncate max-w-[100px]">{client.channel}</span>
+                      <span className="font-medium text-slate-500 truncate max-w-[100px]">{formatTextWithoutPrefix(client.channel)}</span>
                     </div>
                     <div className="flex flex-col">
                       <span className="uppercase tracking-wider opacity-70">Ruta</span>
@@ -85,7 +90,7 @@ export const ClientsList = () => {
                     </div>
                     <div className="flex flex-col">
                       <span className="uppercase tracking-wider opacity-70">GEC</span>
-                      <span className="font-medium text-slate-500 truncate max-w-[100px]">{client.gec}</span>
+                      <span className="font-medium text-slate-500 truncate max-w-[100px]">{formatTextWithoutPrefix(client.gec)}</span>
                     </div>
                   </div>
                   <div className="flex items-center justify-end">
