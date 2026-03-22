@@ -106,56 +106,56 @@ export const AlertsList = () => {
           const creator = users.find(u => u.id === alert.createdBy);
           
           return (
-            <Card key={alert.id} className={`p-5 flex flex-col border-l-4 border-l-amber-500 relative ${selectedIds.has(alert.id) ? 'ring-2 ring-indigo-500' : ''}`}>
+            <Card key={alert.id} className={`p-3 md:p-5 flex flex-col border-l-4 border-l-amber-500 relative ${selectedIds.has(alert.id) ? 'ring-2 ring-indigo-500' : ''}`}>
               {isEscritorio && (
-                <div className="absolute top-3 right-3 z-10">
+                <div className="absolute top-2 right-2 md:top-3 md:right-3 z-10">
                   <input 
                     type="checkbox" 
-                    className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer shadow-sm"
+                    className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 md:w-5 md:h-5 cursor-pointer shadow-sm"
                     checked={selectedIds.has(alert.id)}
                     onChange={() => handleSelectOne(alert.id)}
                   />
                 </div>
               )}
-              <div className={`flex justify-between items-start mb-3 ${isEscritorio ? 'pr-8' : ''}`}>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant={alert.status === 'new' ? 'warning' : alert.status === 'read' ? 'info' : 'success'}>
+              <div className={`flex justify-between items-start mb-2 md:mb-3 ${isEscritorio ? 'pr-6 md:pr-8' : ''}`}>
+                <div className="flex flex-wrap items-center gap-1.5 md:gap-2">
+                  <Badge variant={alert.status === 'new' ? 'warning' : alert.status === 'read' ? 'info' : 'success'} className="text-[10px] md:text-xs px-1.5 py-0.5 md:px-2.5 md:py-0.5">
                     {alert.status === 'new' ? 'Nueva' : alert.status === 'read' ? 'Leída' : 'Accionada'}
                   </Badge>
-                  <Badge variant="default" className="bg-slate-200">
+                  <Badge variant="default" className="bg-slate-200 text-[10px] md:text-xs px-1.5 py-0.5 md:px-2.5 md:py-0.5">
                     {alert.type === 'competitor_action' ? 'Competencia' : alert.type === 'stock_out' ? 'Quiebre Stock' : alert.type === 'new_opportunity' ? 'Oportunidad' : 'Otro'}
                   </Badge>
                 </div>
-                <span className="text-xs text-slate-500 flex items-center gap-1 shrink-0 ml-2">
+                <span className="text-[10px] md:text-xs text-slate-500 flex items-center gap-1 shrink-0 ml-2">
                   <Calendar className="w-3 h-3" />
                   {format(new Date(alert.createdAt), 'dd MMM HH:mm', { locale: es })}
                 </span>
               </div>
               
-              <p className="text-slate-800 text-sm md:text-base font-medium mb-4 flex-1">{alert.description}</p>
+              <p className="text-slate-800 text-xs md:text-base font-medium mb-2 md:mb-4 flex-1">{alert.description}</p>
               
-              <div className="space-y-2 mt-auto pt-3 border-t border-slate-100">
-                <div className="flex items-center gap-2 text-sm text-slate-600">
-                  <Store className="w-4 h-4 text-slate-400 shrink-0" />
+              <div className="space-y-1.5 md:space-y-2 mt-auto pt-2 md:pt-3 border-t border-slate-100">
+                <div className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-slate-600">
+                  <Store className="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-400 shrink-0" />
                   <span className="truncate font-medium">{client?.name}</span>
                 </div>
                 
                 {isEscritorio && (
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
-                    <img src={creator?.avatar} alt={creator?.name} className="w-5 h-5 rounded-full shrink-0" />
+                  <div className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-slate-600">
+                    <img src={creator?.avatar} alt={creator?.name} className="w-4 h-4 md:w-5 md:h-5 rounded-full shrink-0" />
                     <span className="truncate">Reportado por: {creator?.name}</span>
                   </div>
                 )}
                 
                 {alert.status !== 'actioned' && (
-                  <div className="flex flex-col sm:flex-row gap-2 mt-4">
+                  <div className="flex flex-col sm:flex-row gap-2 mt-2 md:mt-4">
                     {alert.status === 'new' && (
-                      <Button variant="outline" className="flex-1" onClick={() => updateAlertStatus(alert.id, 'read')}>
+                      <Button variant="outline" className="flex-1 text-xs md:text-sm h-8 md:h-10" onClick={() => updateAlertStatus(alert.id, 'read')}>
                         Marcar Leída
                       </Button>
                     )}
                     {isEscritorio && (
-                      <Button variant="primary" className="flex-1 bg-emerald-600 hover:bg-emerald-700" onClick={() => updateAlertStatus(alert.id, 'actioned')}>
+                      <Button variant="primary" className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-xs md:text-sm h-8 md:h-10" onClick={() => updateAlertStatus(alert.id, 'actioned')}>
                         Marcar Accionada
                       </Button>
                     )}

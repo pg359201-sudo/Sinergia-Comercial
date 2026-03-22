@@ -106,40 +106,40 @@ export const SalesList = () => {
           const creator = users.find(u => u.id === sale.createdBy);
           
           return (
-            <Card key={sale.id} className={`p-5 flex flex-col border-t-4 border-t-emerald-500 relative ${selectedIds.has(sale.id) ? 'ring-2 ring-indigo-500' : ''}`}>
-              <div className="absolute top-3 right-3 z-10">
+            <Card key={sale.id} className={`p-3 md:p-5 flex flex-col border-t-4 border-t-emerald-500 relative ${selectedIds.has(sale.id) ? 'ring-2 ring-indigo-500' : ''}`}>
+              <div className="absolute top-2 right-2 md:top-3 md:right-3 z-10">
                 <input 
                   type="checkbox" 
-                  className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer shadow-sm"
+                  className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 md:w-5 md:h-5 cursor-pointer shadow-sm"
                   checked={selectedIds.has(sale.id)}
                   onChange={() => handleSelectOne(sale.id)}
                 />
               </div>
-              <div className="flex justify-between items-start mb-3 pr-8">
-                <div className="p-2 bg-emerald-100 text-emerald-600 rounded-lg">
-                  <ShoppingCart className="w-5 h-5" />
+              <div className="flex justify-between items-start mb-2 md:mb-3 pr-6 md:pr-8">
+                <div className="p-1.5 md:p-2 bg-emerald-100 text-emerald-600 rounded-lg">
+                  <ShoppingCart className="w-4 h-4 md:w-5 md:h-5" />
                 </div>
-                <span className="text-xs text-slate-500 flex items-center gap-1 shrink-0">
+                <span className="text-[10px] md:text-xs text-slate-500 flex items-center gap-1 shrink-0">
                   <Calendar className="w-3 h-3" />
                   {format(new Date(sale.createdAt), 'dd MMM HH:mm', { locale: es })}
                 </span>
               </div>
               
-              <h3 className="text-lg font-bold text-slate-900 mb-1">{sale.product}</h3>
-              <div className="flex justify-between items-end mb-4">
-                <span className="text-sm text-slate-600">Cant: {sale.quantity}</span>
-                {sale.amount > 0 && <span className="text-xl font-bold text-emerald-600">${sale.amount.toLocaleString()}</span>}
+              <h3 className="text-base md:text-lg font-bold text-slate-900 mb-1">{sale.product}</h3>
+              <div className="flex justify-between items-end mb-2 md:mb-4">
+                <span className="text-xs md:text-sm text-slate-600">Cant: {sale.quantity}</span>
+                {sale.amount > 0 && <span className="text-lg md:text-xl font-bold text-emerald-600">${sale.amount.toLocaleString()}</span>}
               </div>
               
-              <div className="space-y-2 mt-auto pt-3 border-t border-slate-100">
-                <div className="flex items-center gap-2 text-sm text-slate-600">
-                  <Store className="w-4 h-4 text-slate-400 shrink-0" />
+              <div className="space-y-1.5 md:space-y-2 mt-auto pt-2 md:pt-3 border-t border-slate-100">
+                <div className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-slate-600">
+                  <Store className="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-400 shrink-0" />
                   <span className="truncate font-medium">{client?.name}</span>
                 </div>
                 
                 {isEscritorio && (
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
-                    <img src={creator?.avatar} alt={creator?.name} className="w-5 h-5 rounded-full shrink-0" />
+                  <div className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-slate-600">
+                    <img src={creator?.avatar} alt={creator?.name} className="w-4 h-4 md:w-5 md:h-5 rounded-full shrink-0" />
                     <span className="truncate">Vendido por: {creator?.name}</span>
                   </div>
                 )}

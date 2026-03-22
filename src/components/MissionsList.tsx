@@ -106,45 +106,45 @@ export const MissionsList = () => {
           const assignedUser = users.find(u => u.id === mission.assignedTo);
           
           return (
-            <Card key={mission.id} className={`p-5 flex flex-col relative ${selectedIds.has(mission.id) ? 'ring-2 ring-indigo-500' : ''}`}>
+            <Card key={mission.id} className={`p-3 md:p-5 flex flex-col relative ${selectedIds.has(mission.id) ? 'ring-2 ring-indigo-500' : ''}`}>
               {isEscritorio && (
-                <div className="absolute top-3 right-3 z-10">
+                <div className="absolute top-2 right-2 md:top-3 md:right-3 z-10">
                   <input 
                     type="checkbox" 
-                    className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-5 h-5 cursor-pointer shadow-sm"
+                    className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 md:w-5 md:h-5 cursor-pointer shadow-sm"
                     checked={selectedIds.has(mission.id)}
                     onChange={() => handleSelectOne(mission.id)}
                   />
                 </div>
               )}
-              <div className={`flex justify-between items-start mb-3 ${isEscritorio ? 'pr-8' : ''}`}>
-                <Badge variant={mission.status === 'completed' ? 'success' : mission.status === 'in-progress' ? 'warning' : 'info'}>
+              <div className={`flex justify-between items-start mb-2 md:mb-3 ${isEscritorio ? 'pr-6 md:pr-8' : ''}`}>
+                <Badge variant={mission.status === 'completed' ? 'success' : mission.status === 'in-progress' ? 'warning' : 'info'} className="text-[10px] md:text-xs px-1.5 py-0.5 md:px-2.5 md:py-0.5">
                   {mission.status === 'completed' ? 'Completada' : mission.status === 'in-progress' ? 'En Progreso' : 'Pendiente'}
                 </Badge>
-                <span className="text-xs text-slate-500 flex items-center gap-1">
+                <span className="text-[10px] md:text-xs text-slate-500 flex items-center gap-1">
                   <Calendar className="w-3 h-3" />
                   {format(new Date(mission.createdAt), 'dd MMM', { locale: es })}
                 </span>
               </div>
               
-              <h3 className="text-lg font-bold text-slate-900 mb-1">{mission.title}</h3>
-              <p className="text-sm text-slate-600 line-clamp-2 mb-4 flex-1">{mission.description}</p>
+              <h3 className="text-base md:text-lg font-bold text-slate-900 mb-1">{mission.title}</h3>
+              <p className="text-xs md:text-sm text-slate-600 line-clamp-2 mb-2 md:mb-4 flex-1">{mission.description}</p>
               
-              <div className="space-y-2 mt-auto pt-3 border-t border-slate-100">
-                <div className="flex items-center gap-2 text-sm text-slate-600">
-                  <Store className="w-4 h-4 text-slate-400 shrink-0" />
+              <div className="space-y-1.5 md:space-y-2 mt-auto pt-2 md:pt-3 border-t border-slate-100">
+                <div className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-slate-600">
+                  <Store className="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-400 shrink-0" />
                   <span className="truncate font-medium">{client?.name}</span>
                 </div>
                 
                 {isEscritorio && (
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
-                    <img src={assignedUser?.avatar} alt={assignedUser?.name} className="w-5 h-5 rounded-full shrink-0" />
+                  <div className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-slate-600">
+                    <img src={assignedUser?.avatar} alt={assignedUser?.name} className="w-4 h-4 md:w-5 md:h-5 rounded-full shrink-0" />
                     <span className="truncate">Asignado a: {assignedUser?.name}</span>
                   </div>
                 )}
                 
-                <Link to={`/missions/${mission.id}`} className="block mt-3">
-                  <Button variant={mission.status === 'completed' ? 'outline' : 'primary'} className="w-full">
+                <Link to={`/missions/${mission.id}`} className="block mt-2 md:mt-3">
+                  <Button variant={mission.status === 'completed' ? 'outline' : 'primary'} className="w-full text-xs md:text-sm h-8 md:h-10">
                     {isEscritorio ? 'Ver Detalles' : mission.status === 'completed' ? 'Ver Ejecución' : 'Ejecutar Misión'}
                   </Button>
                 </Link>
