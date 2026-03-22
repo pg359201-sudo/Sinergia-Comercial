@@ -8,9 +8,21 @@ export const ClientsList = () => {
   const { clients } = useAppStore();
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredClients = clients.filter(client => 
-    client.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const parseUC12mm = (value: string | undefined): number => {
+    if (!value || value === '0') return 0;
+    let cleanValue = value.toString();
+    if (cleanValue.includes('.') && cleanValue.includes(',')) {
+      cleanValue = cleanValue.replace(/\./g, '').replace(',', '.');
+    } else if (cleanValue.includes(',')) {
+      cleanValue = cleanValue.replace(',', '.');
+    }
+    const num = parseFloat(cleanValue);
+    return isNaN(num) ? 0 : num;
+  };
+
+  const filteredClients = clients
+    .filter(client => client.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .sort((a, b) => parseUC12mm(b.uc12mm) - parseUC12mm(a.uc12mm));
 
   const formatUC12mm = (value: string | undefined) => {
     if (!value || value === '0') return '0';
