@@ -53,9 +53,6 @@ export const ClientsList = () => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-slate-900 text-base line-clamp-1">{client.name}</h3>
-                    <div className="flex items-center gap-1 text-xs text-slate-500 mt-0.5 font-medium">
-                      <span className="truncate">GEC: {client.gec}</span>
-                    </div>
                   </div>
                 </div>
                 
@@ -68,6 +65,14 @@ export const ClientsList = () => {
                     <div className="flex flex-col">
                       <span className="uppercase tracking-wider opacity-70">Ruta</span>
                       <span className="font-medium text-slate-500 truncate max-w-[120px]">{client.route}</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="uppercase tracking-wider opacity-70">GEC</span>
+                      <span className="font-medium text-slate-500 truncate max-w-[100px]">{client.gec}</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="uppercase tracking-wider opacity-70">UC 12mm</span>
+                      <span className="font-medium text-slate-500 truncate max-w-[100px]">{client.uc12mm || '0'}</span>
                     </div>
                   </div>
                   <div className="flex items-center justify-end">

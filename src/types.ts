@@ -15,6 +15,7 @@ export interface Client {
   visitDay: string;
   channel: string;
   gec: string;
+  uc12mm?: string;
 }
 
 export type MissionStatus = 'pending' | 'in-progress' | 'completed';

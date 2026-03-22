@@ -43,13 +43,13 @@ export const ClientDetail = () => {
           <div className="flex-1">
             <div className="flex flex-wrap items-center gap-3 mb-2">
               <h1 className="text-2xl md:text-3xl font-bold text-slate-900">{client.name}</h1>
-              <Badge variant="default" className="bg-slate-800">{client.channel}</Badge>
               <Badge variant="secondary" className="bg-slate-100 text-slate-700">{client.gec}</Badge>
             </div>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-6 text-slate-600 mt-3">
               <span className="flex items-center gap-2"><MapPin className="w-4 h-4 text-slate-400" /> {client.address}</span>
               <span className="flex items-center gap-2"><Calendar className="w-4 h-4 text-slate-400" /> Visita: {client.visitDay}</span>
               <span className="flex items-center gap-2 text-indigo-600 font-medium">{client.route}</span>
+              {client.uc12mm && <span className="flex items-center gap-2 text-slate-500 font-medium">UC 12mm: {client.uc12mm}</span>}
             </div>
           </div>
         </div>

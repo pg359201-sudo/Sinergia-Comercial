@@ -36,6 +36,7 @@ export const DashboardEscritorio = () => {
           let grupoCanalColIndex = -1;
           let gecColIndex = -1;
           let rutaVentaColIndex = -1;
+          let uc12mmColIndex = -1;
           
           // Buscar dinámicamente en qué columna están los datos
           for (let c = 0; c < row2.length; c++) {
@@ -49,6 +50,8 @@ export const DashboardEscritorio = () => {
               gecColIndex = c;
             } else if (normalized === 'rutaventa') {
               rutaVentaColIndex = c;
+            } else if (normalized === 'uc12mm') {
+              uc12mmColIndex = c;
             }
           }
 
@@ -60,6 +63,7 @@ export const DashboardEscritorio = () => {
               const grupoCanal = grupoCanalColIndex !== -1 ? data[i][grupoCanalColIndex] : null;
               const gec = gecColIndex !== -1 ? data[i][gecColIndex] : null;
               const rutaVenta = rutaVentaColIndex !== -1 ? data[i][rutaVentaColIndex] : null;
+              const uc12mm = uc12mmColIndex !== -1 ? data[i][uc12mmColIndex] : null;
 
               if (razonSocial && typeof razonSocial === 'string' && razonSocial.trim() !== '') {
                 newClients.push({
@@ -69,7 +73,8 @@ export const DashboardEscritorio = () => {
                   route: rutaVenta ? String(rutaVenta).trim() : 'Sin ruta',
                   visitDay: 'Lunes',
                   channel: grupoCanal ? String(grupoCanal).trim() : 'Sin canal',
-                  gec: gec ? String(gec).trim() : 'Sin GEC'
+                  gec: gec ? String(gec).trim() : 'Sin GEC',
+                  uc12mm: uc12mm ? String(uc12mm).trim() : '0'
                 });
               }
             }
