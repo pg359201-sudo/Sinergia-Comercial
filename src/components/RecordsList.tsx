@@ -48,7 +48,7 @@ export const RecordsList = () => {
       clientId: a.clientId,
       type: 'Activación',
       typePath: 'activations',
-      description: a.title,
+      description: a.feedback ? `${a.title} (Feedback: ${a.feedback})` : a.title,
       hasPhoto: !!a.evidenceUrl
     }))
   ].map(record => {

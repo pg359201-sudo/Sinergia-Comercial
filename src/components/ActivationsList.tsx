@@ -176,6 +176,13 @@ export const ActivationsList = () => {
                       </p>
                     </div>
                   )}
+                  
+                  {activation.feedback && (
+                    <div className="mt-2 bg-indigo-50 p-2 md:p-3 rounded-lg border border-indigo-100">
+                      <p className="text-[10px] md:text-xs text-indigo-800 font-medium mb-0.5 md:mb-1">Feedback:</p>
+                      <p className="text-[11px] md:text-sm text-indigo-900 italic line-clamp-2 leading-tight">"{activation.feedback}"</p>
+                    </div>
+                  )}
                 </div>
               </Link>
             </Card>
