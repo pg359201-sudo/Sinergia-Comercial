@@ -128,7 +128,6 @@ export const SalesList = () => {
               <h3 className="text-base md:text-lg font-bold text-slate-900 mb-1">{sale.product}</h3>
               <div className="flex justify-between items-end mb-2 md:mb-4">
                 <span className="text-xs md:text-sm text-slate-600">Cant: {sale.quantity}</span>
-                {sale.amount > 0 && <span className="text-lg md:text-xl font-bold text-emerald-600">${sale.amount.toLocaleString()}</span>}
               </div>
               
               <div className="space-y-1.5 md:space-y-2 mt-auto pt-2 md:pt-3 border-t border-slate-100">

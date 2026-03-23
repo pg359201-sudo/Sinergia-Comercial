@@ -53,7 +53,6 @@ export interface TacticalSale {
   createdBy: string; // User ID (terreno)
   product: string;
   quantity: number;
-  amount: number;
   createdAt: string;
 }
 

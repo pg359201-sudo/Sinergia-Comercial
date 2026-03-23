@@ -63,7 +63,6 @@ const mockSales: TacticalSale[] = [
     createdBy: 'u2',
     product: 'Whisky White Horse 750ml',
     quantity: 12,
-    amount: 150000,
     createdAt: new Date(Date.now() - 7200000).toISOString(),
   }
 ];

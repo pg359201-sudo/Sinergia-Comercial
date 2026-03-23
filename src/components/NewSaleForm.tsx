@@ -19,7 +19,6 @@ export const NewSaleForm = () => {
     addSale({
       product,
       quantity,
-      amount: 0,
       clientId,
       createdBy: currentUser!.id,
     });

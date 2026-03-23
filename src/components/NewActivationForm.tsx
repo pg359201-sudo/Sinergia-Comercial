@@ -94,7 +94,7 @@ export const NewActivationForm = () => {
             <Label htmlFor="description" className="mb-2 block text-sm md:text-base">Descripción (Opcional)</Label>
             <textarea
               id="description"
-              className="flex w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-base placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent min-h-[100px]"
+              className="flex w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-base placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent min-h-[80px] md:min-h-[100px]"
               placeholder="Detalles sobre la exhibición, cantidad de caras, etc."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -113,33 +113,33 @@ export const NewActivationForm = () => {
             {!evidenceUrl ? (
               <div 
                 onClick={() => fileInputRef.current?.click()}
-                className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors ${
+                className={`border-2 border-dashed rounded-xl p-6 md:p-8 text-center cursor-pointer transition-colors ${
                   isUploading ? 'border-indigo-300 bg-indigo-50' : 'border-slate-300 hover:border-indigo-400 hover:bg-slate-50'
                 }`}
               >
                 {isUploading ? (
                   <div className="flex flex-col items-center text-indigo-600">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mb-2"></div>
-                    <span className="font-medium">Subiendo imagen...</span>
+                    <div className="animate-spin rounded-full h-6 w-6 md:h-8 md:w-8 border-b-2 border-indigo-600 mb-2"></div>
+                    <span className="font-medium text-sm md:text-base">Subiendo imagen...</span>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center text-slate-500">
-                    <Upload className="w-10 h-10 mb-3 text-slate-400" />
-                    <span className="font-medium text-slate-700">Tomar foto o subir archivo</span>
-                    <span className="text-sm mt-1">Soporta JPG, PNG</span>
+                    <Upload className="w-8 h-8 md:w-10 md:h-10 mb-2 md:mb-3 text-slate-400" />
+                    <span className="font-medium text-sm md:text-base text-slate-700">Tomar foto o subir archivo</span>
+                    <span className="text-xs md:text-sm mt-1">Soporta JPG, PNG</span>
                   </div>
                 )}
               </div>
             ) : (
               <div className="relative rounded-xl overflow-hidden border border-slate-200">
-                <img src={evidenceUrl} alt="Evidencia" className="w-full h-48 object-cover" referrerPolicy="no-referrer" />
+                <img src={evidenceUrl} alt="Evidencia" className="w-full h-32 md:h-48 object-cover" referrerPolicy="no-referrer" />
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                  <Button type="button" variant="secondary" onClick={() => fileInputRef.current?.click()}>
+                  <Button type="button" variant="secondary" className="text-xs md:text-sm h-8 md:h-10" onClick={() => fileInputRef.current?.click()}>
                     Cambiar Foto
                   </Button>
                 </div>
                 <div className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md">
-                  <CheckCircle2 className="w-6 h-6 text-emerald-500" />
+                  <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-emerald-500" />
                 </div>
               </div>
             )}

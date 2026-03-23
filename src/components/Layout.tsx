@@ -5,7 +5,7 @@ import { LayoutDashboard, ClipboardList, BellRing, LogOut, Briefcase, ShoppingCa
 import { cn } from './ui';
 
 export const Layout = () => {
-  const { currentUser, logout } = useAppStore();
+  const { currentUser, logout, alerts } = useAppStore();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -17,6 +17,8 @@ export const Layout = () => {
     logout();
     navigate('/login');
   };
+
+  const unreadAlertsCount = alerts.filter(a => a.status === 'new').length;
 
   if (currentUser.role === 'terreno') {
     const mobileNav = [
@@ -52,11 +54,18 @@ export const Layout = () => {
                 key={item.path}
                 to={item.path}
                 className={cn(
-                  'flex flex-col items-center justify-center w-14 h-14 rounded-xl transition-colors',
+                  'flex flex-col items-center justify-center w-14 h-14 rounded-xl transition-colors relative',
                   isActive ? 'text-indigo-600' : 'text-slate-500 hover:text-slate-900'
                 )}
               >
-                <Icon className={cn("w-6 h-6 mb-1", isActive && "fill-indigo-100")} />
+                <div className="relative">
+                  <Icon className={cn("w-6 h-6 mb-1", isActive && "fill-indigo-100")} />
+                  {item.name === 'Alertas' && unreadAlertsCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                      {unreadAlertsCount}
+                    </span>
+                  )}
+                </div>
                 <span className="text-[10px] font-medium">{item.name}</span>
               </Link>
             );
@@ -99,7 +108,14 @@ export const Layout = () => {
                   isActive ? 'bg-indigo-600 text-white' : 'hover:bg-slate-800 hover:text-white'
                 )}
               >
-                <Icon className="w-5 h-5" />
+                <div className="relative">
+                  <Icon className="w-5 h-5" />
+                  {item.name === 'Alertas' && unreadAlertsCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center shadow-sm">
+                      {unreadAlertsCount}
+                    </span>
+                  )}
+                </div>
                 <span className="font-medium">{item.name}</span>
               </Link>
             );

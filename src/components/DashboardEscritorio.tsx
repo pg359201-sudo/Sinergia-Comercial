@@ -15,7 +15,6 @@ export const DashboardEscritorio = () => {
   const pendingMissions = missions.filter(m => m.status !== 'completed').length;
   const completedMissions = missions.filter(m => m.status === 'completed').length;
   const newAlerts = alerts.filter(a => a.status === 'new').length;
-  const totalSales = sales.reduce((acc, sale) => acc + sale.amount, 0);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -201,7 +200,6 @@ export const DashboardEscritorio = () => {
               <div key={sale.id} className="p-4 rounded-xl border border-slate-100 bg-slate-50 flex flex-col gap-2">
                 <div className="flex justify-between items-start">
                   <span className="text-sm font-bold text-slate-900">{sale.product}</span>
-                  {sale.amount > 0 && <span className="text-sm font-bold text-emerald-600">${sale.amount.toLocaleString()}</span>}
                 </div>
                 <div className="flex justify-between items-center text-xs text-slate-500">
                   <span>Cant: {sale.quantity}</span>
