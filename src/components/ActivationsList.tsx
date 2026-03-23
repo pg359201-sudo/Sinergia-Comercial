@@ -126,8 +126,8 @@ export const ActivationsList = () => {
       ) : (
         <div className={`grid gap-4 md:gap-6 ${isMobile ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
           {filteredActivations.map(activation => (
-            <Card key={activation.id} className={`overflow-hidden flex flex-row md:flex-col border-indigo-100 hover:border-indigo-300 transition-colors shadow-sm relative ${selectedIds.has(activation.id) ? 'ring-2 ring-indigo-500' : ''}`}>
-              <div className="absolute top-2 left-2 z-10 md:top-3 md:left-3">
+            <Card key={activation.id} className={`overflow-hidden flex flex-row md:flex-col border-indigo-100 hover:border-indigo-300 transition-colors shadow-sm relative group ${selectedIds.has(activation.id) ? 'ring-2 ring-indigo-500' : ''}`}>
+              <div className="absolute top-2 left-2 z-20 md:top-3 md:left-3">
                 <input 
                   type="checkbox" 
                   className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 md:w-5 md:h-5 cursor-pointer shadow-sm"
@@ -135,48 +135,49 @@ export const ActivationsList = () => {
                   onChange={() => handleSelectOne(activation.id)}
                 />
               </div>
-              <div className="w-24 h-full md:w-full md:h-48 relative bg-slate-100 shrink-0">
-                <img 
-                  src={activation.evidenceUrl} 
-                  alt={activation.title} 
-                  className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute bottom-1 right-1 md:top-3 md:right-3 md:bottom-auto">
-                  <Badge variant="secondary" className="bg-black/60 text-white border-none backdrop-blur-sm text-[10px] md:text-xs px-1.5 py-0.5 md:px-2.5 md:py-0.5">
-                    {format(new Date(activation.createdAt), "d MMM", { locale: es })}
-                  </Badge>
-                </div>
-              </div>
-              
-              <div className="p-3 md:p-5 flex-1 flex flex-col min-w-0">
-                <h3 className="font-bold text-sm md:text-lg text-slate-900 mb-1 md:mb-2 line-clamp-1 pl-5 md:pl-6">{activation.title}</h3>
-                
-                <div className="space-y-1 md:space-y-2 mb-2 md:mb-4 flex-1">
-                  <div className="flex items-start gap-1.5 md:gap-2 text-xs md:text-sm text-slate-600">
-                    <Store className="w-3.5 h-3.5 md:w-4 md:h-4 mt-0.5 text-slate-400 shrink-0" />
-                    <div className="min-w-0">
-                      <span className="font-medium text-slate-900 block truncate">{getClientName(activation.clientId)}</span>
-                      <span className="text-[10px] md:text-xs truncate block">{getClientRoute(activation.clientId)}</span>
-                    </div>
+              <Link to={`/records/activations/${activation.id}`} className="flex flex-row md:flex-col w-full">
+                <div className="w-20 md:w-full md:h-48 relative bg-slate-100 shrink-0">
+                  <img 
+                    src={activation.evidenceUrl} 
+                    alt={activation.title} 
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute bottom-1 right-1 md:top-3 md:right-3 md:bottom-auto">
+                    <Badge variant="secondary" className="bg-black/60 text-white border-none backdrop-blur-sm text-[9px] md:text-xs px-1.5 py-0.5 md:px-2.5 md:py-0.5">
+                      {format(new Date(activation.createdAt), "d MMM", { locale: es })}
+                    </Badge>
                   </div>
+                </div>
+                
+                <div className="p-2.5 md:p-5 flex-1 flex flex-col min-w-0">
+                  <h3 className="font-bold text-sm md:text-lg text-slate-900 mb-1 line-clamp-1 pl-5 md:pl-6 group-hover:text-indigo-600 transition-colors">{activation.title}</h3>
                   
-                  {currentUser?.role === 'escritorio' && (
-                    <div className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-slate-600">
-                      <UserIcon className="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-400 shrink-0" />
-                      <span className="truncate">{getUserName(activation.createdBy)}</span>
+                  <div className="space-y-1 md:space-y-2 mb-1 md:mb-4 flex-1">
+                    <div className="flex items-start gap-1.5 md:gap-2 text-xs md:text-sm text-slate-600">
+                      <Store className="w-3.5 h-3.5 md:w-4 md:h-4 mt-0.5 text-slate-400 shrink-0" />
+                      <div className="min-w-0">
+                        <span className="font-medium text-slate-900 block truncate leading-tight">{getClientName(activation.clientId)}</span>
+                      </div>
+                    </div>
+                    
+                    {currentUser?.role === 'escritorio' && (
+                      <div className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-slate-600">
+                        <UserIcon className="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-400 shrink-0" />
+                        <span className="truncate">{getUserName(activation.createdBy)}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {activation.description && (
+                    <div className="mt-auto pt-1.5 md:pt-3 border-t border-slate-100">
+                      <p className="text-[11px] md:text-sm text-slate-500 line-clamp-1 md:line-clamp-2 italic leading-tight">
+                        "{activation.description}"
+                      </p>
                     </div>
                   )}
                 </div>
-
-                {activation.description && (
-                  <div className="mt-auto pt-2 md:pt-3 border-t border-slate-100">
-                    <p className="text-xs md:text-sm text-slate-600 line-clamp-1 md:line-clamp-2 italic">
-                      "{activation.description}"
-                    </p>
-                  </div>
-                )}
-              </div>
+              </Link>
             </Card>
           ))}
         </div>

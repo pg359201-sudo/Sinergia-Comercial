@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/AppContext';
-import { Card, Badge, Button } from './ui';
-import { ArrowLeft, Calendar, User, Store, Camera } from 'lucide-react';
+import { Card, Badge, Button, Label } from './ui';
+import { ArrowLeft, Calendar, User, Store, Camera, MessageSquare } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 export const RecordDetail = () => {
   const { type, id } = useParams<{ type: string; id: string }>();
   const navigate = useNavigate();
-  const { missions, alerts, sales, activations, clients, users } = useAppStore();
+  const { missions, alerts, sales, activations, clients, users, updateActivationFeedback, currentUser } = useAppStore();
+
+  const [feedbackText, setFeedbackText] = useState('');
+  const [isEditingFeedback, setIsEditingFeedback] = useState(false);
 
   let recordData: any = null;
   let recordTypeLabel = '';
@@ -39,6 +42,13 @@ export const RecordDetail = () => {
 
   const client = clients.find(c => c.id === recordData.clientId);
   const user = users.find(u => u.id === (recordData.createdBy || recordData.assignedTo));
+
+  const handleSaveFeedback = () => {
+    if (id && feedbackText.trim()) {
+      updateActivationFeedback(id, feedbackText.trim());
+      setIsEditingFeedback(false);
+    }
+  };
 
   return (
     <div className="space-y-6 pb-8 max-w-3xl mx-auto">
@@ -159,6 +169,47 @@ export const RecordDetail = () => {
                   <p className="text-slate-700">{recordData.description}</p>
                 </div>
               )}
+              
+              <div className="pt-4 border-t border-slate-200 mt-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-sm text-slate-500 font-medium flex items-center gap-2">
+                    <MessageSquare className="w-4 h-4" />
+                    Feedback / Comentarios
+                  </p>
+                  {!isEditingFeedback && (
+                    <Button variant="ghost" className="h-8 text-xs" onClick={() => {
+                      setFeedbackText(recordData.feedback || '');
+                      setIsEditingFeedback(true);
+                    }}>
+                      {recordData.feedback ? 'Editar' : 'Añadir Feedback'}
+                    </Button>
+                  )}
+                </div>
+                
+                {isEditingFeedback ? (
+                  <div className="space-y-3">
+                    <textarea
+                      className="w-full p-3 border border-slate-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                      rows={3}
+                      placeholder="Escribe un comentario o feedback sobre esta activación..."
+                      value={feedbackText}
+                      onChange={(e) => setFeedbackText(e.target.value)}
+                    />
+                    <div className="flex justify-end gap-2">
+                      <Button variant="ghost" size="sm" onClick={() => setIsEditingFeedback(false)}>Cancelar</Button>
+                      <Button size="sm" onClick={handleSaveFeedback} className="bg-indigo-600 hover:bg-indigo-700">Guardar</Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-white p-4 rounded-xl border border-slate-200">
+                    {recordData.feedback ? (
+                      <p className="text-slate-700 italic">"{recordData.feedback}"</p>
+                    ) : (
+                      <p className="text-slate-400 text-sm italic">Sin feedback registrado.</p>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>

@@ -64,4 +64,5 @@ export interface Activation {
   createdBy: string; // User ID (terreno)
   createdAt: string;
   evidenceUrl: string;
+  feedback?: string;
 }

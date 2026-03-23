@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAppStore } from '../store/AppContext';
 import { Card, Badge } from './ui';
 import { ArrowLeft, Store, Calendar, ClipboardList, BellRing, ShoppingCart, Camera } from 'lucide-react';
@@ -161,28 +161,37 @@ export const ClientDetail = () => {
               if (item.type === 'activation') {
                 const act = item.data as Activation;
                 return (
-                  <Card key={`act-${act.id}`} className="p-5 border-l-4 border-l-indigo-500 flex flex-col sm:flex-row gap-4 shadow-sm">
-                    <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl h-fit shrink-0">
-                      <Camera className="w-6 h-6" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex flex-col sm:flex-row justify-between items-start mb-2 gap-2">
-                        <h3 className="font-bold text-slate-900 text-lg leading-tight">Activación: {act.title}</h3>
-                        <span className="text-xs text-slate-500 font-medium bg-slate-100 px-2 py-1 rounded-md shrink-0">{dateFormatted}</span>
+                  <Link key={`act-${act.id}`} to={`/records/activations/${act.id}`} className="block">
+                    <Card className="p-5 border-l-4 border-l-indigo-500 flex flex-col sm:flex-row gap-4 shadow-sm hover:border-indigo-400 transition-colors">
+                      <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl h-fit shrink-0">
+                        <Camera className="w-6 h-6" />
                       </div>
-                      {act.description && <p className="text-slate-600 mb-4 text-sm md:text-base">{act.description}</p>}
-                      
-                      {act.evidenceUrl && (
-                        <div className="mt-3 mb-4 rounded-xl overflow-hidden border border-slate-200 max-w-sm">
-                          <img src={act.evidenceUrl} alt="Evidencia" className="w-full h-48 object-cover" referrerPolicy="no-referrer" />
+                      <div className="flex-1">
+                        <div className="flex flex-col sm:flex-row justify-between items-start mb-2 gap-2">
+                          <h3 className="font-bold text-slate-900 text-lg leading-tight">Activación: {act.title}</h3>
+                          <span className="text-xs text-slate-500 font-medium bg-slate-100 px-2 py-1 rounded-md shrink-0">{dateFormatted}</span>
                         </div>
-                      )}
-                      
-                      <div className="pt-3 border-t border-slate-100 text-sm text-slate-500">
-                        Registrada por: <span className="font-medium text-slate-700">{getUserName(act.createdBy)}</span>
+                        {act.description && <p className="text-slate-600 mb-4 text-sm md:text-base">{act.description}</p>}
+                        
+                        {act.evidenceUrl && (
+                          <div className="mt-3 mb-4 rounded-xl overflow-hidden border border-slate-200 max-w-sm">
+                            <img src={act.evidenceUrl} alt="Evidencia" className="w-full h-48 object-cover" referrerPolicy="no-referrer" />
+                          </div>
+                        )}
+                        
+                        {act.feedback && (
+                          <div className="mb-4 bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                            <p className="text-xs text-indigo-800 font-medium mb-1">Feedback:</p>
+                            <p className="text-sm text-indigo-900 italic">"{act.feedback}"</p>
+                          </div>
+                        )}
+                        
+                        <div className="pt-3 border-t border-slate-100 text-sm text-slate-500">
+                          Registrada por: <span className="font-medium text-slate-700">{getUserName(act.createdBy)}</span>
+                        </div>
                       </div>
-                    </div>
-                  </Card>
+                    </Card>
+                  </Link>
                 );
               }
 

@@ -17,6 +17,7 @@ interface AppState {
   updateAlertStatus: (id: string, status: Alert['status']) => void;
   addSale: (sale: Omit<TacticalSale, 'id' | 'createdAt'>) => void;
   addActivation: (activation: Omit<Activation, 'id' | 'createdAt'>) => void;
+  updateActivationFeedback: (id: string, feedback: string) => void;
   addClients: (newClients: Client[]) => void;
   deleteMissions: (ids: string[]) => void;
   deleteAlerts: (ids: string[]) => void;
@@ -269,6 +270,17 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     } catch (error) { console.error("Error saving activation:", error); }
   };
 
+  const updateActivationFeedback = async (id: string, feedback: string) => {
+    setActivations(prev => prev.map(a => a.id === id ? { ...a, feedback } : a));
+    try {
+      await fetch(`/api/activations/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ feedback })
+      });
+    } catch (error) { console.error("Error updating activation feedback:", error); }
+  };
+
   const addClients = async (newClients: Client[]) => {
     // Optimistic UI update: merge by name
     setClients(prev => {
@@ -360,7 +372,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   return (
     <AppContext.Provider value={{
       currentUser, users, clients, missions, alerts, sales, activations,
-      login, logout, addMission, updateMissionStatus, addAlert, updateAlertStatus, addSale, addActivation, addClients,
+      login, logout, addMission, updateMissionStatus, addAlert, updateAlertStatus, addSale, addActivation, updateActivationFeedback, addClients,
       deleteMissions, deleteAlerts, deleteSales, deleteActivations
     }}>
       {children}
