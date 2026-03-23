@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/AppContext';
-import { LayoutDashboard, ClipboardList, BellRing, LogOut, Briefcase, ShoppingCart, Camera, Store, FileText } from 'lucide-react';
+import { LayoutDashboard, ClipboardList, BellRing, LogOut, Briefcase, ShoppingCart, Camera, Store, FileText, Menu, X } from 'lucide-react';
 import { cn } from './ui';
 
 export const Layout = () => {
   const { currentUser, logout, alerts } = useAppStore();
   const location = useLocation();
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   if (!currentUser) {
     return <Outlet />;
@@ -87,15 +88,34 @@ export const Layout = () => {
   ];
 
   return (
-    <div className="flex h-screen bg-slate-50">
+    <div className="flex flex-col md:flex-row h-screen bg-slate-50 overflow-hidden">
+      {/* Mobile Header */}
+      <div className="md:hidden flex items-center justify-between bg-slate-900 text-white p-4 z-30">
+        <div className="flex items-center gap-2">
+          <Briefcase className="w-6 h-6 text-indigo-400" />
+          <span className="font-bold text-lg">Sinergia</span>
+        </div>
+        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-slate-400 hover:text-white">
+          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </div>
+
       {/* Sidebar */}
-      <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col">
-        <div className="p-6 flex items-center gap-3 text-white">
-          <Briefcase className="w-8 h-8 text-indigo-400" />
-          <span className="text-xl font-bold tracking-tight">Sinergia</span>
+      <aside className={cn(
+        "fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 text-slate-300 flex flex-col transition-transform duration-300 ease-in-out md:relative md:translate-x-0",
+        isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
+        <div className="p-6 flex items-center justify-between text-white">
+          <div className="flex items-center gap-3">
+            <Briefcase className="w-8 h-8 text-indigo-400" />
+            <span className="text-xl font-bold tracking-tight">Sinergia</span>
+          </div>
+          <button onClick={() => setIsMobileMenuOpen(false)} className="md:hidden text-slate-400 hover:text-white">
+            <X className="w-6 h-6" />
+          </button>
         </div>
         
-        <nav className="flex-1 px-4 space-y-2 mt-4">
+        <nav className="flex-1 px-4 space-y-2 mt-4 overflow-y-auto">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
             const Icon = item.icon;
@@ -103,6 +123,7 @@ export const Layout = () => {
               <Link
                 key={item.path}
                 to={item.path}
+                onClick={() => setIsMobileMenuOpen(false)}
                 className={cn(
                   'flex items-center gap-3 px-4 py-3 rounded-xl transition-colors',
                   isActive ? 'bg-indigo-600 text-white' : 'hover:bg-slate-800 hover:text-white'
@@ -140,9 +161,17 @@ export const Layout = () => {
         </div>
       </aside>
 
+      {/* Overlay for mobile */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Main Content */}
-      <main className="flex-1 overflow-auto">
-        <div className="p-8 max-w-7xl mx-auto">
+      <main className="flex-1 overflow-auto w-full">
+        <div className="p-4 md:p-8 max-w-7xl mx-auto">
           <Outlet />
         </div>
       </main>
