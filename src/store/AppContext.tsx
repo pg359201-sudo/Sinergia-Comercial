@@ -89,8 +89,25 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [missions, setMissions] = useState<Mission[]>(mockMissions);
   const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
   const [sales, setSales] = useState<TacticalSale[]>(mockSales);
-  const [activations, setActivations] = useState<Activation[]>(mockActivations);
+  const [activations, setActivations] = useState<Activation[]>(() => {
+    const saved = localStorage.getItem('app_activations');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        return mockActivations;
+      }
+    }
+    return mockActivations;
+  });
   const [dbConfigured, setDbConfigured] = useState(true);
+
+  // Save activations to localStorage whenever they change
+  useEffect(() => {
+    if (!dbConfigured) {
+      localStorage.setItem('app_activations', JSON.stringify(activations));
+    }
+  }, [activations, dbConfigured]);
 
   // Inicializar DB y cargar datos
   useEffect(() => {

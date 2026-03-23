@@ -91,9 +91,18 @@ export async function startServer() {
           client_id VARCHAR(255),
           created_by VARCHAR(255),
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          evidence_url TEXT
+          evidence_url TEXT,
+          feedback TEXT
         );
       `;
+      
+      // Add feedback column if it doesn't exist (for existing databases)
+      try {
+        await sql`ALTER TABLE activations ADD COLUMN IF NOT EXISTS feedback TEXT;`;
+      } catch (e) {
+        console.log("Column feedback might already exist or error adding it:", e);
+      }
+
       res.json({ message: "Tablas creadas exitosamente en Postgres" });
     } catch (error) {
       console.error("Error inicializando la BD:", error);
@@ -298,7 +307,8 @@ export async function startServer() {
       const { rows } = await sql`SELECT * FROM activations ORDER BY created_at DESC`;
       res.json(rows.map(r => ({
         id: r.id, title: r.title, description: r.description, clientId: r.client_id,
-        createdBy: r.created_by, createdAt: r.created_at, evidenceUrl: r.evidence_url
+        createdBy: r.created_by, createdAt: r.created_at, evidenceUrl: r.evidence_url,
+        feedback: r.feedback
       })));
     } catch (error) { res.status(500).json({ error: "Error obteniendo activaciones" }); }
   });
@@ -306,13 +316,28 @@ export async function startServer() {
   app.post("/api/activations", async (req, res) => {
     if (!process.env.POSTGRES_URL) return res.status(500).json({ error: "DB no configurada" });
     try {
-      const { id, title, description, clientId, createdBy, createdAt, evidenceUrl } = req.body;
+      const { id, title, description, clientId, createdBy, createdAt, evidenceUrl, feedback } = req.body;
       await sql`
-        INSERT INTO activations (id, title, description, client_id, created_by, created_at, evidence_url)
-        VALUES (${id}, ${title}, ${description}, ${clientId}, ${createdBy}, ${createdAt}, ${evidenceUrl})
+        INSERT INTO activations (id, title, description, client_id, created_by, created_at, evidence_url, feedback)
+        VALUES (${id}, ${title}, ${description}, ${clientId}, ${createdBy}, ${createdAt}, ${evidenceUrl}, ${feedback || null})
       `;
       res.json({ success: true });
     } catch (error) { res.status(500).json({ error: "Error creando activación" }); }
+  });
+
+  app.patch("/api/activations/:id", async (req, res) => {
+    if (!process.env.POSTGRES_URL) return res.status(500).json({ error: "DB no configurada" });
+    try {
+      const { id } = req.params;
+      const { feedback } = req.body;
+      
+      await sql`
+        UPDATE activations 
+        SET feedback = ${feedback}
+        WHERE id = ${id}
+      `;
+      res.json({ success: true });
+    } catch (error) { res.status(500).json({ error: "Error actualizando activación" }); }
   });
 
   app.delete("/api/activations", async (req, res) => {

@@ -44,7 +44,7 @@ export const RecordDetail = () => {
   const user = users.find(u => u.id === (recordData.createdBy || recordData.assignedTo));
 
   const handleSaveFeedback = () => {
-    if (id && feedbackText.trim()) {
+    if (id) {
       updateActivationFeedback(id, feedbackText.trim());
       setIsEditingFeedback(false);
     }
