@@ -92,7 +92,7 @@ export const RecordDetail = () => {
               <div>
                 <p className="text-sm text-slate-500 font-medium">Usuario Responsable</p>
                 <p className="font-bold text-slate-900">{user?.name || 'Desconocido'}</p>
-                <p className="text-sm text-slate-600">{user?.role === 'terreno' ? 'Equipo de Terreno' : 'Escritorio'}</p>
+                <p className="text-sm text-slate-600">{user?.role === 'terreno' ? 'Agente' : 'Headquarter'}</p>
               </div>
             </div>
           </div>

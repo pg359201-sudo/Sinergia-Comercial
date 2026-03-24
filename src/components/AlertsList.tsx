@@ -61,7 +61,7 @@ export const AlertsList = () => {
         <div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Alertas</h1>
           <p className="mt-1 text-sm text-slate-600">
-            {isEscritorio ? 'Oportunidades reportadas por el terreno.' : 'Tus alertas enviadas.'}
+            {isEscritorio ? 'Oportunidades reportadas por los agentes.' : 'Tus alertas enviadas.'}
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
@@ -142,7 +142,6 @@ export const AlertsList = () => {
                 
                 {isEscritorio && (
                   <div className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-slate-600">
-                    <img src={creator?.avatar} alt={creator?.name} className="w-4 h-4 md:w-5 md:h-5 rounded-full shrink-0" />
                     <span className="truncate">Reportado por: {creator?.name}</span>
                   </div>
                 )}

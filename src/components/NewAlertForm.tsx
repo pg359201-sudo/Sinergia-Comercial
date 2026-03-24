@@ -38,7 +38,7 @@ export const NewAlertForm = () => {
           <AlertTriangle className="w-7 h-7 md:w-8 md:h-8 text-amber-500" />
           Nueva Alerta
         </h1>
-        <p className="mt-1 text-sm text-slate-600">Notifica al escritorio sobre oportunidades inmediatas.</p>
+        <p className="mt-1 text-sm text-slate-600">Notifica al Headquarter sobre oportunidades inmediatas.</p>
       </div>
 
       <Card className="p-5 md:p-6 border-amber-200 bg-amber-50/30">

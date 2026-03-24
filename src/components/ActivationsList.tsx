@@ -74,7 +74,7 @@ export const ActivationsList = () => {
           <p className="mt-1 text-sm text-slate-600">
             {currentUser?.role === 'terreno' 
               ? 'Tus registros fotográficos de exhibiciones y material POP.'
-              : 'Monitoreo de activaciones y exhibiciones en terreno.'}
+              : 'Monitoreo de activaciones y exhibiciones de los agentes.'}
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
@@ -120,7 +120,7 @@ export const ActivationsList = () => {
           <p className="text-slate-500 mt-2">
             {currentUser?.role === 'terreno' 
               ? 'Registra tu primera exhibición o material POP.'
-              : 'Aún no hay registros fotográficos del equipo de terreno.'}
+              : 'Aún no hay registros fotográficos de los agentes.'}
           </p>
         </Card>
       ) : (

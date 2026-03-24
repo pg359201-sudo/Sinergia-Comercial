@@ -26,8 +26,8 @@ interface AppState {
 }
 
 const mockUsers: User[] = [
-  { id: 'u1', name: 'Carlos (Escritorio)', role: 'escritorio', avatar: 'https://i.pravatar.cc/150?u=u1' },
-  { id: 'u2', name: 'Ana (Terreno)', role: 'terreno', avatar: 'https://i.pravatar.cc/150?u=u2' },
+  { id: 'u1', name: 'Headquarter', role: 'escritorio' },
+  { id: 'u2', name: 'Agente', role: 'terreno' },
 ];
 
 const mockClients: Client[] = [];

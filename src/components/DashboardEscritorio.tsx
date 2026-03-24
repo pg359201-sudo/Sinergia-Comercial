@@ -108,7 +108,7 @@ export const DashboardEscritorio = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-slate-900">Visión Estratégica</h1>
-          <p className="mt-2 text-slate-600">Monitorea la ejecución y capitaliza las oportunidades del terreno.</p>
+          <p className="mt-2 text-slate-600">Monitorea la ejecución y capitaliza las oportunidades de los agentes.</p>
         </div>
         <div>
           <input 
@@ -158,7 +158,7 @@ export const DashboardEscritorio = () => {
             <TrendingUp className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-sm font-medium text-slate-500">Ventas Tácticas (Terreno)</p>
+            <p className="text-sm font-medium text-slate-500">Ventas Tácticas (Agentes)</p>
             <p className="text-2xl font-bold text-slate-900">{sales.length}</p>
           </div>
         </Card>
@@ -167,7 +167,7 @@ export const DashboardEscritorio = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-slate-900">Últimas Alertas del Terreno</h2>
+            <h2 className="text-lg font-bold text-slate-900">Últimas Alertas de Agentes</h2>
             <Link to="/alerts">
               <Button variant="ghost" className="text-sm">Ver todas</Button>
             </Link>

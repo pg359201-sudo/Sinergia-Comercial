@@ -35,7 +35,7 @@ export const Layout = () => {
         <header className="bg-slate-900 text-white p-4 flex justify-between items-center sticky top-0 z-10 shadow-md">
           <div className="flex items-center gap-2">
             <Briefcase className="w-6 h-6 text-indigo-400" />
-            <span className="font-bold text-lg">Sinergia Terreno</span>
+            <span className="font-bold text-lg">SyncOps Agente</span>
           </div>
           <button onClick={handleLogout} className="p-2 text-slate-400 hover:text-white">
             <LogOut className="w-5 h-5" />
@@ -93,7 +93,7 @@ export const Layout = () => {
       <div className="md:hidden flex items-center justify-between bg-slate-900 text-white p-4 z-30">
         <div className="flex items-center gap-2">
           <Briefcase className="w-6 h-6 text-indigo-400" />
-          <span className="font-bold text-lg">Sinergia</span>
+          <span className="font-bold text-lg">SyncOps</span>
         </div>
         <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-slate-400 hover:text-white">
           {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -108,7 +108,7 @@ export const Layout = () => {
         <div className="p-6 flex items-center justify-between text-white">
           <div className="flex items-center gap-3">
             <Briefcase className="w-8 h-8 text-indigo-400" />
-            <span className="text-xl font-bold tracking-tight">Sinergia</span>
+            <span className="text-xl font-bold tracking-tight">SyncOps</span>
           </div>
           <button onClick={() => setIsMobileMenuOpen(false)} className="md:hidden text-slate-400 hover:text-white">
             <X className="w-6 h-6" />
@@ -145,10 +145,8 @@ export const Layout = () => {
 
         <div className="p-4 border-t border-slate-800">
           <div className="flex items-center gap-3 mb-4 px-2">
-            <img src={currentUser.avatar} alt="Avatar" className="w-10 h-10 rounded-full bg-slate-800" />
             <div className="flex flex-col">
               <span className="text-sm font-medium text-white">{currentUser.name}</span>
-              <span className="text-xs text-slate-400 capitalize">{currentUser.role}</span>
             </div>
           </div>
           <button

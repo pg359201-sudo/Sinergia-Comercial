@@ -1,5 +1,5 @@
 {
-  "name": "Sinergia Comercial",
-  "description": "App de Sinergia Comercial Bidireccional para perfiles de Escritorio y Terreno.",
+  "name": "SyncOps",
+  "description": "App de SyncOps para perfiles de Headquarter y Agente.",
   "requestFramePermissions": ["camera", "geolocation"]
 }

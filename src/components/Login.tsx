@@ -22,7 +22,7 @@ export const Login = () => {
           <Briefcase className="w-12 h-12" />
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-slate-900 tracking-tight">
-          Sinergia Comercial
+          SyncOps
         </h2>
         <p className="mt-2 text-center text-sm text-slate-600">
           Ejecución, Venta y Retroalimentación
@@ -46,7 +46,7 @@ export const Login = () => {
                 >
                   {users.map((user) => (
                     <option key={user.id} value={user.id}>
-                      {user.name} - {user.role === 'escritorio' ? 'Estratégico' : 'Táctico'}
+                      {user.name}
                     </option>
                   ))}
                 </select>

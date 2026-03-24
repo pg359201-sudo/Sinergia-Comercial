@@ -14,10 +14,9 @@ export const DashboardTerreno = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Hola, {currentUser?.name.split(' ')[0]}</h1>
+          <h1 className="text-2xl font-bold text-slate-900">Hola, {currentUser?.name}</h1>
           <p className="text-slate-500 text-sm">{pendingMissions} misiones pendientes hoy</p>
         </div>
-        <img src={currentUser?.avatar} alt="Perfil" className="w-12 h-12 rounded-full border-2 border-white shadow-sm" />
       </div>
 
       <div className="grid grid-cols-3 gap-3">

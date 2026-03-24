@@ -36,7 +36,7 @@ export const NewMissionForm = () => {
 
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">Nueva Misión</h1>
-        <p className="mt-2 text-slate-600">Asigna una directiva comercial al equipo de terreno.</p>
+        <p className="mt-2 text-slate-600">Asigna una directiva comercial a un agente.</p>
       </div>
 
       <Card className="p-6">
@@ -81,7 +81,7 @@ export const NewMissionForm = () => {
             </div>
 
             <div>
-              <Label htmlFor="assignee" className="mb-2 block">Asignar a (Terreno)</Label>
+              <Label htmlFor="assignee" className="mb-2 block">Asignar a (Agente)</Label>
               <select
                 id="assignee"
                 className="block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-xl border"

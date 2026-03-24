@@ -4,7 +4,6 @@ export interface User {
   id: string;
   name: string;
   role: Role;
-  avatar?: string;
 }
 
 export interface Client {
