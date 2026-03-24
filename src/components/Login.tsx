@@ -60,6 +60,12 @@ export const Login = () => {
           <button type="submit" className="w-full h-12 flex items-center justify-center rounded-xl bg-slate-900 px-4 text-sm font-semibold text-white shadow-sm transition-all hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2">
             Ingresar
           </button>
+          
+          <div className="pt-6 text-center">
+            <p className="text-[7px] font-medium tracking-widest text-slate-400/80 uppercase">
+              Built by Pascatech
+            </p>
+          </div>
         </form>
       </div>
     </div>

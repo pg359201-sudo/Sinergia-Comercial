@@ -20,9 +20,9 @@ export const DashboardTerreno = () => {
       </div>
 
       <div className="grid grid-cols-3 gap-3">
-        <Link to="/sales/new" className="bg-[#8A7F53] text-white p-3 rounded-2xl flex flex-col items-center justify-center gap-2 shadow-md active:scale-95 transition-transform text-center">
+        <Link to="/sales/new" className="bg-[#9C8A53] text-white p-3 rounded-2xl flex flex-col items-center justify-center gap-2 shadow-md active:scale-95 transition-transform text-center">
           <ShoppingCart className="w-7 h-7" />
-          <span className="font-bold text-xs leading-tight">Venta<br/>Rápida</span>
+          <span className="text-xs leading-tight font-medium">Venta<br/>Rápida</span>
         </Link>
         <Link to="/alerts/new" className="bg-[#5F6D4F] text-white p-3 rounded-2xl flex flex-col items-center justify-center gap-2 shadow-md active:scale-95 transition-transform text-center">
           <AlertTriangle className="w-7 h-7" />

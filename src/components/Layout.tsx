@@ -122,7 +122,7 @@ export const Layout = () => {
 
     return (
       <div className="flex flex-col h-screen bg-slate-50">
-        <header className="bg-slate-800 text-white p-4 flex justify-between items-center sticky top-0 z-10 shadow-md">
+        <header className="bg-slate-800 text-white px-4 py-3 flex justify-between items-center sticky top-0 z-10 shadow-md">
           <div className="flex items-center gap-2">
             <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235F6D4F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E" alt="SyncOps Logo" className="h-6 w-auto object-contain" />
             <span className="font-orbitron font-black uppercase tracking-tighter text-sm">Sync<span className="text-[#5F6D4F]">Ops</span></span>
@@ -180,7 +180,7 @@ export const Layout = () => {
   return (
     <div className="flex flex-col md:flex-row h-screen bg-slate-50 overflow-hidden">
       {/* Mobile Header */}
-      <div className="md:hidden flex items-center justify-between bg-slate-800 text-white p-4 z-30">
+      <div className="md:hidden flex items-center justify-between bg-slate-800 text-white px-4 py-3 z-30">
         <div className="flex items-center gap-2">
           <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235F6D4F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E" alt="SyncOps Logo" className="h-6 w-auto object-contain" />
           <span className="font-orbitron font-black uppercase tracking-tighter text-sm">Sync<span className="text-[#5F6D4F]">Ops</span></span>
@@ -234,11 +234,6 @@ export const Layout = () => {
         </nav>
 
         <div className="p-4 border-t border-slate-800">
-          <div className="flex items-center gap-3 mb-4 px-2">
-            <div className="flex flex-col">
-              <span className="text-sm font-medium text-white">{currentUser.name}</span>
-            </div>
-          </div>
           <input 
             type="file" 
             accept=".xlsx, .xls, .csv" 
@@ -251,7 +246,7 @@ export const Layout = () => {
             className="flex items-center gap-3 px-4 py-2 mb-2 w-full text-left text-slate-500 hover:text-slate-300 transition-colors"
           >
             <Upload className="w-4 h-4" />
-            <span className="font-medium text-xs">Cargar Clientes</span>
+            <span className="font-medium text-[11px]">Cargar Clientes</span>
           </button>
           <button
             onClick={handleLogout}
