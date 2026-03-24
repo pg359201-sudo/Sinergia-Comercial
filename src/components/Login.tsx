@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/AppContext';
 import { Button, Card, Input, Label } from './ui';
-import { Briefcase } from 'lucide-react';
 
 export const Login = () => {
   const { users, login } = useAppStore();
@@ -16,50 +15,52 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center text-indigo-600">
-          <Briefcase className="w-12 h-12" />
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
+      <div className="relative w-full max-w-sm overflow-hidden rounded-3xl bg-white p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
+        <div className="mb-8 flex flex-col items-center">
+          <div className="relative mb-4 flex h-16 w-16 items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+              <path d="M 100 20 A 80 80 0 0 1 180 100" fill="none" stroke="#2D3130" strokeWidth="12" strokeLinecap="square"/>
+              <path d="M 100 180 A 80 80 0 0 1 20 100" fill="none" stroke="#2D3130" strokeWidth="12" strokeLinecap="square"/>
+
+              <path d="M 20 100 A 80 80 0 0 1 100 20" fill="none" stroke="#5F6D4F" strokeWidth="12" strokeLinecap="square"/>
+              <path d="M 180 100 A 80 80 0 0 1 100 180" fill="none" stroke="#5F6D4F" strokeWidth="12" strokeLinecap="square"/>
+
+              <line x1="5" y1="100" x2="60" y2="100" stroke="#2D3130" strokeWidth="8"/>
+              <line x1="140" y1="100" x2="195" y2="100" stroke="#2D3130" strokeWidth="8"/>
+              <line x1="100" y1="5" x2="100" y2="60" stroke="#2D3130" strokeWidth="8"/>
+              <line x1="100" y1="140" x2="100" y2="195" stroke="#2D3130" strokeWidth="8"/>
+
+              <polygon points="100,72 108,89 127,89 112,100 117,118 100,107 83,118 88,100 73,89 92,89" fill="#5F6D4F"/>
+            </svg>
+          </div>
+          <h2 className="text-2xl font-orbitron font-black tracking-tighter text-slate-900 uppercase text-center">
+            Sync<span className="text-[#5F6D4F]">Ops</span>
+          </h2>
+          <p className="mt-1 text-[10px] font-medium uppercase tracking-widest text-slate-400 text-center">
+            Ejecución, Inteligencia y Operaciones
+          </p>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-slate-900 tracking-tight">
-          SyncOps
-        </h2>
-        <p className="mt-2 text-center text-sm text-slate-600">
-          Ejecución, Venta y Retroalimentación
-        </p>
-      </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <Card className="py-8 px-4 sm:rounded-2xl sm:px-10">
-          <form className="space-y-6" onSubmit={handleLogin}>
-            <div>
-              <Label htmlFor="user" className="block text-sm font-medium text-slate-700">
-                Selecciona tu perfil
-              </Label>
-              <div className="mt-1">
-                <select
-                  id="user"
-                  name="user"
-                  className="block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-xl border"
-                  value={selectedUser}
-                  onChange={(e) => setSelectedUser(e.target.value)}
-                >
-                  {users.map((user) => (
-                    <option key={user.id} value={user.id}>
-                      {user.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+        <form className="space-y-3 max-w-[260px] mx-auto" onSubmit={handleLogin}>
+          <select
+            id="user"
+            name="user"
+            className="block w-full h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-center text-sm tracking-widest text-slate-900 transition-colors focus:border-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 appearance-none"
+            value={selectedUser}
+            onChange={(e) => setSelectedUser(e.target.value)}
+          >
+            {users.map((user) => (
+              <option key={user.id} value={user.id}>
+                {user.name}
+              </option>
+            ))}
+          </select>
 
-            <div>
-              <Button type="submit" className="w-full flex justify-center py-2 px-4">
-                Ingresar
-              </Button>
-            </div>
-          </form>
-        </Card>
+          <button type="submit" className="w-full h-12 flex items-center justify-center rounded-xl bg-slate-900 px-4 text-sm font-semibold text-white shadow-sm transition-all hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2">
+            Ingresar
+          </button>
+        </form>
       </div>
     </div>
   );

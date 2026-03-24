@@ -34,19 +34,19 @@ export const NewSaleForm = () => {
 
       <div>
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 flex items-center gap-3">
-          <ShoppingCart className="w-7 h-7 md:w-8 md:h-8 text-emerald-500" />
+          <ShoppingCart className="w-7 h-7 md:w-8 md:h-8 text-[#8A7F53]" />
           Venta Táctica
         </h1>
         <p className="mt-1 text-sm text-slate-600">Registra una reposición rápida.</p>
       </div>
 
-      <Card className="p-5 md:p-6 border-emerald-200 bg-emerald-50/30">
+      <Card className="p-5 md:p-6 border-[#8A7F53]/30 bg-[#8A7F53]/10">
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <Label htmlFor="client" className="mb-2 block text-sm md:text-base">Cliente (PDV)</Label>
             <select
               id="client"
-              className="block w-full pl-3 pr-10 py-3 text-base border-slate-300 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 rounded-xl border bg-white"
+              className="block w-full pl-3 pr-10 py-3 text-base border-slate-300 focus:outline-none focus:ring-[#8A7F53] focus:border-[#8A7F53] rounded-xl border bg-white"
               value={clientId}
               onChange={(e) => setClientId(e.target.value)}
               required
@@ -82,9 +82,9 @@ export const NewSaleForm = () => {
             />
           </div>
 
-          <div className="pt-4 mt-6 border-t border-emerald-200 flex flex-col sm:flex-row justify-end gap-3">
+          <div className="pt-4 mt-6 border-t border-[#8A7F53]/30 flex flex-col sm:flex-row justify-end gap-3">
             <Button type="button" variant="ghost" className="w-full sm:w-auto py-3" onClick={() => navigate(-1)}>Cancelar</Button>
-            <Button type="submit" className="w-full sm:w-auto py-3 bg-emerald-600 hover:bg-emerald-700 text-base">Registrar Venta</Button>
+            <Button type="submit" className="w-full sm:w-auto py-3 bg-[#8A7F53] hover:bg-[#786E48] text-white text-base">Registrar Venta</Button>
           </div>
         </form>
       </Card>

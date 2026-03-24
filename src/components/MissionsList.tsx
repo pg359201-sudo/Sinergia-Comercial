@@ -59,8 +59,8 @@ export const MissionsList = () => {
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Misiones</h1>
-          <p className="mt-1 text-sm text-slate-600">
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">Misiones</h1>
+          <p className="mt-1 text-xs text-slate-500">
             {isEscritorio ? 'Gestiona y asigna misiones a los agentes.' : 'Tus misiones asignadas para hoy.'}
           </p>
         </div>

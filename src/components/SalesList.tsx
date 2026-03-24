@@ -59,8 +59,8 @@ export const SalesList = () => {
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Ventas</h1>
-          <p className="mt-1 text-sm text-slate-600">
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">Ventas</h1>
+          <p className="mt-1 text-xs text-slate-500">
             {isEscritorio ? 'Reposiciones y ventas rápidas ejecutadas por agentes.' : 'Tus ventas tácticas registradas.'}
           </p>
         </div>
@@ -76,7 +76,7 @@ export const SalesList = () => {
           )}
           {!isEscritorio && (
             <Link to="/sales/new" className="w-full sm:w-auto">
-              <Button className="w-full sm:w-auto flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700">
+              <Button className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#8A7F53] hover:bg-[#786E48] text-white">
                 <Plus className="w-4 h-4" />
                 Registrar Venta
               </Button>
@@ -106,7 +106,7 @@ export const SalesList = () => {
           const creator = users.find(u => u.id === sale.createdBy);
           
           return (
-            <Card key={sale.id} className={`p-3 md:p-5 flex flex-col border-t-4 border-t-emerald-500 relative ${selectedIds.has(sale.id) ? 'ring-2 ring-indigo-500' : ''}`}>
+            <Card key={sale.id} className={`p-3 md:p-5 flex flex-col border-t-4 border-t-[#8A7F53] relative ${selectedIds.has(sale.id) ? 'ring-2 ring-indigo-500' : ''}`}>
               <div className="absolute top-2 right-2 md:top-3 md:right-3 z-10">
                 <input 
                   type="checkbox" 
@@ -116,7 +116,7 @@ export const SalesList = () => {
                 />
               </div>
               <div className="flex justify-between items-start mb-2 md:mb-3 pr-6 md:pr-8">
-                <div className="p-1.5 md:p-2 bg-emerald-100 text-emerald-600 rounded-lg">
+                <div className="p-1.5 md:p-2 bg-[#8A7F53]/10 text-[#8A7F53] rounded-lg">
                   <ShoppingCart className="w-4 h-4 md:w-5 md:h-5" />
                 </div>
                 <span className="text-[10px] md:text-xs text-slate-500 flex items-center gap-1 shrink-0">

@@ -55,19 +55,19 @@ export const NewActivationForm = () => {
 
       <div>
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 flex items-center gap-3">
-          <Camera className="w-7 h-7 md:w-8 md:h-8 text-indigo-500" />
+          <Camera className="w-7 h-7 md:w-8 md:h-8 text-[#9C7C38]" />
           Nueva Activación
         </h1>
         <p className="mt-1 text-sm text-slate-600">Registra una exhibición, material POP o acción especial en el PDV.</p>
       </div>
 
-      <Card className="p-5 md:p-6 border-indigo-200 bg-indigo-50/30">
+      <Card className="p-5 md:p-6 border-[#9C7C38]/30 bg-[#9C7C38]/10">
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <Label htmlFor="client" className="mb-2 block text-sm md:text-base">Cliente (PDV)</Label>
             <select
               id="client"
-              className="block w-full pl-3 pr-10 py-3 text-base border-slate-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-xl border bg-white"
+              className="block w-full pl-3 pr-10 py-3 text-base border-slate-300 focus:outline-none focus:ring-[#9C7C38] focus:border-[#9C7C38] rounded-xl border bg-white"
               value={clientId}
               onChange={(e) => setClientId(e.target.value)}
               required
@@ -94,7 +94,7 @@ export const NewActivationForm = () => {
             <Label htmlFor="description" className="mb-2 block text-sm md:text-base">Descripción (Opcional)</Label>
             <textarea
               id="description"
-              className="flex w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-base placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent min-h-[80px] md:min-h-[100px]"
+              className="flex w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-base placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#9C7C38] focus:border-transparent min-h-[80px] md:min-h-[100px]"
               placeholder="Detalles sobre la exhibición, cantidad de caras, etc."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -114,12 +114,12 @@ export const NewActivationForm = () => {
               <div 
                 onClick={() => fileInputRef.current?.click()}
                 className={`border-2 border-dashed rounded-xl p-6 md:p-8 text-center cursor-pointer transition-colors ${
-                  isUploading ? 'border-indigo-300 bg-indigo-50' : 'border-slate-300 hover:border-indigo-400 hover:bg-slate-50'
+                  isUploading ? 'border-[#9C7C38]/50 bg-[#9C7C38]/10' : 'border-slate-300 hover:border-[#9C7C38] hover:bg-slate-50'
                 }`}
               >
                 {isUploading ? (
-                  <div className="flex flex-col items-center text-indigo-600">
-                    <div className="animate-spin rounded-full h-6 w-6 md:h-8 md:w-8 border-b-2 border-indigo-600 mb-2"></div>
+                  <div className="flex flex-col items-center text-[#9C7C38]">
+                    <div className="animate-spin rounded-full h-6 w-6 md:h-8 md:w-8 border-b-2 border-[#9C7C38] mb-2"></div>
                     <span className="font-medium text-sm md:text-base">Subiendo imagen...</span>
                   </div>
                 ) : (
@@ -145,11 +145,11 @@ export const NewActivationForm = () => {
             )}
           </div>
 
-          <div className="pt-4 mt-6 border-t border-indigo-200 flex flex-col sm:flex-row justify-end gap-3">
+          <div className="pt-4 mt-6 border-t border-[#9C7C38]/30 flex flex-col sm:flex-row justify-end gap-3">
             <Button type="button" variant="ghost" className="w-full sm:w-auto py-3" onClick={() => navigate(-1)}>Cancelar</Button>
             <Button 
               type="submit" 
-              className="w-full sm:w-auto py-3 bg-indigo-600 hover:bg-indigo-700 text-base"
+              className="w-full sm:w-auto py-3 bg-[#9C7C38] hover:bg-[#8A6D31] text-white text-base"
               disabled={!evidenceUrl || isUploading}
             >
               Registrar Activación

@@ -156,8 +156,8 @@ export const RecordsList = () => {
 
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Registros Generales</h1>
-          <p className="mt-1 text-sm text-slate-600">Vista consolidada de todas las actividades de los agentes.</p>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">Registros Generales</h1>
+          <p className="mt-1 text-xs text-slate-500">Vista consolidada de todas las actividades de los agentes.</p>
         </div>
         
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">

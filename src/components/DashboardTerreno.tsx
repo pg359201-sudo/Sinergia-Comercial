@@ -14,21 +14,21 @@ export const DashboardTerreno = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Hola, {currentUser?.name}</h1>
+          <h1 className="text-xl font-bold text-slate-900">Hola, {currentUser?.name}</h1>
           <p className="text-slate-500 text-sm">{pendingMissions} misiones pendientes hoy</p>
         </div>
       </div>
 
       <div className="grid grid-cols-3 gap-3">
-        <Link to="/sales/new" className="bg-emerald-600 text-white p-3 rounded-2xl flex flex-col items-center justify-center gap-2 shadow-md active:scale-95 transition-transform text-center">
+        <Link to="/sales/new" className="bg-[#8A7F53] text-white p-3 rounded-2xl flex flex-col items-center justify-center gap-2 shadow-md active:scale-95 transition-transform text-center">
           <ShoppingCart className="w-7 h-7" />
           <span className="font-bold text-xs leading-tight">Venta<br/>Rápida</span>
         </Link>
-        <Link to="/alerts/new" className="bg-amber-500 text-white p-3 rounded-2xl flex flex-col items-center justify-center gap-2 shadow-md active:scale-95 transition-transform text-center">
+        <Link to="/alerts/new" className="bg-[#5F6D4F] text-white p-3 rounded-2xl flex flex-col items-center justify-center gap-2 shadow-md active:scale-95 transition-transform text-center">
           <AlertTriangle className="w-7 h-7" />
           <span className="font-bold text-xs leading-tight">Alerta<br/>PDV</span>
         </Link>
-        <Link to="/activations/new" className="bg-indigo-600 text-white p-3 rounded-2xl flex flex-col items-center justify-center gap-2 shadow-md active:scale-95 transition-transform text-center">
+        <Link to="/activations/new" className="bg-[#9C7C38] text-white p-3 rounded-2xl flex flex-col items-center justify-center gap-2 shadow-md active:scale-95 transition-transform text-center">
           <Camera className="w-7 h-7" />
           <span className="font-bold text-xs leading-tight">Nueva<br/>Activación</span>
         </Link>

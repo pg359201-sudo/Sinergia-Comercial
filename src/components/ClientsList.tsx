@@ -46,8 +46,8 @@ export const ClientsList = () => {
     <div className="space-y-6 pb-8">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">Directorio de Clientes</h1>
-          <p className="mt-1 text-sm text-slate-600">Gestiona los Puntos de Venta (PDV) y revisa su historial de actividad.</p>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">Directorio de Clientes</h1>
+          <p className="mt-1 text-xs text-slate-500">Gestiona los Puntos de Venta (PDV) y revisa su historial de actividad.</p>
         </div>
         
         <div className="relative w-full md:max-w-md">

@@ -1,127 +1,24 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useAppStore } from '../store/AppContext';
 import { Card, Badge, Button } from './ui';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { ClipboardList, BellRing, TrendingUp, CheckCircle2, Upload } from 'lucide-react';
+import { ClipboardList, BellRing, TrendingUp, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import * as XLSX from 'xlsx';
-import { Client } from '../types';
 
 export const DashboardEscritorio = () => {
-  const { missions, alerts, sales, addClients } = useAppStore();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { missions, alerts, sales } = useAppStore();
 
   const pendingMissions = missions.filter(m => m.status !== 'completed').length;
   const completedMissions = missions.filter(m => m.status === 'completed').length;
   const newAlerts = alerts.filter(a => a.status === 'new').length;
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      try {
-        const bstr = evt.target?.result;
-        const wb = XLSX.read(bstr, { type: 'binary' });
-        const wsname = wb.SheetNames[0];
-        const ws = wb.Sheets[wsname];
-        const data = XLSX.utils.sheet_to_json(ws, { header: 1 }) as any[][];
-        
-        if (data.length > 1) {
-          const row2 = data[1]; // Fila 2 (índice 1)
-          let razonSocialColIndex = -1;
-          let grupoCanalColIndex = -1;
-          let gecColIndex = -1;
-          let rutaVentaColIndex = -1;
-          let uc12mmColIndex = -1;
-          
-          // Buscar dinámicamente en qué columna están los datos
-          for (let c = 0; c < row2.length; c++) {
-            const cellValue = row2[c] ? String(row2[c]) : '';
-            const normalized = cellValue.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '');
-            if (normalized === 'razonsocial') {
-              razonSocialColIndex = c;
-            } else if (normalized === 'grupocanal') {
-              grupoCanalColIndex = c;
-            } else if (normalized === 'gec') {
-              gecColIndex = c;
-            } else if (normalized === 'rutaventa') {
-              rutaVentaColIndex = c;
-            } else if (normalized === 'uc12mm') {
-              uc12mmColIndex = c;
-            }
-          }
-
-          if (razonSocialColIndex !== -1) {
-            const newClients: Client[] = [];
-            // Empezar desde la fila 3 (índice 2)
-            for (let i = 2; i < data.length; i++) {
-              const razonSocial = data[i][razonSocialColIndex];
-              const grupoCanal = grupoCanalColIndex !== -1 ? data[i][grupoCanalColIndex] : null;
-              const gec = gecColIndex !== -1 ? data[i][gecColIndex] : null;
-              const rutaVenta = rutaVentaColIndex !== -1 ? data[i][rutaVentaColIndex] : null;
-              const uc12mm = uc12mmColIndex !== -1 ? data[i][uc12mmColIndex] : null;
-
-              if (razonSocial && typeof razonSocial === 'string' && razonSocial.trim() !== '') {
-                newClients.push({
-                  id: `c${Date.now()}-${i}`,
-                  name: razonSocial.trim(),
-                  address: 'Sin dirección',
-                  route: rutaVenta ? String(rutaVenta).trim() : 'Sin ruta',
-                  visitDay: 'Lunes',
-                  channel: grupoCanal ? String(grupoCanal).trim() : 'Sin canal',
-                  gec: gec ? String(gec).trim() : 'Sin GEC',
-                  uc12mm: uc12mm ? String(uc12mm).trim() : '0'
-                });
-              }
-            }
-            if (newClients.length > 0) {
-              addClients(newClients);
-              alert(`Se cargaron ${newClients.length} clientes exitosamente.`);
-            } else {
-              alert('No se encontraron clientes debajo del título "RazonSocial".');
-            }
-          } else {
-            // Mostrar los encabezados encontrados para ayudar a depurar
-            const foundHeaders = row2.map(h => String(h || '').trim()).filter(h => h).join(', ');
-            alert(`No se encontró la columna "RazonSocial" en la Fila 2. Encabezados encontrados: ${foundHeaders || 'Ninguno'}`);
-          }
-        } else {
-          alert('El archivo parece estar vacío o no tiene suficientes filas.');
-        }
-      } catch (error) {
-        console.error("Error al procesar el archivo:", error);
-        alert('Hubo un error al procesar el archivo Excel.');
-      }
-      // Reset input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    };
-    reader.readAsBinaryString(file);
-  };
-
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Visión Estratégica</h1>
-          <p className="mt-2 text-slate-600">Monitorea la ejecución y capitaliza las oportunidades de los agentes.</p>
-        </div>
-        <div>
-          <input 
-            type="file" 
-            accept=".xlsx, .xls, .csv" 
-            className="hidden" 
-            ref={fileInputRef}
-            onChange={handleFileUpload}
-          />
-          <Button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-2">
-            <Upload className="w-4 h-4" />
-            Cargar Clientes (Excel)
-          </Button>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">Visión Estratégica</h1>
+          <p className="mt-1 text-xs text-slate-500">Monitorea la ejecución y capitaliza las oportunidades de los agentes.</p>
         </div>
       </div>
 
@@ -154,7 +51,7 @@ export const DashboardEscritorio = () => {
           </div>
         </Card>
         <Card className="p-6 flex items-center gap-4">
-          <div className="p-3 bg-blue-100 text-blue-600 rounded-xl">
+          <div className="p-3 bg-[#8A7F53]/10 text-[#8A7F53] rounded-xl">
             <TrendingUp className="w-6 h-6" />
           </div>
           <div>
