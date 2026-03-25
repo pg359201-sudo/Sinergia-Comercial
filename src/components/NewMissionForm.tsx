@@ -11,16 +11,17 @@ export const NewMissionForm = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [clientId, setClientId] = useState(clients[0]?.id || '');
-  const [assignedTo, setAssignedTo] = useState(users.find(u => u.role === 'terreno')?.id || '');
+  const [isGeneral, setIsGeneral] = useState(false);
+  const assignedTo = users.find(u => u.role === 'terreno')?.id || '';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !description || !clientId || !assignedTo) return;
+    if (!title || !description || (!isGeneral && !clientId) || !assignedTo) return;
 
     addMission({
       title,
       description,
-      clientId,
+      clientId: isGeneral ? undefined : clientId,
       assignedTo,
       createdBy: currentUser!.id,
     });
@@ -64,36 +65,36 @@ export const NewMissionForm = () => {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <Label htmlFor="client" className="mb-2 block">Cliente (PDV)</Label>
-              <select
-                id="client"
-                className="block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-xl border"
-                value={clientId}
-                onChange={(e) => setClientId(e.target.value)}
-                required
-              >
-                {[...clients].sort((a, b) => a.name.localeCompare(b.name)).map(c => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </select>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="isGeneral"
+                checked={isGeneral}
+                onChange={(e) => setIsGeneral(e.target.checked)}
+                className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+              />
+              <Label htmlFor="isGeneral" className="text-xs font-normal text-slate-500">
+                Misión General (Sin cliente específico)
+              </Label>
             </div>
 
-            <div>
-              <Label htmlFor="assignee" className="mb-2 block">Asignar a (Agente)</Label>
-              <select
-                id="assignee"
-                className="block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-xl border"
-                value={assignedTo}
-                onChange={(e) => setAssignedTo(e.target.value)}
-                required
-              >
-                {users.filter(u => u.role === 'terreno').map(u => (
-                  <option key={u.id} value={u.id}>{u.name}</option>
-                ))}
-              </select>
-            </div>
+            {!isGeneral && (
+              <div>
+                <Label htmlFor="client" className="mb-2 block">Cliente (PDV)</Label>
+                <select
+                  id="client"
+                  className="block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-xl border"
+                  value={clientId}
+                  onChange={(e) => setClientId(e.target.value)}
+                  required={!isGeneral}
+                >
+                  {[...clients].sort((a, b) => a.name.localeCompare(b.name)).map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
 
           <div className="pt-4 border-t border-slate-100 flex justify-end gap-3">

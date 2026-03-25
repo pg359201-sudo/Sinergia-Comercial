@@ -191,7 +191,7 @@ export async function startServer() {
       const { id, title, description, clientId, assignedTo, createdBy, status, createdAt, evidenceUrl, notes } = req.body;
       await sql`
         INSERT INTO missions (id, title, description, client_id, assigned_to, created_by, status, created_at, evidence_url, notes)
-        VALUES (${id}, ${title}, ${description}, ${clientId}, ${assignedTo}, ${createdBy}, ${status}, ${createdAt}, ${evidenceUrl || null}, ${notes || null})
+        VALUES (${id}, ${title}, ${description}, ${clientId || null}, ${assignedTo}, ${createdBy}, ${status}, ${createdAt}, ${evidenceUrl || null}, ${notes || null})
       `;
       res.json({ success: true });
     } catch (error) { res.status(500).json({ error: "Error creando misión" }); }

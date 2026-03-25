@@ -23,7 +23,7 @@ export interface Mission {
   id: string;
   title: string;
   description: string;
-  clientId: string;
+  clientId?: string;
   assignedTo: string; // User ID (terreno)
   createdBy: string; // User ID (escritorio)
   status: MissionStatus;

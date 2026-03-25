@@ -49,8 +49,8 @@ export const DashboardTerreno = () => {
                     <Store className="w-6 h-6" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-slate-900 truncate">{mission.title}</h3>
-                    <p className="text-sm text-slate-500 truncate">{client?.name}</p>
+                    <h3 className="text-sm font-bold text-slate-900 line-clamp-2 leading-snug">{mission.title}</h3>
+                    <p className="text-xs text-slate-500 truncate mt-0.5">{client ? client.name : 'Misión General'}</p>
                   </div>
                   <ChevronRight className="w-5 h-5 text-slate-400 shrink-0" />
                 </Card>

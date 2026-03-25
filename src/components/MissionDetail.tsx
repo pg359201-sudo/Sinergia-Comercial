@@ -20,7 +20,7 @@ export const MissionDetail = () => {
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  if (!mission || !client) {
+  if (!mission) {
     return <div>Misión no encontrada</div>;
   }
 
@@ -75,7 +75,7 @@ export const MissionDetail = () => {
           <div>
             <Label className="text-slate-500 mb-1 block">Cliente</Label>
             <div className="flex items-center gap-2 text-slate-900 font-medium">
-              {client.name}
+              {client ? client.name : 'Misión General'}
             </div>
           </div>
           <div>

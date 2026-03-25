@@ -133,7 +133,7 @@ export const MissionsList = () => {
               <div className="space-y-1.5 md:space-y-2 mt-auto pt-2 md:pt-3 border-t border-slate-100">
                 <div className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-slate-600">
                   <Store className="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-400 shrink-0" />
-                  <span className="truncate font-medium">{client?.name}</span>
+                  <span className="truncate font-medium">{client ? client.name : 'Misión General'}</span>
                 </div>
                 
                 {isEscritorio && (

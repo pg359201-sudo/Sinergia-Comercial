@@ -55,7 +55,7 @@ export const RecordsList = () => {
     const client = clients.find(c => c.id === record.clientId);
     return {
       ...record,
-      clientName: client ? client.name : 'Cliente Desconocido',
+      clientName: client ? client.name : (record.typePath === 'missions' && !record.clientId ? 'Misión General' : 'Cliente Desconocido'),
       formattedDate: format(new Date(record.date), 'dd/MM/yy HH:mm'),
       uniqueId: `${record.typePath}-${record.id}`
     };
