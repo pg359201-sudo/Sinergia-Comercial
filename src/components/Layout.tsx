@@ -169,12 +169,12 @@ export const Layout = () => {
   // Escritorio Layout
   const navItems = [
     { name: 'Dashboard', path: '/', icon: LayoutDashboard },
-    { name: 'Clientes', path: '/clients', icon: Store },
-    { name: 'Registros', path: '/records', icon: FileText },
     { name: 'Misiones', path: '/missions', icon: ClipboardList },
+    { name: 'Activaciones', path: '/activations', icon: Camera },
     { name: 'Alertas', path: '/alerts', icon: BellRing },
     { name: 'Ventas Tácticas', path: '/sales', icon: ShoppingCart },
-    { name: 'Activaciones', path: '/activations', icon: Camera },
+    { name: 'Clientes', path: '/clients', icon: Store },
+    { name: 'Registros', path: '/records', icon: FileText },
   ];
 
   return (
