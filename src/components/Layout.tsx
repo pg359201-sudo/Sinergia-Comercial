@@ -125,7 +125,7 @@ export const Layout = () => {
         <header className="bg-slate-800 text-white px-4 py-3 flex justify-between items-center sticky top-0 z-10 shadow-md">
           <div className="flex items-center gap-2">
             <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235F6D4F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E" alt="SyncOps Logo" className="h-6 w-auto object-contain" />
-            <span className="font-orbitron font-black uppercase tracking-tighter text-sm">Sync<span className="text-[#5F6D4F]">Ops</span></span>
+            <span className="font-orbitron font-black uppercase tracking-tighter text-sm">Sync<span className="text-slate-400 font-medium mx-[1px]">·</span><span className="text-[#5F6D4F]">Ops</span></span>
           </div>
           <button onClick={handleLogout} className="p-2 text-slate-400 hover:text-white">
             <LogOut className="w-5 h-5" />
@@ -183,7 +183,7 @@ export const Layout = () => {
       <div className="md:hidden flex items-center justify-between bg-slate-800 text-white px-4 py-3 z-30">
         <div className="flex items-center gap-2">
           <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235F6D4F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E" alt="SyncOps Logo" className="h-6 w-auto object-contain" />
-          <span className="font-orbitron font-black uppercase tracking-tighter text-sm">Sync<span className="text-[#5F6D4F]">Ops</span></span>
+          <span className="font-orbitron font-black uppercase tracking-tighter text-sm">Sync<span className="text-slate-400 font-medium mx-[1px]">·</span><span className="text-[#5F6D4F]">Ops</span></span>
         </div>
         <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-slate-400 hover:text-white">
           {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -198,7 +198,7 @@ export const Layout = () => {
         <div className="p-6 flex items-center justify-between text-white">
           <div className="flex items-center gap-3">
             <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235F6D4F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E" alt="SyncOps Logo" className="h-7 w-auto object-contain" />
-            <span className="text-base font-orbitron font-black uppercase tracking-tighter">Sync<span className="text-[#5F6D4F]">Ops</span></span>
+            <span className="text-base font-orbitron font-black uppercase tracking-tighter">Sync<span className="text-slate-400 font-medium mx-[1px]">·</span><span className="text-[#5F6D4F]">Ops</span></span>
           </div>
           <button onClick={() => setIsMobileMenuOpen(false)} className="md:hidden text-slate-400 hover:text-white">
             <X className="w-6 h-6" />

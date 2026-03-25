@@ -35,7 +35,7 @@ export const Login = () => {
             </svg>
           </div>
           <h2 className="text-2xl font-orbitron font-black tracking-tighter text-slate-900 uppercase text-center">
-            Sync<span className="text-[#5F6D4F]">Ops</span>
+            Sync<span className="text-slate-400 font-medium mx-[1px]">·</span><span className="text-[#5F6D4F]">Ops</span>
           </h2>
           <p className="mt-1 text-[10px] font-medium uppercase tracking-widest text-slate-400 text-center">
             Ejecución, Inteligencia y Operaciones
@@ -62,7 +62,7 @@ export const Login = () => {
           </button>
           
           <div className="pt-6 text-center">
-            <p className="text-[7px] font-medium tracking-widest text-slate-400/80 uppercase">
+            <p className="text-[9px] font-medium tracking-widest text-slate-400/80 uppercase">
               Built by Pascatech
             </p>
           </div>
