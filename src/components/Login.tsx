@@ -6,12 +6,30 @@ import { Button, Card, Input, Label } from './ui';
 export const Login = () => {
   const { users, login } = useAppStore();
   const navigate = useNavigate();
-  const [selectedUser, setSelectedUser] = useState(users[0].id);
+  const [pin, setPin] = useState('');
+  const [error, setError] = useState('');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    login(selectedUser);
-    navigate('/');
+    
+    const headquarterPin = import.meta.env.VITE_HEADQUARTER_PIN || '6995';
+    const agentePin = import.meta.env.VITE_AGENTE_PIN || '1234';
+
+    if (pin === headquarterPin) {
+      const hqUser = users.find(u => u.role === 'escritorio');
+      if (hqUser) {
+        login(hqUser.id);
+        navigate('/');
+      }
+    } else if (pin === agentePin) {
+      const agenteUser = users.find(u => u.role === 'terreno');
+      if (agenteUser) {
+        login(agenteUser.id);
+        navigate('/');
+      }
+    } else {
+      setError('Código incorrecto');
+    }
   };
 
   return (
@@ -43,19 +61,21 @@ export const Login = () => {
         </div>
 
         <form className="space-y-3 max-w-[260px] mx-auto" onSubmit={handleLogin}>
-          <select
-            id="user"
-            name="user"
-            className="block w-full h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-center text-sm tracking-widest text-slate-900 transition-colors focus:border-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900 appearance-none"
-            value={selectedUser}
-            onChange={(e) => setSelectedUser(e.target.value)}
-          >
-            {users.map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.name}
-              </option>
-            ))}
-          </select>
+          <div>
+            <input
+              type="password"
+              id="pin"
+              name="pin"
+              placeholder="Ingresa tu código"
+              className="block w-full h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 text-center text-sm tracking-widest text-slate-900 transition-colors focus:border-slate-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-900"
+              value={pin}
+              onChange={(e) => {
+                setPin(e.target.value);
+                setError('');
+              }}
+            />
+            {error && <p className="mt-2 text-center text-xs text-red-500 font-medium">{error}</p>}
+          </div>
 
           <button type="submit" className="w-full h-12 flex items-center justify-center rounded-xl bg-slate-900 px-4 text-sm font-semibold text-white shadow-sm transition-all hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2">
             Ingresar

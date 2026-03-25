@@ -17,7 +17,7 @@ export const DashboardEscritorio = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900">Visión Estratégica</h1>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900">Headquarter</h1>
           <p className="mt-1 text-xs text-slate-500 font-normal">Monitorea la ejecución y capitaliza las oportunidades de los agentes.</p>
         </div>
       </div>
