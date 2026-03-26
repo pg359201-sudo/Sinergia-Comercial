@@ -94,7 +94,7 @@ export const AlertsList = () => {
             checked={selectedIds.size === displayAlerts.length}
             onChange={handleSelectAll}
           />
-          <label htmlFor="selectAll" className="text-sm text-slate-600 cursor-pointer select-none">
+          <label htmlFor="selectAll" className="text-xs text-slate-600 cursor-pointer select-none">
             Seleccionar todas
           </label>
         </div>

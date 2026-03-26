@@ -124,7 +124,7 @@ export const Layout = () => {
       <div className="flex flex-col h-screen bg-slate-50">
         <header className="bg-slate-800 text-white px-4 py-3 flex justify-between items-center sticky top-0 z-10 shadow-md">
           <div className="flex items-center gap-2">
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235F6D4F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E" alt="SyncOps Logo" className="h-6 w-auto object-contain" />
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B59A3A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E" alt="SyncOps Logo" className="h-5 w-auto object-contain" />
             <span className="font-orbitron font-black uppercase tracking-tighter text-sm">Sync<span className="text-slate-400 font-medium mx-[1px]">·</span><span className="text-[#5F6D4F]">Ops</span></span>
           </div>
           <button onClick={handleLogout} className="p-2 text-slate-400 hover:text-white">
@@ -182,7 +182,7 @@ export const Layout = () => {
       {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-between bg-slate-800 text-white px-4 py-3 z-30">
         <div className="flex items-center gap-2">
-          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235F6D4F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E" alt="SyncOps Logo" className="h-6 w-auto object-contain" />
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B59A3A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E" alt="SyncOps Logo" className="h-5 w-auto object-contain" />
           <span className="font-orbitron font-black uppercase tracking-tighter text-sm">Sync<span className="text-slate-400 font-medium mx-[1px]">·</span><span className="text-[#5F6D4F]">Ops</span></span>
         </div>
         <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-slate-400 hover:text-white">
@@ -197,7 +197,7 @@ export const Layout = () => {
       )}>
         <div className="p-6 flex items-center justify-between text-white">
           <div className="flex items-center gap-3">
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235F6D4F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E" alt="SyncOps Logo" className="h-7 w-auto object-contain" />
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B59A3A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E" alt="SyncOps Logo" className="h-6 w-auto object-contain" />
             <span className="text-base font-orbitron font-black uppercase tracking-tighter">Sync<span className="text-slate-400 font-medium mx-[1px]">·</span><span className="text-[#5F6D4F]">Ops</span></span>
           </div>
           <button onClick={() => setIsMobileMenuOpen(false)} className="md:hidden text-slate-400 hover:text-white">
@@ -231,23 +231,27 @@ export const Layout = () => {
               </Link>
             );
           })}
+          
+          <div className="pt-2">
+            <input 
+              type="file" 
+              accept=".xlsx, .xls, .csv" 
+              className="hidden" 
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-slate-500 hover:bg-slate-800 hover:text-white w-full"
+              title="Cargar Cts"
+            >
+              <Upload className="w-5 h-5" />
+              <span className="font-medium">Cargar Cts</span>
+            </button>
+          </div>
         </nav>
 
         <div className="p-4 border-t border-slate-800">
-          <input 
-            type="file" 
-            accept=".xlsx, .xls, .csv" 
-            className="hidden" 
-            ref={fileInputRef}
-            onChange={handleFileUpload}
-          />
-          <button
-            onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-3 px-4 py-2 mb-2 w-full text-left text-slate-500 hover:text-slate-300 transition-colors"
-          >
-            <Upload className="w-4 h-4" />
-            <span className="font-medium text-[11px]">Cargar Clientes</span>
-          </button>
           <button
             onClick={handleLogout}
             className="flex items-center gap-3 px-4 py-2 w-full text-left text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-colors"

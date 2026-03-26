@@ -94,7 +94,7 @@ export const MissionsList = () => {
             checked={selectedIds.size === displayMissions.length}
             onChange={handleSelectAll}
           />
-          <label htmlFor="selectAll" className="text-sm text-slate-600 cursor-pointer select-none">
+          <label htmlFor="selectAll" className="text-xs text-slate-600 cursor-pointer select-none">
             Seleccionar todas
           </label>
         </div>
