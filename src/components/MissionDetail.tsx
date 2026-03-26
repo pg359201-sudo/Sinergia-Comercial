@@ -18,6 +18,7 @@ export const MissionDetail = () => {
   const [evidenceUrl, setEvidenceUrl] = useState(mission?.evidenceUrl || '');
   const [notes, setNotes] = useState(mission?.notes || '');
   const [selectedClientId, setSelectedClientId] = useState('');
+  const [noSpecificClient, setNoSpecificClient] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -30,15 +31,18 @@ export const MissionDetail = () => {
 
   const handleComplete = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!evidenceUrl) {
+    const isPhotoRequired = mission.clientId || !noSpecificClient;
+
+    if (isPhotoRequired && !evidenceUrl) {
       alert('Debes subir evidencia fotográfica.');
       return;
     }
-    if (!mission.clientId && !selectedClientId) {
-      alert('Debes seleccionar un cliente para esta misión general.');
+    if (!mission.clientId && !selectedClientId && !noSpecificClient) {
+      alert('Debes seleccionar un cliente o marcar "Sin cliente específico" para esta misión general.');
       return;
     }
-    updateMissionStatus(mission.id, 'completed', evidenceUrl, notes, selectedClientId || undefined);
+    const finalClientId = noSpecificClient ? undefined : (selectedClientId || undefined);
+    updateMissionStatus(mission.id, 'completed', evidenceUrl, notes, finalClientId);
     navigate('/missions');
   };
 
@@ -136,25 +140,45 @@ export const MissionDetail = () => {
           <h2 className="text-xl font-bold text-slate-900 mb-6">Reportar Ejecución</h2>
           <form onSubmit={handleComplete} className="space-y-6">
             {!mission.clientId && (
-              <div>
-                <Label htmlFor="client-select" className="mb-2 block">Asignar a Cliente *</Label>
-                <select
-                  id="client-select"
-                  className="flex w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                  value={selectedClientId}
-                  onChange={(e) => setSelectedClientId(e.target.value)}
-                  required
-                >
-                  <option value="">Selecciona un cliente...</option>
-                  {[...clients].sort((a, b) => a.name.localeCompare(b.name)).map(c => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
-                  ))}
-                </select>
+              <div className="space-y-3">
+                <div>
+                  <Label htmlFor="client-select" className="mb-2 block">Asignar a Cliente *</Label>
+                  <select
+                    id="client-select"
+                    className="flex w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent disabled:opacity-50 disabled:bg-slate-50"
+                    value={selectedClientId}
+                    onChange={(e) => setSelectedClientId(e.target.value)}
+                    required={!noSpecificClient}
+                    disabled={noSpecificClient}
+                  >
+                    <option value="">Selecciona un cliente...</option>
+                    {[...clients].sort((a, b) => a.name.localeCompare(b.name)).map(c => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="no-specific-client"
+                    className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4"
+                    checked={noSpecificClient}
+                    onChange={(e) => {
+                      setNoSpecificClient(e.target.checked);
+                      if (e.target.checked) setSelectedClientId('');
+                    }}
+                  />
+                  <Label htmlFor="no-specific-client" className="text-sm font-normal text-slate-600 cursor-pointer">
+                    Sin cliente específico
+                  </Label>
+                </div>
               </div>
             )}
 
             <div>
-              <Label className="mb-2 block">Evidencia Fotográfica *</Label>
+              <Label className="mb-2 block">
+                Evidencia Fotográfica {(!mission.clientId && noSpecificClient) ? '(Opcional)' : '*'}
+              </Label>
               <input 
                 type="file" 
                 accept="image/*" 
@@ -194,7 +218,7 @@ export const MissionDetail = () => {
               />
             </div>
 
-            <Button type="submit" className="w-full" disabled={!evidenceUrl || (!mission.clientId && !selectedClientId)}>
+            <Button type="submit" className="w-full" disabled={((mission.clientId || !noSpecificClient) && !evidenceUrl) || (!mission.clientId && !selectedClientId && !noSpecificClient)}>
               Completar Misión y Enviar Retroalimentación
             </Button>
           </form>
