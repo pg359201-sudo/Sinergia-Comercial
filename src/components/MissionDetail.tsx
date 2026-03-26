@@ -17,6 +17,7 @@ export const MissionDetail = () => {
   
   const [evidenceUrl, setEvidenceUrl] = useState(mission?.evidenceUrl || '');
   const [notes, setNotes] = useState(mission?.notes || '');
+  const [selectedClientId, setSelectedClientId] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -33,7 +34,11 @@ export const MissionDetail = () => {
       alert('Debes subir evidencia fotográfica.');
       return;
     }
-    updateMissionStatus(mission.id, 'completed', evidenceUrl, notes);
+    if (!mission.clientId && !selectedClientId) {
+      alert('Debes seleccionar un cliente para esta misión general.');
+      return;
+    }
+    updateMissionStatus(mission.id, 'completed', evidenceUrl, notes, selectedClientId || undefined);
     navigate('/missions');
   };
 
@@ -130,6 +135,24 @@ export const MissionDetail = () => {
         <Card className="p-6 border-indigo-100">
           <h2 className="text-xl font-bold text-slate-900 mb-6">Reportar Ejecución</h2>
           <form onSubmit={handleComplete} className="space-y-6">
+            {!mission.clientId && (
+              <div>
+                <Label htmlFor="client-select" className="mb-2 block">Asignar a Cliente *</Label>
+                <select
+                  id="client-select"
+                  className="flex w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  value={selectedClientId}
+                  onChange={(e) => setSelectedClientId(e.target.value)}
+                  required
+                >
+                  <option value="">Selecciona un cliente...</option>
+                  {[...clients].sort((a, b) => a.name.localeCompare(b.name)).map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
             <div>
               <Label className="mb-2 block">Evidencia Fotográfica *</Label>
               <input 
@@ -171,7 +194,7 @@ export const MissionDetail = () => {
               />
             </div>
 
-            <Button type="submit" className="w-full" disabled={!evidenceUrl}>
+            <Button type="submit" className="w-full" disabled={!evidenceUrl || (!mission.clientId && !selectedClientId)}>
               Completar Misión y Enviar Retroalimentación
             </Button>
           </form>

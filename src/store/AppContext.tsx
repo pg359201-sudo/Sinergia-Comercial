@@ -12,7 +12,7 @@ interface AppState {
   login: (userId: string) => void;
   logout: () => void;
   addMission: (mission: Omit<Mission, 'id' | 'createdAt' | 'status'>) => void;
-  updateMissionStatus: (id: string, status: Mission['status'], evidenceUrl?: string, notes?: string) => void;
+  updateMissionStatus: (id: string, status: Mission['status'], evidenceUrl?: string, notes?: string, clientId?: string) => void;
   addAlert: (alert: Omit<Alert, 'id' | 'createdAt' | 'status'>) => void;
   updateAlertStatus: (id: string, status: Alert['status']) => void;
   addSale: (sale: Omit<TacticalSale, 'id' | 'createdAt'>) => void;
@@ -192,7 +192,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     } catch (error) { console.error("Error saving mission:", error); }
   };
 
-  const updateMissionStatus = async (id: string, status: Mission['status'], evidenceUrl?: string, notes?: string) => {
+  const updateMissionStatus = async (id: string, status: Mission['status'], evidenceUrl?: string, notes?: string, clientId?: string) => {
     const completedAt = status === 'completed' ? new Date().toISOString() : undefined;
     
     let updatedMission: Mission | null = null;
@@ -205,6 +205,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
           completedAt: completedAt || m.completedAt,
           evidenceUrl: evidenceUrl || m.evidenceUrl,
           notes: notes || m.notes,
+          ...(clientId ? { clientId } : {})
         };
         return updatedMission;
       }
@@ -220,7 +221,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
             status: (updatedMission as Mission).status, 
             evidenceUrl: (updatedMission as Mission).evidenceUrl, 
             notes: (updatedMission as Mission).notes, 
-            completedAt: (updatedMission as Mission).completedAt 
+            completedAt: (updatedMission as Mission).completedAt,
+            clientId: (updatedMission as Mission).clientId
           })
         });
       } catch (error) { console.error("Error updating mission:", error); }
