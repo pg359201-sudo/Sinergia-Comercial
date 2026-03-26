@@ -53,17 +53,17 @@ export const ClientDetail = () => {
         <span className="font-medium">Volver a Clientes</span>
       </button>
 
-      <Card className="p-4 md:p-5 bg-white border-slate-200 shadow-sm">
-        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-          <div className="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
-            <Store className="w-6 h-6" />
+      <Card className="p-3 md:p-4 bg-white border-slate-200 shadow-sm">
+        <div className="flex flex-col md:flex-row gap-3 items-start md:items-center">
+          <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
+            <Store className="w-5 h-5" />
           </div>
           <div className="flex-1">
-            <div className="flex flex-wrap items-center gap-2 mb-1">
-              <h1 className="text-xl md:text-2xl font-bold text-slate-900">{client.name}</h1>
-              <Badge variant="secondary" className="bg-slate-100 text-slate-700 text-xs">{formatTextWithoutPrefix(client.gec)}</Badge>
+            <div className="flex flex-wrap items-center gap-2 mb-0.5">
+              <h1 className="text-lg md:text-xl font-bold text-slate-900 leading-tight">{client.name}</h1>
+              <Badge variant="secondary" className="bg-slate-100 text-slate-700 text-[10px] px-1.5 py-0">{formatTextWithoutPrefix(client.gec)}</Badge>
             </div>
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-sm text-slate-600 mt-2">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs text-slate-600 mt-1">
               <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5 text-slate-400" /> Visita: {client.visitDay}</span>
               <span className="flex items-center gap-1.5 text-indigo-600 font-medium">{client.route}</span>
               {client.uc12mm && <span className="flex items-center gap-1.5 text-slate-500 font-medium">UC 12mm: {formatUC12mm(client.uc12mm)}</span>}
