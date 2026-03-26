@@ -96,7 +96,7 @@ export const Login = () => {
           </button>
           
           <div className="pt-6 text-center">
-            <p className="text-[9px] font-medium tracking-widest text-slate-400/80 uppercase">
+            <p className="text-[8px] font-medium tracking-widest text-slate-400/80 uppercase">
               Built by Pascatech
             </p>
           </div>
