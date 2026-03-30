@@ -22,7 +22,8 @@ export const RecordsList = () => {
       type: 'Misión',
       typePath: 'missions',
       description: m.title,
-      hasPhoto: false
+      hasPhoto: false,
+      recordStatus: m.status === 'completed' ? 'Completo' : 'Pendiente'
     })),
     ...alerts.map(a => ({
       id: a.id,
@@ -31,7 +32,8 @@ export const RecordsList = () => {
       type: 'Alerta',
       typePath: 'alerts',
       description: a.type === 'competitor_action' ? 'Competencia' : a.type === 'stock_out' ? 'Quiebre Stock' : 'Oportunidad',
-      hasPhoto: false
+      hasPhoto: false,
+      recordStatus: a.status === 'actioned' ? 'Completo' : 'Pendiente'
     })),
     ...sales.map(s => ({
       id: s.id,
@@ -40,7 +42,8 @@ export const RecordsList = () => {
       type: 'Venta Táctica',
       typePath: 'sales',
       description: `${s.product} (${s.quantity} uds)`,
-      hasPhoto: false
+      hasPhoto: false,
+      recordStatus: 'Completo'
     })),
     ...activations.map(a => ({
       id: a.id,
@@ -49,7 +52,8 @@ export const RecordsList = () => {
       type: 'Activación',
       typePath: 'activations',
       description: a.feedback ? `${a.title} (Feedback: ${a.feedback})` : a.title,
-      hasPhoto: !!a.evidenceUrl
+      hasPhoto: !!a.evidenceUrl,
+      recordStatus: 'Completo'
     }))
   ].map(record => {
     const client = clients.find(c => c.id === record.clientId);
@@ -59,7 +63,11 @@ export const RecordsList = () => {
       formattedDate: format(new Date(record.date), 'dd/MM/yy HH:mm'),
       uniqueId: `${record.typePath}-${record.id}`
     };
-  }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }).sort((a, b) => {
+    if (a.recordStatus === 'Pendiente' && b.recordStatus !== 'Pendiente') return -1;
+    if (a.recordStatus !== 'Pendiente' && b.recordStatus === 'Pendiente') return 1;
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
 
   const filteredRecords = allRecords.filter(record => {
     const term = searchTerm.toLowerCase();
@@ -193,13 +201,14 @@ export const RecordsList = () => {
                 <th className="p-4 font-semibold">Cliente</th>
                 <th className="p-4 font-semibold">Tipo de Actividad</th>
                 <th className="p-4 font-semibold">Detalle</th>
+                <th className="p-4 font-semibold">Estado</th>
                 <th className="p-4 font-semibold text-center">Acción</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filteredRecords.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-8 text-center text-slate-500">
+                  <td colSpan={7} className="p-8 text-center text-slate-500">
                     No se encontraron registros.
                   </td>
                 </tr>
@@ -214,7 +223,7 @@ export const RecordsList = () => {
                         onChange={() => handleSelectOne(record.uniqueId)}
                       />
                     </td>
-                    <td className="p-4 text-sm text-slate-600 whitespace-nowrap">
+                    <td className="p-4 text-xs text-slate-600 whitespace-nowrap">
                       {record.formattedDate}
                     </td>
                     <td className="p-4 text-sm font-medium text-slate-900">
@@ -232,13 +241,18 @@ export const RecordsList = () => {
                     <td className="p-4 text-sm text-slate-600 max-w-xs truncate">
                       {record.description}
                     </td>
+                    <td className="p-4 text-sm">
+                      <Badge variant={record.recordStatus === 'Completo' ? 'success' : 'warning'}>
+                        {record.recordStatus}
+                      </Badge>
+                    </td>
                     <td className="p-4 text-center">
                       <Link to={`/records/${record.typePath}/${record.id}`}>
-                        <Button variant="ghost" className="h-8 px-3 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50">
+                        <Button variant="ghost" className="h-8 w-8 p-0 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 mx-auto flex items-center justify-center">
                           {record.hasPhoto ? (
-                            <span className="flex items-center gap-1.5"><ImageIcon className="w-4 h-4" /> Ver Foto</span>
+                            <ImageIcon className="w-4 h-4" />
                           ) : (
-                            <span className="flex items-center gap-1.5"><Eye className="w-4 h-4" /> Ver Detalle</span>
+                            <Eye className="w-4 h-4" />
                           )}
                         </Button>
                       </Link>
