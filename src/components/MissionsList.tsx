@@ -14,9 +14,15 @@ export const MissionsList = () => {
   const isEscritorio = currentUser?.role === 'escritorio';
   const displayMissions = isEscritorio ? missions : missions.filter(m => m.assignedTo === currentUser?.id);
 
+  const sortedMissions = [...displayMissions].sort((a, b) => {
+    if (a.status === 'completed' && b.status !== 'completed') return 1;
+    if (a.status !== 'completed' && b.status === 'completed') return -1;
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
-      setSelectedIds(new Set(displayMissions.map(m => m.id)));
+      setSelectedIds(new Set(sortedMissions.map(m => m.id)));
     } else {
       setSelectedIds(new Set());
     }
@@ -85,13 +91,13 @@ export const MissionsList = () => {
         </div>
       </div>
 
-      {isEscritorio && displayMissions.length > 0 && (
+      {isEscritorio && sortedMissions.length > 0 && (
         <div className="flex items-center gap-2 px-1">
           <input 
             type="checkbox" 
             id="selectAll"
             className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer"
-            checked={selectedIds.size === displayMissions.length}
+            checked={selectedIds.size === sortedMissions.length}
             onChange={handleSelectAll}
           />
           <label htmlFor="selectAll" className="text-xs text-slate-600 cursor-pointer select-none">
@@ -101,7 +107,7 @@ export const MissionsList = () => {
       )}
 
       <div className={`grid gap-4 ${isEscritorio ? 'md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
-        {displayMissions.map((mission) => {
+        {sortedMissions.map((mission) => {
           const client = clients.find(c => c.id === mission.clientId);
           const assignedUser = users.find(u => u.id === mission.assignedTo);
           
@@ -151,7 +157,7 @@ export const MissionsList = () => {
             </Card>
           );
         })}
-        {displayMissions.length === 0 && (
+        {sortedMissions.length === 0 && (
           <div className="col-span-full py-12 text-center text-slate-500">
             No hay misiones disponibles.
           </div>
