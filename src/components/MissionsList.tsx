@@ -20,14 +20,6 @@ export const MissionsList = () => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
-  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      setSelectedIds(new Set(sortedMissions.map(m => m.id)));
-    } else {
-      setSelectedIds(new Set());
-    }
-  };
-
   const handleSelectOne = (id: string) => {
     const newSelected = new Set(selectedIds);
     if (newSelected.has(id)) {
@@ -90,21 +82,6 @@ export const MissionsList = () => {
           )}
         </div>
       </div>
-
-      {isEscritorio && sortedMissions.length > 0 && (
-        <div className="flex items-center gap-2 px-1">
-          <input 
-            type="checkbox" 
-            id="selectAll"
-            className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer"
-            checked={selectedIds.size === sortedMissions.length}
-            onChange={handleSelectAll}
-          />
-          <label htmlFor="selectAll" className="text-xs text-slate-600 cursor-pointer select-none">
-            Seleccionar todas
-          </label>
-        </div>
-      )}
 
       <div className={`grid gap-4 ${isEscritorio ? 'md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
         {sortedMissions.map((mission) => {

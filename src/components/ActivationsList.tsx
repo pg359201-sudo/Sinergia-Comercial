@@ -22,14 +22,6 @@ export const ActivationsList = () => {
 
   const isMobile = currentUser?.role === 'terreno';
 
-  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      setSelectedIds(new Set(filteredActivations.map(a => a.id)));
-    } else {
-      setSelectedIds(new Set());
-    }
-  };
-
   const handleSelectOne = (id: string) => {
     const newSelected = new Set(selectedIds);
     if (newSelected.has(id)) {
@@ -97,21 +89,6 @@ export const ActivationsList = () => {
           )}
         </div>
       </div>
-
-      {filteredActivations.length > 0 && (
-        <div className="flex items-center gap-2 px-1">
-          <input 
-            type="checkbox" 
-            id="selectAll"
-            className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer"
-            checked={selectedIds.size === filteredActivations.length}
-            onChange={handleSelectAll}
-          />
-          <label htmlFor="selectAll" className="text-xs text-slate-600 cursor-pointer select-none">
-            Seleccionar todas
-          </label>
-        </div>
-      )}
 
       {filteredActivations.length === 0 ? (
         <Card className="p-12 text-center border-dashed border-2 border-slate-200 bg-slate-50">

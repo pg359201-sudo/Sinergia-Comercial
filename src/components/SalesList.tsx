@@ -14,14 +14,6 @@ export const SalesList = () => {
   const isEscritorio = currentUser?.role === 'escritorio';
   const displaySales = isEscritorio ? sales : sales.filter(s => s.createdBy === currentUser?.id);
 
-  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      setSelectedIds(new Set(displaySales.map(s => s.id)));
-    } else {
-      setSelectedIds(new Set());
-    }
-  };
-
   const handleSelectOne = (id: string) => {
     const newSelected = new Set(selectedIds);
     if (newSelected.has(id)) {
@@ -84,21 +76,6 @@ export const SalesList = () => {
           )}
         </div>
       </div>
-
-      {displaySales.length > 0 && (
-        <div className="flex items-center gap-2 px-1">
-          <input 
-            type="checkbox" 
-            id="selectAll"
-            className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer"
-            checked={selectedIds.size === displaySales.length}
-            onChange={handleSelectAll}
-          />
-          <label htmlFor="selectAll" className="text-xs text-slate-600 cursor-pointer select-none">
-            Seleccionar todas
-          </label>
-        </div>
-      )}
 
       <div className={`grid gap-4 ${isEscritorio ? 'md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
         {displaySales.map((sale) => {

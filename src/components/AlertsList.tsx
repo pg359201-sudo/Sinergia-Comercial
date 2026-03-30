@@ -14,14 +14,6 @@ export const AlertsList = () => {
   const isEscritorio = currentUser?.role === 'escritorio';
   const displayAlerts = isEscritorio ? alerts : alerts.filter(a => a.createdBy === currentUser?.id);
 
-  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      setSelectedIds(new Set(displayAlerts.map(a => a.id)));
-    } else {
-      setSelectedIds(new Set());
-    }
-  };
-
   const handleSelectOne = (id: string) => {
     const newSelected = new Set(selectedIds);
     if (newSelected.has(id)) {
@@ -84,21 +76,6 @@ export const AlertsList = () => {
           )}
         </div>
       </div>
-
-      {isEscritorio && displayAlerts.length > 0 && (
-        <div className="flex items-center gap-2 px-1">
-          <input 
-            type="checkbox" 
-            id="selectAll"
-            className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer"
-            checked={selectedIds.size === displayAlerts.length}
-            onChange={handleSelectAll}
-          />
-          <label htmlFor="selectAll" className="text-xs text-slate-600 cursor-pointer select-none">
-            Seleccionar todas
-          </label>
-        </div>
-      )}
 
       <div className={`grid gap-4 ${isEscritorio ? 'lg:grid-cols-2' : 'grid-cols-1'}`}>
         {displayAlerts.map((alert) => {

@@ -71,14 +71,6 @@ export const RecordsList = () => {
     );
   });
 
-  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      setSelectedIds(new Set(filteredRecords.map(r => r.uniqueId)));
-    } else {
-      setSelectedIds(new Set());
-    }
-  };
-
   const handleSelectOne = (uniqueId: string) => {
     const newSelected = new Set(selectedIds);
     if (newSelected.has(uniqueId)) {
@@ -195,12 +187,7 @@ export const RecordsList = () => {
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 text-sm">
                 <th className="p-4 w-12 text-center">
-                  <input 
-                    type="checkbox" 
-                    className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4 cursor-pointer"
-                    checked={filteredRecords.length > 0 && selectedIds.size === filteredRecords.length}
-                    onChange={handleSelectAll}
-                  />
+                  {/* Checkbox column header */}
                 </th>
                 <th className="p-4 font-semibold">Fecha</th>
                 <th className="p-4 font-semibold">Cliente</th>
