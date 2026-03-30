@@ -113,7 +113,7 @@ export const RecordsList = () => {
   };
 
   const exportToCSV = () => {
-    const headers = ['Fecha', 'Cliente', 'Tipo de Actividad', 'Descripción', 'Tiene Foto'];
+    const headers = ['Fecha', 'Cliente', 'Tipo de Act.', 'Descripción', 'Tiene Foto'];
     const rows = filteredRecords.map(record => [
       record.formattedDate,
       `"${record.clientName}"`,
@@ -194,15 +194,15 @@ export const RecordsList = () => {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 text-sm">
-                <th className="p-4 w-12 text-center">
+                <th className="p-4 w-10 text-center">
                   {/* Checkbox column header */}
                 </th>
-                <th className="p-4 font-semibold">Fecha</th>
-                <th className="p-4 font-semibold">Cliente</th>
-                <th className="p-4 font-semibold">Tipo de Actividad</th>
-                <th className="p-4 font-semibold">Detalle</th>
-                <th className="p-4 font-semibold">Estado</th>
-                <th className="p-4 font-semibold text-center">Acción</th>
+                <th className="p-4 font-semibold w-28 whitespace-nowrap">Fecha</th>
+                <th className="p-4 font-semibold min-w-[160px]">Cliente</th>
+                <th className="p-4 font-semibold w-32 whitespace-nowrap">Tipo de Act.</th>
+                <th className="p-4 font-semibold w-auto">Detalle</th>
+                <th className="p-4 font-semibold w-28 whitespace-nowrap">Estado</th>
+                <th className="p-4 w-16 text-center"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -229,7 +229,7 @@ export const RecordsList = () => {
                     <td className="p-4 text-sm font-medium text-slate-900">
                       {record.clientName}
                     </td>
-                    <td className="p-4 text-sm">
+                    <td className="p-4 text-sm whitespace-nowrap">
                       <Badge variant={
                         record.typePath === 'missions' ? 'default' :
                         record.typePath === 'alerts' ? 'warning' :
@@ -241,7 +241,7 @@ export const RecordsList = () => {
                     <td className="p-4 text-sm text-slate-600 max-w-xs truncate">
                       {record.description}
                     </td>
-                    <td className="p-4 text-sm">
+                    <td className="p-4 text-sm whitespace-nowrap">
                       <Badge variant={record.recordStatus === 'Completo' ? 'success' : 'warning'}>
                         {record.recordStatus}
                       </Badge>
