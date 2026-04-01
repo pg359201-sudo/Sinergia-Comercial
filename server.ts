@@ -200,12 +200,21 @@ export async function startServer() {
   app.put("/api/missions/:id", async (req, res) => {
     if (!process.env.POSTGRES_URL) return res.status(500).json({ error: "DB no configurada" });
     try {
-      const { status, evidenceUrl, notes, completedAt } = req.body;
-      await sql`
-        UPDATE missions 
-        SET status = ${status}, evidence_url = ${evidenceUrl || null}, notes = ${notes || null}, completed_at = ${completedAt || null}
-        WHERE id = ${req.params.id}
-      `;
+      const { status, evidenceUrl, notes, completedAt, title, description } = req.body;
+      
+      if (title !== undefined && description !== undefined) {
+        await sql`
+          UPDATE missions 
+          SET title = ${title}, description = ${description}
+          WHERE id = ${req.params.id}
+        `;
+      } else {
+        await sql`
+          UPDATE missions 
+          SET status = ${status}, evidence_url = ${evidenceUrl || null}, notes = ${notes || null}, completed_at = ${completedAt || null}
+          WHERE id = ${req.params.id}
+        `;
+      }
       res.json({ success: true });
     } catch (error) { res.status(500).json({ error: "Error actualizando misión" }); }
   });

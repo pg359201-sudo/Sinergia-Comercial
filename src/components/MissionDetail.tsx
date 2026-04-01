@@ -4,13 +4,13 @@ import { useAppStore } from '../store/AppContext';
 import { Card, Badge, Button, Label, Input } from './ui';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Calendar, CheckCircle2, UploadCloud, ArrowLeft } from 'lucide-react';
+import { Calendar, CheckCircle2, UploadCloud, ArrowLeft, Pencil, Save, X } from 'lucide-react';
 import { compressAndUploadImage } from '../utils/imageUpload';
 
 export const MissionDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { currentUser, missions, clients, updateMissionStatus } = useAppStore();
+  const { currentUser, missions, clients, updateMissionStatus, updateMissionDetails } = useAppStore();
   
   const mission = missions.find(m => m.id === id);
   const client = clients.find(c => c?.id === mission?.clientId);
@@ -20,6 +20,9 @@ export const MissionDetail = () => {
   const [selectedClientId, setSelectedClientId] = useState('');
   const [noSpecificClient, setNoSpecificClient] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState(mission?.title || '');
+  const [editDescription, setEditDescription] = useState(mission?.description || '');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!mission) {
@@ -62,6 +65,13 @@ export const MissionDetail = () => {
     }
   };
 
+  const handleSaveDetails = () => {
+    if (mission) {
+      updateMissionDetails(mission.id, editTitle, editDescription);
+      setIsEditing(false);
+    }
+  };
+
   return (
     <div className="max-w-3xl mx-auto space-y-8">
       <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors">
@@ -70,13 +80,42 @@ export const MissionDetail = () => {
       </button>
 
       <div className="flex justify-between items-start">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">{mission.title}</h1>
+        <div className="flex-1 mr-4">
+          {isEditing ? (
+            <Input 
+              value={editTitle} 
+              onChange={(e) => setEditTitle(e.target.value)} 
+              className="text-2xl font-bold mb-2 h-auto py-2"
+            />
+          ) : (
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900">{mission.title}</h1>
+          )}
           <p className="mt-2 text-slate-600">Detalle de la misión y ejecución.</p>
         </div>
-        <Badge variant={mission.status === 'completed' ? 'success' : mission.status === 'in-progress' ? 'warning' : 'info'} className="text-sm px-3 py-1">
-          {mission.status === 'completed' ? 'Completada' : mission.status === 'in-progress' ? 'En Progreso' : 'Pendiente'}
-        </Badge>
+        <div className="flex flex-col items-end gap-2">
+          <Badge variant={mission.status === 'completed' ? 'success' : mission.status === 'in-progress' ? 'warning' : 'info'} className="text-sm px-3 py-1">
+            {mission.status === 'completed' ? 'Completa' : mission.status === 'in-progress' ? 'En Progreso' : 'Pendiente'}
+          </Badge>
+          {isEscritorio && !isEditing && (
+            <Button variant="outline" size="sm" onClick={() => setIsEditing(true)} className="flex items-center justify-center w-8 h-8 p-0" title="Editar">
+              <Pencil className="w-4 h-4" />
+            </Button>
+          )}
+          {isEscritorio && isEditing && (
+            <div className="flex gap-2">
+              <Button variant="ghost" size="sm" onClick={() => {
+                setIsEditing(false);
+                setEditTitle(mission.title);
+                setEditDescription(mission.description);
+              }} className="flex items-center justify-center w-8 h-8 p-0" title="Cancelar">
+                <X className="w-4 h-4" />
+              </Button>
+              <Button size="sm" onClick={handleSaveDetails} className="flex items-center justify-center w-8 h-8 p-0" title="Guardar">
+                <Save className="w-4 h-4" />
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
 
       <Card className="p-6">
@@ -97,10 +136,18 @@ export const MissionDetail = () => {
         </div>
 
         <div>
-          <Label className="text-slate-500 mb-2 block">Descripción de la Misión (Directiva)</Label>
-          <div className="bg-slate-50 p-4 rounded-xl text-slate-700 border border-slate-100">
-            {mission.description}
-          </div>
+          <Label className="text-slate-500 mb-2 block">Descripción de la Misión</Label>
+          {isEditing ? (
+            <textarea
+              className="flex w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent min-h-[100px]"
+              value={editDescription}
+              onChange={(e) => setEditDescription(e.target.value)}
+            />
+          ) : (
+            <div className="bg-slate-50 p-4 rounded-xl text-slate-700 border border-slate-100">
+              {mission.description}
+            </div>
+          )}
         </div>
       </Card>
 

@@ -102,7 +102,7 @@ export const MissionsList = () => {
               )}
               <div className={`flex justify-between items-start mb-2 md:mb-3 ${isEscritorio ? 'pr-6 md:pr-8' : ''}`}>
                 <Badge variant={mission.status === 'completed' ? 'success' : mission.status === 'in-progress' ? 'warning' : 'info'} className="text-[10px] md:text-xs px-1.5 py-0.5 md:px-2.5 md:py-0.5">
-                  {mission.status === 'completed' ? 'Completada' : mission.status === 'in-progress' ? 'En Progreso' : 'Pendiente'}
+                  {mission.status === 'completed' ? 'Completa' : mission.status === 'in-progress' ? 'En Progreso' : 'Pendiente'}
                 </Badge>
                 <span className="text-[10px] md:text-xs text-slate-500 flex items-center gap-1">
                   <Calendar className="w-3 h-3" />
@@ -118,12 +118,6 @@ export const MissionsList = () => {
                   <Store className="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-400 shrink-0" />
                   <span className="truncate font-medium">{client ? client.name : 'Misión General'}</span>
                 </div>
-                
-                {isEscritorio && (
-                  <div className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-slate-600">
-                    <span className="truncate">Asignado a: {assignedUser?.name}</span>
-                  </div>
-                )}
                 
                 <Link to={`/missions/${mission.id}`} className="block mt-2 md:mt-3">
                   <Button variant={mission.status === 'completed' ? 'outline' : 'primary'} className="w-full text-xs md:text-sm h-8 md:h-10">

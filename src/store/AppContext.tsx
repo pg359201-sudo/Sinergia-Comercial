@@ -13,6 +13,7 @@ interface AppState {
   logout: () => void;
   addMission: (mission: Omit<Mission, 'id' | 'createdAt' | 'status'>) => void;
   updateMissionStatus: (id: string, status: Mission['status'], evidenceUrl?: string, notes?: string, clientId?: string) => void;
+  updateMissionDetails: (id: string, title: string, description: string) => void;
   addAlert: (alert: Omit<Alert, 'id' | 'createdAt' | 'status'>) => void;
   updateAlertStatus: (id: string, status: Alert['status']) => void;
   addSale: (sale: Omit<TacticalSale, 'id' | 'createdAt'>) => void;
@@ -229,6 +230,17 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     }
   };
 
+  const updateMissionDetails = async (id: string, title: string, description: string) => {
+    setMissions(prev => prev.map(m => m.id === id ? { ...m, title, description } : m));
+    try {
+      await fetch(`/api/missions/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, description })
+      });
+    } catch (error) { console.error("Error updating mission details:", error); }
+  };
+
   const addAlert = async (alert: Omit<Alert, 'id' | 'createdAt' | 'status'>) => {
     const newAlert: Alert = {
       ...alert,
@@ -391,7 +403,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   return (
     <AppContext.Provider value={{
       currentUser, users, clients, missions, alerts, sales, activations,
-      login, logout, addMission, updateMissionStatus, addAlert, updateAlertStatus, addSale, addActivation, updateActivationFeedback, addClients,
+      login, logout, addMission, updateMissionStatus, updateMissionDetails, addAlert, updateAlertStatus, addSale, addActivation, updateActivationFeedback, addClients,
       deleteMissions, deleteAlerts, deleteSales, deleteActivations
     }}>
       {children}
