@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppStore } from '../store/AppContext';
 import { Card, Button, Label, Input } from './ui';
 import { ArrowLeft } from 'lucide-react';
 
 export const NewMissionForm = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { clients, users, addMission, currentUser } = useAppStore();
   
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [clientId, setClientId] = useState(clients[0]?.id || '');
+  
+  const initialClientId = searchParams.get('clientId') || (clients[0]?.id || '');
+  const [clientId, setClientId] = useState(initialClientId);
   const [isGeneral, setIsGeneral] = useState(false);
   const assignedTo = users.find(u => u.role === 'terreno')?.id || '';
 

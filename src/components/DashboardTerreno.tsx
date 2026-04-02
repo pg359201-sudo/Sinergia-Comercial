@@ -40,7 +40,7 @@ export const DashboardTerreno = () => {
           <Link to="/missions" className="text-indigo-600 text-sm font-medium">Ver todas</Link>
         </div>
         <div className="space-y-3">
-          {myMissions.filter(m => m.status !== 'completed').slice(0, 3).map(mission => {
+          {myMissions.filter(m => m.status !== 'completed').slice(0, 10).map(mission => {
             const client = clients.find(c => c.id === mission.clientId);
             return (
               <Link key={mission.id} to={`/missions/${mission.id}`} className="block">

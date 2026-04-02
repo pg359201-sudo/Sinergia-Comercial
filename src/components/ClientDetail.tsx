@@ -48,10 +48,16 @@ export const ClientDetail = () => {
 
   return (
     <div className="space-y-6 pb-8">
-      <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors">
-        <ArrowLeft className="w-5 h-5" />
-        <span className="font-medium">Volver a Clientes</span>
-      </button>
+      <div className="flex justify-between items-center">
+        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors">
+          <ArrowLeft className="w-5 h-5" />
+          <span className="font-medium">Volver a Clientes</span>
+        </button>
+        <Link to={`/missions/new?clientId=${client.id}`} className="flex items-center gap-2 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-colors text-sm font-medium">
+          <ClipboardList className="w-4 h-4" />
+          Crear Misión
+        </Link>
+      </div>
 
       <Card className="p-3 md:p-4 bg-white border-slate-200 shadow-sm">
         <div className="flex flex-col md:flex-row gap-3 items-start md:items-center">
