@@ -79,7 +79,8 @@ export const RecordsList = () => {
       record.formattedDate.toLowerCase().includes(term) ||
       record.clientName.toLowerCase().includes(term) ||
       record.type.toLowerCase().includes(term) ||
-      record.description.toLowerCase().includes(term)
+      record.description.toLowerCase().includes(term) ||
+      record.category.toLowerCase().includes(term)
     );
   });
 
