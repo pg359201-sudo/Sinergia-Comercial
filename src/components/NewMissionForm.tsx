@@ -10,6 +10,7 @@ export const NewMissionForm = () => {
   const { clients, users, addMission, currentUser } = useAppStore();
   
   const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   
   const initialClientId = searchParams.get('clientId') || (clients[0]?.id || '');
@@ -19,10 +20,11 @@ export const NewMissionForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !description || (!isGeneral && !clientId) || !assignedTo) return;
+    if (!title || !category || !description || (!isGeneral && !clientId) || !assignedTo) return;
 
     addMission({
       title,
+      category,
       description,
       clientId: isGeneral ? undefined : clientId,
       assignedTo,
@@ -54,6 +56,25 @@ export const NewMissionForm = () => {
               placeholder="Ej: Ganar cabecera central"
               required
             />
+          </div>
+
+          <div>
+            <Label htmlFor="category" className="mb-2 block">Categoría</Label>
+            <select
+              id="category"
+              className="block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-xl border"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
+            >
+              <option value="">Selecciona una categoría...</option>
+              <option value="Refrescos">Refrescos</option>
+              <option value="Jugos">Jugos</option>
+              <option value="Isotónicos">Isotónicos</option>
+              <option value="Energizantes">Energizantes</option>
+              <option value="Diageo">Diageo</option>
+              <option value="Vinos">Vinos</option>
+            </select>
           </div>
 
           <div>

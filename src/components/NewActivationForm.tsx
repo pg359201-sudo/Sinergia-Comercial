@@ -10,6 +10,7 @@ export const NewActivationForm = () => {
   const { clients, addActivation, currentUser } = useAppStore();
   
   const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [clientId, setClientId] = useState(clients[0]?.id || '');
   const [isUploading, setIsUploading] = useState(false);
@@ -34,10 +35,11 @@ export const NewActivationForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !clientId || !evidenceUrl) return;
+    if (!title || !category || !clientId || !evidenceUrl) return;
 
     addActivation({
       title,
+      category,
       description,
       clientId,
       createdBy: currentUser!.id,
@@ -88,6 +90,25 @@ export const NewActivationForm = () => {
               placeholder="Ej: Exhibición Powerade"
               required
             />
+          </div>
+
+          <div>
+            <Label htmlFor="category" className="mb-2 block text-sm md:text-base">Categoría</Label>
+            <select
+              id="category"
+              className="block w-full pl-3 pr-10 py-3 text-base border-slate-300 focus:outline-none focus:ring-[#9C7C38] focus:border-[#9C7C38] rounded-xl border bg-white"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
+            >
+              <option value="">Selecciona una categoría...</option>
+              <option value="Refrescos">Refrescos</option>
+              <option value="Jugos">Jugos</option>
+              <option value="Isotónicos">Isotónicos</option>
+              <option value="Energizantes">Energizantes</option>
+              <option value="Diageo">Diageo</option>
+              <option value="Vinos">Vinos</option>
+            </select>
           </div>
 
           <div>

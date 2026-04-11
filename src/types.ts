@@ -31,6 +31,7 @@ export interface Mission {
   completedAt?: string;
   evidenceUrl?: string;
   notes?: string;
+  category?: string;
 }
 
 export type AlertType = 'stock_out' | 'competitor_action' | 'new_opportunity' | 'other';
@@ -64,4 +65,5 @@ export interface Activation {
   createdAt: string;
   evidenceUrl: string;
   feedback?: string;
+  category?: string;
 }

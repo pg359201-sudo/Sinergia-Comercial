@@ -99,8 +99,10 @@ export async function startServer() {
       // Add feedback column if it doesn't exist (for existing databases)
       try {
         await sql`ALTER TABLE activations ADD COLUMN IF NOT EXISTS feedback TEXT;`;
+        await sql`ALTER TABLE activations ADD COLUMN IF NOT EXISTS category VARCHAR(255);`;
+        await sql`ALTER TABLE missions ADD COLUMN IF NOT EXISTS category VARCHAR(255);`;
       } catch (e) {
-        console.log("Column feedback might already exist or error adding it:", e);
+        console.log("Error adding columns:", e);
       }
 
       res.json({ message: "Tablas creadas exitosamente en Postgres" });
@@ -180,7 +182,7 @@ export async function startServer() {
       res.json(rows.map(r => ({
         id: r.id, title: r.title, description: r.description, clientId: r.client_id,
         assignedTo: r.assigned_to, createdBy: r.created_by, status: r.status,
-        createdAt: r.created_at, completedAt: r.completed_at, evidenceUrl: r.evidence_url, notes: r.notes
+        createdAt: r.created_at, completedAt: r.completed_at, evidenceUrl: r.evidence_url, notes: r.notes, category: r.category
       })));
     } catch (error) { res.status(500).json({ error: "Error obteniendo misiones" }); }
   });
@@ -188,10 +190,10 @@ export async function startServer() {
   app.post("/api/missions", async (req, res) => {
     if (!process.env.POSTGRES_URL) return res.status(500).json({ error: "DB no configurada" });
     try {
-      const { id, title, description, clientId, assignedTo, createdBy, status, createdAt, evidenceUrl, notes } = req.body;
+      const { id, title, description, clientId, assignedTo, createdBy, status, createdAt, evidenceUrl, notes, category } = req.body;
       await sql`
-        INSERT INTO missions (id, title, description, client_id, assigned_to, created_by, status, created_at, evidence_url, notes)
-        VALUES (${id}, ${title}, ${description}, ${clientId || null}, ${assignedTo}, ${createdBy}, ${status}, ${createdAt}, ${evidenceUrl || null}, ${notes || null})
+        INSERT INTO missions (id, title, description, client_id, assigned_to, created_by, status, created_at, evidence_url, notes, category)
+        VALUES (${id}, ${title}, ${description}, ${clientId || null}, ${assignedTo}, ${createdBy}, ${status}, ${createdAt}, ${evidenceUrl || null}, ${notes || null}, ${category || null})
       `;
       res.json({ success: true });
     } catch (error) { res.status(500).json({ error: "Error creando misión" }); }
@@ -317,7 +319,7 @@ export async function startServer() {
       res.json(rows.map(r => ({
         id: r.id, title: r.title, description: r.description, clientId: r.client_id,
         createdBy: r.created_by, createdAt: r.created_at, evidenceUrl: r.evidence_url,
-        feedback: r.feedback
+        feedback: r.feedback, category: r.category
       })));
     } catch (error) { res.status(500).json({ error: "Error obteniendo activaciones" }); }
   });
@@ -325,10 +327,10 @@ export async function startServer() {
   app.post("/api/activations", async (req, res) => {
     if (!process.env.POSTGRES_URL) return res.status(500).json({ error: "DB no configurada" });
     try {
-      const { id, title, description, clientId, createdBy, createdAt, evidenceUrl, feedback } = req.body;
+      const { id, title, description, clientId, createdBy, createdAt, evidenceUrl, feedback, category } = req.body;
       await sql`
-        INSERT INTO activations (id, title, description, client_id, created_by, created_at, evidence_url, feedback)
-        VALUES (${id}, ${title}, ${description}, ${clientId}, ${createdBy}, ${createdAt}, ${evidenceUrl}, ${feedback || null})
+        INSERT INTO activations (id, title, description, client_id, created_by, created_at, evidence_url, feedback, category)
+        VALUES (${id}, ${title}, ${description}, ${clientId}, ${createdBy}, ${createdAt}, ${evidenceUrl}, ${feedback || null}, ${category || null})
       `;
       res.json({ success: true });
     } catch (error) { res.status(500).json({ error: "Error creando activación" }); }

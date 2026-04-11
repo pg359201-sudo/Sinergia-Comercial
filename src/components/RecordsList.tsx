@@ -23,7 +23,8 @@ export const RecordsList = () => {
       typePath: 'missions',
       description: m.title,
       hasPhoto: false,
-      recordStatus: m.status === 'completed' ? 'Completo' : 'Pendiente'
+      recordStatus: m.status === 'completed' ? 'Completo' : 'Pendiente',
+      category: m.category || '-'
     })),
     ...alerts.map(a => ({
       id: a.id,
@@ -33,7 +34,8 @@ export const RecordsList = () => {
       typePath: 'alerts',
       description: a.type === 'competitor_action' ? 'Competencia' : a.type === 'stock_out' ? 'Quiebre Stock' : 'Oportunidad',
       hasPhoto: false,
-      recordStatus: a.status === 'actioned' ? 'Completo' : 'Pendiente'
+      recordStatus: a.status === 'actioned' ? 'Completo' : 'Pendiente',
+      category: '-'
     })),
     ...sales.map(s => ({
       id: s.id,
@@ -43,7 +45,8 @@ export const RecordsList = () => {
       typePath: 'sales',
       description: `${s.product} (${s.quantity} uds)`,
       hasPhoto: false,
-      recordStatus: 'Completo'
+      recordStatus: 'Completo',
+      category: '-'
     })),
     ...activations.map(a => ({
       id: a.id,
@@ -53,7 +56,8 @@ export const RecordsList = () => {
       typePath: 'activations',
       description: a.feedback ? `${a.title} (Feedback: ${a.feedback})` : a.title,
       hasPhoto: !!a.evidenceUrl,
-      recordStatus: 'Completo'
+      recordStatus: 'Completo',
+      category: a.category || '-'
     }))
   ].map(record => {
     const client = clients.find(c => c.id === record.clientId);
@@ -113,11 +117,12 @@ export const RecordsList = () => {
   };
 
   const exportToCSV = () => {
-    const headers = ['Fecha', 'Cliente', 'Tipo de Act.', 'Descripción', 'Tiene Foto'];
+    const headers = ['Fecha', 'Cliente', 'Tipo de Act.', 'Categoría', 'Descripción', 'Tiene Foto'];
     const rows = filteredRecords.map(record => [
       record.formattedDate,
       `"${record.clientName}"`,
       record.type,
+      `"${record.category}"`,
       `"${record.description}"`,
       record.hasPhoto ? 'Sí' : 'No'
     ]);
@@ -200,6 +205,7 @@ export const RecordsList = () => {
                 <th className="p-4 font-semibold w-28 whitespace-nowrap">Fecha</th>
                 <th className="p-4 font-semibold min-w-[160px]">Cliente</th>
                 <th className="p-4 font-semibold w-32 whitespace-nowrap">Tipo de Act.</th>
+                <th className="p-4 font-semibold w-32 whitespace-nowrap">Categoría</th>
                 <th className="p-4 font-semibold w-auto">Detalle</th>
                 <th className="p-4 font-semibold w-28 whitespace-nowrap">Estado</th>
                 <th className="p-4 w-16 text-center"></th>
@@ -208,7 +214,7 @@ export const RecordsList = () => {
             <tbody className="divide-y divide-slate-100">
               {filteredRecords.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="p-8 text-center text-slate-500">
+                  <td colSpan={8} className="p-8 text-center text-slate-500">
                     No se encontraron registros.
                   </td>
                 </tr>
@@ -237,6 +243,9 @@ export const RecordsList = () => {
                       }>
                         {record.type}
                       </Badge>
+                    </td>
+                    <td className="p-4 text-sm text-slate-600 whitespace-nowrap">
+                      {record.category}
                     </td>
                     <td className="p-4 text-sm text-slate-600 max-w-xs truncate">
                       {record.description}
