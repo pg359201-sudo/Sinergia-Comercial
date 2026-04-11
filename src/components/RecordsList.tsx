@@ -205,9 +205,9 @@ export const RecordsList = () => {
                 <th className="p-4 font-semibold w-28 whitespace-nowrap">Fecha</th>
                 <th className="p-4 font-semibold min-w-[160px]">Cliente</th>
                 <th className="p-4 font-semibold w-32 whitespace-nowrap">Tipo de Act.</th>
-                <th className="p-4 font-semibold w-32 whitespace-nowrap">Categoría</th>
                 <th className="p-4 font-semibold w-auto">Detalle</th>
                 <th className="p-4 font-semibold w-28 whitespace-nowrap">Estado</th>
+                <th className="p-4 font-semibold w-32 whitespace-nowrap">Categoría</th>
                 <th className="p-4 w-16 text-center"></th>
               </tr>
             </thead>
@@ -244,9 +244,6 @@ export const RecordsList = () => {
                         {record.type}
                       </Badge>
                     </td>
-                    <td className="p-4 text-sm text-slate-600 whitespace-nowrap">
-                      {record.category}
-                    </td>
                     <td className="p-4 text-sm text-slate-600 max-w-xs truncate">
                       {record.description}
                     </td>
@@ -254,6 +251,9 @@ export const RecordsList = () => {
                       <Badge variant={record.recordStatus === 'Completo' ? 'success' : 'warning'}>
                         {record.recordStatus}
                       </Badge>
+                    </td>
+                    <td className="p-4 text-sm text-slate-600 whitespace-nowrap">
+                      {record.category}
                     </td>
                     <td className="p-4 text-center">
                       <Link to={`/records/${record.typePath}/${record.id}`}>
