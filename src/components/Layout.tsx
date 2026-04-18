@@ -42,6 +42,7 @@ export const Layout = () => {
           let gecColIndex = -1;
           let rutaVentaColIndex = -1;
           let uc12mmColIndex = -1;
+          let nroClienteColIndex = -1;
           
           // Buscar dinámicamente en qué columna están los datos
           for (let c = 0; c < row2.length; c++) {
@@ -57,6 +58,8 @@ export const Layout = () => {
               rutaVentaColIndex = c;
             } else if (normalized === 'uc12mm') {
               uc12mmColIndex = c;
+            } else if (normalized === 'cliente' || normalized === 'codcliente' || normalized === 'codigocliente' || normalized === 'nrocliente' || normalized === 'numerocliente') {
+              nroClienteColIndex = c;
             }
           }
 
@@ -69,11 +72,17 @@ export const Layout = () => {
               const gec = gecColIndex !== -1 ? data[i][gecColIndex] : null;
               const rutaVenta = rutaVentaColIndex !== -1 ? data[i][rutaVentaColIndex] : null;
               const uc12mm = uc12mmColIndex !== -1 ? data[i][uc12mmColIndex] : null;
+              const numCliente = nroClienteColIndex !== -1 ? data[i][nroClienteColIndex] : null;
 
               if (razonSocial && typeof razonSocial === 'string' && razonSocial.trim() !== '') {
+                // Si existe el número de cliente, lo unimos con la razón social
+                const finalName = numCliente 
+                  ? `${String(numCliente).trim()} - ${razonSocial.trim()}`
+                  : razonSocial.trim();
+
                 newClients.push({
                   id: `c${Date.now()}-${i}`,
-                  name: razonSocial.trim(),
+                  name: finalName,
                   address: 'Sin dirección',
                   route: rutaVenta ? String(rutaVenta).trim() : 'Sin ruta',
                   visitDay: 'Lunes',
