@@ -67,19 +67,21 @@ export const ActivationsList = () => {
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
-        <div className="w-full flex-1">
-          <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-3">
-            <Camera className="w-6 h-6 md:w-7 md:h-7 text-indigo-500" />
-            Activaciones en PDV
-          </h1>
-          <p className="mt-1 text-xs text-slate-500">
-            {currentUser?.role === 'terreno' 
-              ? 'Tus registros fotográficos de exhibiciones y material POP.'
-              : 'Monitoreo de activaciones y exhibiciones de los agentes.'}
-          </p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="flex flex-col sm:flex-row gap-4 sm:items-center flex-1 w-full">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-3">
+              <Camera className="w-6 h-6 md:w-7 md:h-7 text-indigo-500" />
+              Activaciones en PDV
+            </h1>
+            <p className="mt-1 text-xs text-slate-500">
+              {currentUser?.role === 'terreno' 
+                ? 'Tus registros fotográficos de exhibiciones y material POP.'
+                : 'Monitoreo de activaciones y exhibiciones de los agentes.'}
+            </p>
+          </div>
           {currentUser?.role === 'escritorio' && (
-            <div className="relative w-full md:max-w-md mt-4">
+            <div className="relative w-full sm:max-w-md sm:ml-4 flex-1">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-slate-400" />
               </div>
