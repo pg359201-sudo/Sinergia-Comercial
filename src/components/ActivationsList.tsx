@@ -67,47 +67,46 @@ export const ActivationsList = () => {
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div className="flex flex-col sm:flex-row gap-4 sm:items-center flex-1 w-full">
-          <div>
-            <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-3">
-              <Camera className="w-6 h-6 md:w-7 md:h-7 text-indigo-500" />
-              Activaciones en PDV
-            </h1>
-            <p className="mt-1 text-xs text-slate-500">
-              {currentUser?.role === 'terreno' 
-                ? 'Tus registros fotográficos de exhibiciones y material POP.'
-                : 'Monitoreo de activaciones y exhibiciones de los agentes.'}
-            </p>
-          </div>
-          {currentUser?.role === 'escritorio' && (
-            <div className="relative w-full sm:max-w-md sm:ml-4 flex-1">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-slate-400" />
-              </div>
-              <Input
-                type="text"
-                placeholder="Buscar por nombre, cliente o categoría..."
-                className="pl-10 py-2 w-full rounded-xl"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          )}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-3">
+            <Camera className="w-6 h-6 md:w-7 md:h-7 text-indigo-500" />
+            Activaciones en PDV
+          </h1>
+          <p className="mt-1 text-xs text-slate-500">
+            {currentUser?.role === 'terreno' 
+              ? 'Tus registros fotográficos de exhibiciones y material POP.'
+              : 'Monitoreo de activaciones y exhibiciones de los agentes.'}
+          </p>
         </div>
-        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto h-full sm:items-start pt-1">
+        
+        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
           {selectedIds.size > 0 && (
             <Button 
               onClick={() => setShowConfirm(true)} 
-              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 border border-red-200"
+              className="flex items-center justify-center gap-2 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 border border-red-200 whitespace-nowrap"
             >
               <Trash2 className="w-4 h-4" />
               Eliminar ({selectedIds.size})
             </Button>
           )}
+          {currentUser?.role === 'escritorio' && (
+            <div className="relative w-full sm:w-64">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-4 w-4 text-slate-400" />
+              </div>
+              <Input
+                type="text"
+                placeholder="Buscar..."
+                className="pl-9 py-2 w-full"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          )}
           {currentUser?.role === 'terreno' && (
             <Link to="/activations/new" className="w-full sm:w-auto">
-              <Button className="w-full sm:w-auto bg-[#9C7C38] hover:bg-[#8A6D31] text-white gap-2">
+              <Button className="w-full sm:w-auto bg-[#9C7C38] hover:bg-[#8A6D31] text-white gap-2 whitespace-nowrap">
                 <Plus className="w-4 h-4" />
                 Nueva Activación
               </Button>
