@@ -20,8 +20,17 @@ export const ClientsList = () => {
     return isNaN(num) ? 0 : num;
   };
 
+  const getClientNumber = (name: string) => {
+    const parts = name.split('-');
+    return parts.length > 1 ? parts[0].trim() : '';
+  };
+
   const filteredClients = clients
-    .filter(client => client.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter(client => {
+      const term = searchTerm.toLowerCase();
+      const clientNumber = getClientNumber(client.name);
+      return client.name.toLowerCase().includes(term) || clientNumber.includes(term);
+    })
     .sort((a, b) => parseUC12mm(b.uc12mm) - parseUC12mm(a.uc12mm));
 
   const formatUC12mm = (value: string | undefined) => {
@@ -56,7 +65,7 @@ export const ClientsList = () => {
           </div>
           <Input
             type="text"
-            placeholder="Buscar cliente por nombre..."
+            placeholder="Buscar por nombre o número de cliente..."
             className="pl-10 py-2.5 w-full rounded-xl"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -82,10 +91,20 @@ export const ClientsList = () => {
                     <Store className="w-5 h-5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-slate-900 text-base line-clamp-1">{client.name}</h3>
-                    <div className="flex items-center gap-1.5 mt-1 text-[11px] text-slate-400">
-                      <span className="uppercase tracking-wider opacity-70">UC 12mm:</span>
-                      <span className="font-medium text-slate-500 truncate max-w-[100px]">{formatUC12mm(client.uc12mm)}</span>
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <h3 className="font-bold text-slate-900 text-base line-clamp-1">{client.name}</h3>
+                    </div>
+                    <div className="flex items-center flex-wrap gap-x-3 gap-y-1 mt-1 text-[11px] text-slate-400">
+                      {getClientNumber(client.name) && (
+                        <div className="flex items-center gap-1">
+                          <span className="uppercase tracking-wider opacity-70">Nº Cliente:</span>
+                          <span className="font-medium text-slate-500">{getClientNumber(client.name)}</span>
+                        </div>
+                      )}
+                      <div className="flex items-center gap-1">
+                        <span className="uppercase tracking-wider opacity-70">UC 12mm:</span>
+                        <span className="font-medium text-slate-500 truncate max-w-[100px]">{formatUC12mm(client.uc12mm)}</span>
+                      </div>
                     </div>
                   </div>
                 </div>

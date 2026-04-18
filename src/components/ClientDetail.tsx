@@ -41,6 +41,11 @@ export const ClientDetail = () => {
     return Math.round(num).toLocaleString('es-AR');
   };
 
+  const getClientNumber = (name: string) => {
+    const parts = name.split('-');
+    return parts.length > 1 ? parts[0].trim() : '';
+  };
+
   const formatTextWithoutPrefix = (text: string | undefined) => {
     if (!text) return '';
     return text.replace(/^\s*\d+\s*-\s*/, '').trim();
@@ -72,6 +77,7 @@ export const ClientDetail = () => {
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs text-slate-600 mt-1">
               <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5 text-slate-400" /> Visita: {client.visitDay}</span>
               <span className="flex items-center gap-1.5 text-indigo-600 font-medium">{client.route}</span>
+              {getClientNumber(client.name) && <span className="flex items-center gap-1.5 text-slate-500 font-medium">Nº Cliente: {getClientNumber(client.name)}</span>}
               {client.uc12mm && <span className="flex items-center gap-1.5 text-slate-500 font-medium">UC 12mm: {formatUC12mm(client.uc12mm)}</span>}
             </div>
           </div>
