@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../store/AppContext';
-import { Card, Badge, Button } from './ui';
-import { Camera, Plus, Store, Calendar, User as UserIcon, Trash2 } from 'lucide-react';
+import { Card, Badge, Button, Input } from './ui';
+import { Camera, Plus, Store, Calendar, User as UserIcon, Trash2, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -10,15 +10,25 @@ export const ActivationsList = () => {
   const { activations, clients, users, currentUser, deleteActivations } = useAppStore();
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showConfirm, setShowConfirm] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const getClientName = (id: string) => clients.find(c => c.id === id)?.name || 'Cliente desconocido';
   const getClientRoute = (id: string) => clients.find(c => c.id === id)?.route || '';
   const getUserName = (id: string) => users.find(u => u.id === id)?.name || 'Usuario desconocido';
 
   // Terreno only sees their own activations, Escritorio sees all
-  const filteredActivations = currentUser?.role === 'terreno'
+  const baseActivations = currentUser?.role === 'terreno'
     ? activations.filter(a => a.createdBy === currentUser.id)
     : activations;
+
+  const filteredActivations = baseActivations.filter(a => {
+    if (!searchTerm.trim()) return true;
+    const term = searchTerm.toLowerCase();
+    const titleMatch = a.title.toLowerCase().includes(term);
+    const clientMatch = getClientName(a.clientId).toLowerCase().includes(term);
+    const categoryMatch = (a.category || '').toLowerCase().includes(term);
+    return titleMatch || clientMatch || categoryMatch;
+  });
 
   const isMobile = currentUser?.role === 'terreno';
 
@@ -57,8 +67,8 @@ export const ActivationsList = () => {
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+        <div className="w-full flex-1">
           <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-3">
             <Camera className="w-6 h-6 md:w-7 md:h-7 text-indigo-500" />
             Activaciones en PDV
@@ -68,8 +78,22 @@ export const ActivationsList = () => {
               ? 'Tus registros fotográficos de exhibiciones y material POP.'
               : 'Monitoreo de activaciones y exhibiciones de los agentes.'}
           </p>
+          {currentUser?.role === 'escritorio' && (
+            <div className="relative w-full md:max-w-md mt-4">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-slate-400" />
+              </div>
+              <Input
+                type="text"
+                placeholder="Buscar por nombre, cliente o categoría..."
+                className="pl-10 py-2 w-full rounded-xl"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          )}
         </div>
-        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto h-full sm:items-start pt-1">
           {selectedIds.size > 0 && (
             <Button 
               onClick={() => setShowConfirm(true)} 
