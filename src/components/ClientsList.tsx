@@ -21,14 +21,14 @@ export const ClientsList = () => {
   };
 
   const getClientNumber = (name: string) => {
-    // Extract a continuous block of 8 to 12 digits from the beginning of the string
-    const match = name.match(/^\s*(\d{8,12})/);
-    if (match) {
-      return match[1];
-    }
-    // Fallback: just get any consecutive sequence of 8+ numbers
-    const fallbackMatch = name.match(/(\d{8,})/);
-    return fallbackMatch ? fallbackMatch[1] : '';
+    if (!name) return '';
+    // Look for exactly 10 digits
+    const match10 = name.match(/(\d{10})/);
+    if (match10) return match10[1];
+    
+    // Fallback: look for the first sequence of numbers that is at least 6 digits long
+    const matchNum = name.match(/(\d{6,})/);
+    return matchNum ? matchNum[1] : '';
   };
 
   const filteredClients = clients
@@ -101,12 +101,10 @@ export const ClientsList = () => {
                       <h3 className="font-bold text-slate-900 text-base line-clamp-1">{client.name}</h3>
                     </div>
                     <div className="flex items-center flex-wrap gap-x-3 gap-y-1 mt-1 text-[11px] text-slate-400">
-                      {getClientNumber(client.name) && (
-                        <div className="flex items-center gap-1">
-                          <span className="uppercase tracking-wider opacity-70">Nº Cliente:</span>
-                          <span className="font-medium text-slate-500">{getClientNumber(client.name)}</span>
-                        </div>
-                      )}
+                      <div className="flex items-center gap-1">
+                        <span className="uppercase tracking-wider opacity-70">Nº Cliente:</span>
+                        <span className="font-medium text-slate-500">{getClientNumber(client.name) || 'N/A'}</span>
+                      </div>
                       <div className="flex items-center gap-1">
                         <span className="uppercase tracking-wider opacity-70">UC 12mm:</span>
                         <span className="font-medium text-slate-500 truncate max-w-[100px]">{formatUC12mm(client.uc12mm)}</span>

@@ -42,14 +42,14 @@ export const ClientDetail = () => {
   };
 
   const getClientNumber = (name: string) => {
-    // Extract a continuous block of 8 to 12 digits from the beginning of the string
-    const match = name.match(/^\s*(\d{8,12})/);
-    if (match) {
-      return match[1];
-    }
-    // Fallback: just get any consecutive sequence of 8+ numbers
-    const fallbackMatch = name.match(/(\d{8,})/);
-    return fallbackMatch ? fallbackMatch[1] : '';
+    if (!name) return '';
+    // Look for exactly 10 digits
+    const match10 = name.match(/(\d{10})/);
+    if (match10) return match10[1];
+    
+    // Fallback: look for the first sequence of numbers that is at least 6 digits long
+    const matchNum = name.match(/(\d{6,})/);
+    return matchNum ? matchNum[1] : '';
   };
 
   const formatTextWithoutPrefix = (text: string | undefined) => {
@@ -83,7 +83,7 @@ export const ClientDetail = () => {
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs text-slate-600 mt-1">
               <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5 text-slate-400" /> Visita: {client.visitDay}</span>
               <span className="flex items-center gap-1.5 text-indigo-600 font-medium">{client.route}</span>
-              {getClientNumber(client.name) && <span className="flex items-center gap-1.5 text-slate-500 font-medium">Nº Cliente: {getClientNumber(client.name)}</span>}
+              <span className="flex items-center gap-1.5 text-slate-500 font-medium">Nº Cliente: {getClientNumber(client.name) || 'N/A'}</span>
               {client.uc12mm && <span className="flex items-center gap-1.5 text-slate-500 font-medium">UC 12mm: {formatUC12mm(client.uc12mm)}</span>}
             </div>
           </div>
