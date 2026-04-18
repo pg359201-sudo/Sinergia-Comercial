@@ -112,6 +112,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   // Inicializar DB y cargar datos
   useEffect(() => {
+    const cleanClientName = (name: string) => {
+      if (!name) return '';
+      return name.replace(/^[\d\s-]+/, '').trim();
+    };
+
     const initDb = async () => {
       try {
         const healthRes = await fetch('/api/health');
@@ -126,7 +131,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
           const clientsData = await clientsRes.json();
           if (Array.isArray(clientsData) && clientsData.length > 0) {
             const mappedClients = clientsData.map((c: any) => ({
-              id: c.id, name: c.name, address: c.address, route: c.route,
+              id: c.id, 
+              name: cleanClientName(c.name), 
+              address: c.address, 
+              route: c.route,
               visitDay: c.visit_day, channel: c.channel, gec: c.gec, uc12mm: c.uc12mm
             }));
             setClients(mappedClients);

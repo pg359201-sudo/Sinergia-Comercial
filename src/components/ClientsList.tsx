@@ -20,36 +20,10 @@ export const ClientsList = () => {
     return isNaN(num) ? 0 : num;
   };
 
-  const getClientNumber = (name: string) => {
-    if (!name) return '';
-    
-    // First try: Extract exactly 10 digits if they exist anywhere
-    const match10 = name.match(/\d{10}/);
-    if (match10) return match10[0];
-
-    // Second try: Extract all leading numbers (even if there's less than 10)
-    const leadingNumbers = name.match(/^\s*(\d+)/);
-    if (leadingNumbers) {
-      return leadingNumbers[1];
-    }
-
-    // Third try: get the part before the hyphen and extract numbers
-    if (name.includes('-')) {
-      const leftPart = name.split('-')[0];
-      const digitsOnly = leftPart.replace(/\D/g, '');
-      if (digitsOnly.length > 0) return digitsOnly;
-    }
-    
-    // Final fallback: return whatever digits we can find
-    const anyNumbers = name.match(/\d+/);
-    return anyNumbers ? anyNumbers[0] : '';
-  };
-
   const filteredClients = clients
     .filter(client => {
       const term = searchTerm.toLowerCase();
-      const clientNumber = getClientNumber(client.name);
-      return client.name.toLowerCase().includes(term) || clientNumber.includes(term);
+      return client.name.toLowerCase().includes(term);
     })
     .sort((a, b) => parseUC12mm(b.uc12mm) - parseUC12mm(a.uc12mm));
 
@@ -115,10 +89,6 @@ export const ClientsList = () => {
                       <h3 className="font-bold text-slate-900 text-base line-clamp-1">{client.name}</h3>
                     </div>
                     <div className="flex items-center flex-wrap gap-x-3 gap-y-1 mt-1 text-[11px] text-slate-400">
-                      <div className="flex items-center gap-1">
-                        <span className="uppercase tracking-wider opacity-70">Nº Cliente:</span>
-                        <span className="font-medium text-slate-500">{getClientNumber(client.name) || 'N/A'}</span>
-                      </div>
                       <div className="flex items-center gap-1">
                         <span className="uppercase tracking-wider opacity-70">UC 12mm:</span>
                         <span className="font-medium text-slate-500 truncate max-w-[100px]">{formatUC12mm(client.uc12mm)}</span>

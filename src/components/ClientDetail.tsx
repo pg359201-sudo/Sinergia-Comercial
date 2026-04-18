@@ -41,31 +41,6 @@ export const ClientDetail = () => {
     return Math.round(num).toLocaleString('es-AR');
   };
 
-  const getClientNumber = (name: string) => {
-    if (!name) return '';
-    
-    // First try: Extract exactly 10 digits if they exist anywhere
-    const match10 = name.match(/\d{10}/);
-    if (match10) return match10[0];
-
-    // Second try: Extract all leading numbers (even if there's less than 10)
-    const leadingNumbers = name.match(/^\s*(\d+)/);
-    if (leadingNumbers) {
-      return leadingNumbers[1];
-    }
-
-    // Third try: get the part before the hyphen and extract numbers
-    if (name.includes('-')) {
-      const leftPart = name.split('-')[0];
-      const digitsOnly = leftPart.replace(/\D/g, '');
-      if (digitsOnly.length > 0) return digitsOnly;
-    }
-    
-    // Final fallback: return whatever digits we can find
-    const anyNumbers = name.match(/\d+/);
-    return anyNumbers ? anyNumbers[0] : '';
-  };
-
   const formatTextWithoutPrefix = (text: string | undefined) => {
     if (!text) return '';
     return text.replace(/^\s*\d+\s*-\s*/, '').trim();
@@ -97,7 +72,6 @@ export const ClientDetail = () => {
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs text-slate-600 mt-1">
               <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5 text-slate-400" /> Visita: {client.visitDay}</span>
               <span className="flex items-center gap-1.5 text-indigo-600 font-medium">{client.route}</span>
-              <span className="flex items-center gap-1.5 text-slate-500 font-medium">Nº Cliente: {getClientNumber(client.name) || 'N/A'}</span>
               {client.uc12mm && <span className="flex items-center gap-1.5 text-slate-500 font-medium">UC 12mm: {formatUC12mm(client.uc12mm)}</span>}
             </div>
           </div>
