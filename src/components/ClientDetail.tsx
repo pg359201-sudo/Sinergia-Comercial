@@ -42,8 +42,14 @@ export const ClientDetail = () => {
   };
 
   const getClientNumber = (name: string) => {
-    const parts = name.split('-');
-    return parts.length > 1 ? parts[0].trim() : '';
+    // Extract a continuous block of 8 to 12 digits from the beginning of the string
+    const match = name.match(/^\s*(\d{8,12})/);
+    if (match) {
+      return match[1];
+    }
+    // Fallback: just get any consecutive sequence of 8+ numbers
+    const fallbackMatch = name.match(/(\d{8,})/);
+    return fallbackMatch ? fallbackMatch[1] : '';
   };
 
   const formatTextWithoutPrefix = (text: string | undefined) => {
