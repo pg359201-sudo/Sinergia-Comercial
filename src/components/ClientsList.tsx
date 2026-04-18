@@ -22,13 +22,27 @@ export const ClientsList = () => {
 
   const getClientNumber = (name: string) => {
     if (!name) return '';
-    // Look for exactly 10 digits
-    const match10 = name.match(/(\d{10})/);
-    if (match10) return match10[1];
     
-    // Fallback: look for the first sequence of numbers that is at least 6 digits long
-    const matchNum = name.match(/(\d{6,})/);
-    return matchNum ? matchNum[1] : '';
+    // First try: Extract exactly 10 digits if they exist anywhere
+    const match10 = name.match(/\d{10}/);
+    if (match10) return match10[0];
+
+    // Second try: Extract all leading numbers (even if there's less than 10)
+    const leadingNumbers = name.match(/^\s*(\d+)/);
+    if (leadingNumbers) {
+      return leadingNumbers[1];
+    }
+
+    // Third try: get the part before the hyphen and extract numbers
+    if (name.includes('-')) {
+      const leftPart = name.split('-')[0];
+      const digitsOnly = leftPart.replace(/\D/g, '');
+      if (digitsOnly.length > 0) return digitsOnly;
+    }
+    
+    // Final fallback: return whatever digits we can find
+    const anyNumbers = name.match(/\d+/);
+    return anyNumbers ? anyNumbers[0] : '';
   };
 
   const filteredClients = clients
