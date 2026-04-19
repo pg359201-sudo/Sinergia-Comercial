@@ -6,6 +6,7 @@ import { ArrowLeft, Store, Calendar, ClipboardList, BellRing, ShoppingCart, Came
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Mission, Alert, TacticalSale, Activation } from '../types';
+import { parseImageUrls } from '../utils/imageUpload';
 
 export const ClientDetail = () => {
   const { id } = useParams();
@@ -166,6 +167,8 @@ export const ClientDetail = () => {
 
               if (item.type === 'activation') {
                 const act = item.data as Activation;
+                const images = parseImageUrls(act.evidenceUrl);
+                const firstImage = images.length > 0 ? images[0] : '';
                 return (
                   <Link key={`act-${act.id}`} to={`/records/activations/${act.id}`} className="block">
                     <Card className="p-3 md:p-4 border-l-4 border-l-indigo-500 flex flex-col sm:flex-row gap-3 shadow-sm hover:border-indigo-400 transition-colors">
@@ -179,9 +182,14 @@ export const ClientDetail = () => {
                         </div>
                         {act.description && <p className="text-slate-600 mb-3 text-xs md:text-sm line-clamp-2">{act.description}</p>}
                         
-                        {act.evidenceUrl && (
-                          <div className="mt-2 mb-3 rounded-lg overflow-hidden border border-slate-200 max-w-[200px]">
-                            <img src={act.evidenceUrl} alt="Evidencia" className="w-full h-24 object-cover" referrerPolicy="no-referrer" />
+                        {firstImage && (
+                          <div className="mt-2 mb-3 rounded-lg overflow-hidden border border-slate-200 max-w-[200px] relative">
+                            <img src={firstImage} alt="Evidencia" className="w-full h-24 object-cover" referrerPolicy="no-referrer" />
+                            {images.length > 1 && (
+                              <div className="absolute top-1 right-1 bg-black/60 rounded px-1 text-white text-[10px]">
+                                1/{images.length}
+                              </div>
+                            )}
                           </div>
                         )}
                         
