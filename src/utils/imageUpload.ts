@@ -1,5 +1,17 @@
 import imageCompression from 'browser-image-compression';
 
+export const parseImageUrls = (urlField: string | undefined): string[] => {
+  if (!urlField) return [];
+  try {
+    const parsed = JSON.parse(urlField);
+    if (Array.isArray(parsed)) return parsed;
+  } catch (e) {
+    // If it's just a regular old url string, not JSON
+    return [urlField];
+  }
+  return [urlField];
+};
+
 export async function compressAndUploadImage(file: File): Promise<string> {
   try {
     // 1. Compress the image (with fallback)

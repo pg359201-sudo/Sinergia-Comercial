@@ -14,28 +14,44 @@ export const NewActivationForm = () => {
   const [description, setDescription] = useState('');
   const [clientId, setClientId] = useState(clients[0]?.id || '');
   const [isUploading, setIsUploading] = useState(false);
-  const [evidenceUrl, setEvidenceUrl] = useState('');
+  const [evidenceUrls, setEvidenceUrls] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files || []) as File[];
+    if (files.length === 0) return;
+
+    if (evidenceUrls.length + files.length > 3) {
+      alert('Puedes subir un máximo de 3 imágenes en total.');
+      return;
+    }
 
     setIsUploading(true);
     try {
-      const url = await compressAndUploadImage(file);
-      setEvidenceUrl(url);
+      const urls: string[] = [];
+      for (const file of files) {
+        const url = await compressAndUploadImage(file);
+        urls.push(url);
+      }
+      setEvidenceUrls(prev => [...prev, ...urls].slice(0, 3));
     } catch (error: any) {
       console.error('Error uploading image:', error);
       alert(`Error al procesar y subir la imagen: ${error.message || 'Error desconocido'}`);
     } finally {
       setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
+  };
+
+  const removeImage = (index: number) => {
+    setEvidenceUrls(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !category || !clientId || !evidenceUrl) return;
+    if (!title || !category || !clientId || evidenceUrls.length === 0) return;
 
     addActivation({
       title,
@@ -43,7 +59,7 @@ export const NewActivationForm = () => {
       description,
       clientId,
       createdBy: currentUser!.id,
-      evidenceUrl,
+      evidenceUrl: JSON.stringify(evidenceUrls),
     });
     navigate('/activations');
   };
@@ -123,15 +139,34 @@ export const NewActivationForm = () => {
           </div>
 
           <div className="pt-2">
-            <Label className="mb-2 block text-sm md:text-base">Registro Fotográfico (Requerido)</Label>
+            <Label className="mb-2 block text-sm md:text-base">Registro Fotográfico (De 1 a 3 imágenes)</Label>
             <input 
               type="file" 
               accept="image/*" 
+              multiple
               className="hidden" 
               ref={fileInputRef}
               onChange={handleFileChange}
             />
-            {!evidenceUrl ? (
+            {evidenceUrls.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                {evidenceUrls.map((url, idx) => (
+                  <div key={idx} className="relative rounded-xl overflow-hidden border border-slate-200">
+                    <img src={url} alt={`Evidencia ${idx + 1}`} className="w-full h-32 md:h-40 object-cover" referrerPolicy="no-referrer" />
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                      <Button type="button" variant="secondary" className="text-xs h-8" onClick={() => removeImage(idx)}>
+                        Eliminar Foto
+                      </Button>
+                    </div>
+                    <div className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md">
+                      <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 text-emerald-500" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {evidenceUrls.length < 3 && (
               <div 
                 onClick={() => fileInputRef.current?.click()}
                 className={`border-2 border-dashed rounded-xl p-6 md:p-8 text-center cursor-pointer transition-colors ${
@@ -146,22 +181,10 @@ export const NewActivationForm = () => {
                 ) : (
                   <div className="flex flex-col items-center text-slate-500">
                     <Upload className="w-8 h-8 md:w-10 md:h-10 mb-2 md:mb-3 text-slate-400" />
-                    <span className="font-medium text-sm md:text-base text-slate-700">Tomar foto o subir archivo</span>
+                    <span className="font-medium text-sm md:text-base text-slate-700">Tomar foto o subir archivo ({evidenceUrls.length}/3)</span>
                     <span className="text-xs md:text-sm mt-1">Soporta JPG, PNG</span>
                   </div>
                 )}
-              </div>
-            ) : (
-              <div className="relative rounded-xl overflow-hidden border border-slate-200">
-                <img src={evidenceUrl} alt="Evidencia" className="w-full h-32 md:h-48 object-cover" referrerPolicy="no-referrer" />
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                  <Button type="button" variant="secondary" className="text-xs md:text-sm h-8 md:h-10" onClick={() => fileInputRef.current?.click()}>
-                    Cambiar Foto
-                  </Button>
-                </div>
-                <div className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md">
-                  <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-emerald-500" />
-                </div>
               </div>
             )}
           </div>
@@ -171,7 +194,7 @@ export const NewActivationForm = () => {
             <Button 
               type="submit" 
               className="w-full sm:w-auto py-3 bg-[#9C7C38] hover:bg-[#8A6D31] text-white text-base"
-              disabled={!evidenceUrl || isUploading}
+              disabled={evidenceUrls.length === 0 || isUploading}
             >
               Registrar Activación
             </Button>

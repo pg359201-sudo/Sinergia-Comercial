@@ -5,6 +5,7 @@ import { Camera, Plus, Store, Calendar, User as UserIcon, Trash2, Search } from 
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { parseImageUrls } from '../utils/imageUpload';
 
 export const ActivationsList = () => {
   const { activations, clients, users, currentUser, deleteActivations } = useAppStore();
@@ -127,7 +128,10 @@ export const ActivationsList = () => {
         </Card>
       ) : (
         <div className={`grid gap-4 md:gap-6 ${isMobile ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
-          {filteredActivations.map(activation => (
+          {filteredActivations.map(activation => {
+            const images = parseImageUrls(activation.evidenceUrl);
+            const firstImage = images.length > 0 ? images[0] : '';
+            return (
             <Card key={activation.id} className={`overflow-hidden flex flex-row md:flex-col border-[#9C7C38]/20 hover:border-[#9C7C38]/50 transition-colors shadow-sm relative group ${selectedIds.has(activation.id) ? 'ring-2 ring-indigo-500' : ''}`}>
               <div className="absolute top-2 left-2 z-20 md:top-3 md:left-3">
                 <input 
@@ -139,12 +143,19 @@ export const ActivationsList = () => {
               </div>
               <Link to={`/records/activations/${activation.id}`} className="flex flex-row md:flex-col w-full">
                 <div className="w-20 md:w-full md:h-48 relative bg-slate-100 shrink-0">
-                  <img 
-                    src={activation.evidenceUrl} 
-                    alt={activation.title} 
-                    className="w-full h-full object-cover"
-                    referrerPolicy="no-referrer"
-                  />
+                  {firstImage && (
+                    <img 
+                      src={firstImage} 
+                      alt={activation.title} 
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  )}
+                  {images.length > 1 && (
+                    <div className="absolute top-1 right-1 md:top-2 md:right-2 bg-black/60 rounded px-1.5 py-0.5 text-white text-[10px] md:text-xs">
+                      1/{images.length}
+                    </div>
+                  )}
                   <div className="absolute bottom-1 right-1 md:top-3 md:right-3 md:bottom-auto">
                     <Badge variant="secondary" className="bg-black/60 text-white border-none backdrop-blur-sm text-[9px] md:text-xs px-1.5 py-0.5 md:px-2.5 md:py-0.5">
                       {format(new Date(activation.createdAt), "d MMM", { locale: es })}
@@ -188,7 +199,7 @@ export const ActivationsList = () => {
                 </div>
               </Link>
             </Card>
-          ))}
+          )})}
         </div>
       )}
     </div>

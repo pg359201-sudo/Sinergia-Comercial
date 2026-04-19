@@ -5,6 +5,7 @@ import { Card, Badge, Button, Label } from './ui';
 import { ArrowLeft, Calendar, User, Store, Camera, MessageSquare } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { parseImageUrls } from '../utils/imageUpload';
 
 export const RecordDetail = () => {
   const { type, id } = useParams<{ type: string; id: string }>();
@@ -215,22 +216,29 @@ export const RecordDetail = () => {
         </div>
 
         {/* Photo Evidence Section */}
-        {recordData.evidenceUrl && (
-          <div>
-            <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <Camera className="w-5 h-5 text-indigo-600" />
-              Evidencia Fotográfica
-            </h3>
-            <div className="rounded-2xl overflow-hidden border-2 border-slate-200 bg-slate-100">
-              <img 
-                src={recordData.evidenceUrl} 
-                alt="Evidencia del registro" 
-                className="w-full h-auto max-h-[500px] object-contain"
-                referrerPolicy="no-referrer"
-              />
+        {recordData.evidenceUrl && (() => {
+          const images = parseImageUrls(recordData.evidenceUrl);
+          return (
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <Camera className="w-5 h-5 text-indigo-600" />
+                Evidencia Fotográfica ({images.length})
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {images.map((url, idx) => (
+                  <div key={idx} className="rounded-2xl overflow-hidden border-2 border-slate-200 bg-slate-100">
+                    <img 
+                      src={url} 
+                      alt={`Evidencia ${idx + 1}`} 
+                      className="w-full h-auto max-h-[500px] object-contain"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
       </Card>
     </div>
   );
