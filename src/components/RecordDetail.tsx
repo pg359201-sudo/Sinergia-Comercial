@@ -71,7 +71,12 @@ export const RecordDetail = () => {
               <Store className="w-5 h-5 text-slate-400 mt-0.5" />
               <div>
                 <p className="text-sm text-slate-500 font-medium">Cliente</p>
-                <p className="font-bold text-slate-900">{client?.name || (type === 'missions' && !recordData.clientId ? 'Misión General' : 'Desconocido')}</p>
+                <div className="flex flex-col">
+                  <p className="font-bold text-slate-900">{client?.name || (type === 'missions' && !recordData.clientId ? 'Misión General' : 'Desconocido')}</p>
+                  {client?.clientNumber && (
+                    <p className="text-sm text-slate-500 font-normal">#{client.clientNumber}</p>
+                  )}
+                </div>
               </div>
             </div>
           </div>

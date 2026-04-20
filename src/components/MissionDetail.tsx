@@ -122,8 +122,11 @@ export const MissionDetail = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
             <Label className="text-slate-500 mb-1 block">Cliente</Label>
-            <div className="flex items-center gap-2 text-slate-900 font-medium">
-              {client ? client.name : 'Misión General'}
+            <div className="flex flex-col text-slate-900 font-medium">
+              <span>{client ? client.name : 'Misión General'}</span>
+              {client?.clientNumber && (
+                <span className="text-sm text-slate-500 font-normal">#{client.clientNumber}</span>
+              )}
             </div>
           </div>
           <div>
