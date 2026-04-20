@@ -97,8 +97,8 @@ export const MissionsList = () => {
             />
           </div>
           {isEscritorio && (
-            <Link to="/missions/new" className="w-full sm:w-auto">
-              <Button className="w-full sm:w-auto flex items-center justify-center gap-2">
+            <Link to="/missions/new" className="w-full sm:w-auto shrink-0">
+              <Button className="w-full sm:w-auto flex items-center justify-center gap-2 whitespace-nowrap">
                 <Plus className="w-4 h-4" />
                 Nueva Misión
               </Button>
