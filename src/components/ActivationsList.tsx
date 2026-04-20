@@ -28,8 +28,9 @@ export const ActivationsList = () => {
     const term = searchTerm.toLowerCase();
     const titleMatch = a.title.toLowerCase().includes(term);
     const clientMatch = getClientName(a.clientId).toLowerCase().includes(term);
+    const clientNumberMatch = getClientNumber(a.clientId).toLowerCase().includes(term);
     const categoryMatch = (a.category || '').toLowerCase().includes(term);
-    return titleMatch || clientMatch || categoryMatch;
+    return titleMatch || clientMatch || clientNumberMatch || categoryMatch;
   });
 
   const isMobile = currentUser?.role === 'terreno';
@@ -99,7 +100,7 @@ export const ActivationsList = () => {
               </div>
               <Input
                 type="text"
-                placeholder="Buscar..."
+                placeholder="Buscar por cliente, nº o título..."
                 className="pl-9 py-2 w-full"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
