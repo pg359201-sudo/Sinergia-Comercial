@@ -18,7 +18,7 @@ export interface Client {
   uc12mm?: string;
 }
 
-export type MissionStatus = 'pending' | 'in-progress' | 'completed';
+export type MissionStatus = 'pending' | 'completed';
 
 export interface Mission {
   id: string;

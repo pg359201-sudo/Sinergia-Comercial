@@ -18,12 +18,21 @@ export const MissionsList = () => {
   const filteredMissions = displayMissions.filter(mission => {
     if (!searchTerm.trim()) return true;
     const term = searchTerm.toLowerCase();
+    
     const titleMatch = mission.title.toLowerCase().includes(term);
+    const descMatch = mission.description?.toLowerCase().includes(term);
+    
     const client = clients.find(c => c.id === mission.clientId);
     const clientNameMatch = client?.name.toLowerCase().includes(term);
     const clientNumberMatch = client?.clientNumber?.toLowerCase().includes(term);
-    const descMatch = mission.description?.toLowerCase().includes(term);
-    return titleMatch || clientNameMatch || clientNumberMatch || descMatch;
+    
+    const statusText = mission.status === 'completed' ? 'completa' : 'pendiente';
+    const statusMatch = statusText.includes(term);
+    
+    const dateText = format(new Date(mission.createdAt), 'dd MMM', { locale: es }).toLowerCase();
+    const dateMatch = dateText.includes(term);
+    
+    return titleMatch || clientNameMatch || clientNumberMatch || descMatch || statusMatch || dateMatch;
   });
 
   const sortedMissions = [...filteredMissions].sort((a, b) => {
@@ -90,7 +99,7 @@ export const MissionsList = () => {
             </div>
             <Input
               type="text"
-              placeholder="Buscar por cliente, nº o título..."
+              placeholder="Buscar por cliente, título, estado..."
               className="pl-9 py-2 w-full"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -125,8 +134,8 @@ export const MissionsList = () => {
                 </div>
               )}
               <div className={`flex justify-between items-start mb-2 md:mb-3 ${isEscritorio ? 'pr-6 md:pr-8' : ''}`}>
-                <Badge variant={mission.status === 'completed' ? 'success' : mission.status === 'in-progress' ? 'warning' : 'info'} className="text-[10px] md:text-xs px-1.5 py-0.5 md:px-2.5 md:py-0.5">
-                  {mission.status === 'completed' ? 'Completa' : mission.status === 'in-progress' ? 'En Progreso' : 'Pendiente'}
+                <Badge variant={mission.status === 'completed' ? 'success' : 'info'} className="text-[10px] md:text-xs px-1.5 py-0.5 md:px-2.5 md:py-0.5">
+                  {mission.status === 'completed' ? 'Completa' : 'Pendiente'}
                 </Badge>
                 <span className="text-[10px] md:text-xs text-slate-500 flex items-center gap-1">
                   <Calendar className="w-3 h-3" />

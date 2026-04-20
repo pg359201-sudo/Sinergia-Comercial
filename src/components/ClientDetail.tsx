@@ -106,8 +106,8 @@ export const ClientDetail = () => {
                       </div>
                       <p className="text-slate-600 mb-3 text-xs md:text-sm line-clamp-2">{m.description}</p>
                       <div className="flex flex-wrap gap-2 items-center text-xs pt-2 border-t border-slate-100">
-                        <Badge variant={m.status === 'completed' ? 'success' : m.status === 'in-progress' ? 'warning' : 'default'} className="text-[10px] px-1.5 py-0">
-                          {m.status === 'completed' ? 'Completada' : m.status === 'in-progress' ? 'En Progreso' : 'Pendiente'}
+                        <Badge variant={m.status === 'completed' ? 'success' : 'default'} className="text-[10px] px-1.5 py-0">
+                          {m.status === 'completed' ? 'Completada' : 'Pendiente'}
                         </Badge>
                         <span className="text-slate-500">Asignada a: <span className="font-medium text-slate-700">{getUserName(m.assignedTo)}</span></span>
                       </div>
