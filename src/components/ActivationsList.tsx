@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../store/AppContext';
 import { Card, Badge, Button, Input } from './ui';
-import { Camera, Plus, Store, Calendar, User as UserIcon, Trash2, Search } from 'lucide-react';
+import { Camera, Plus, Store, Calendar, Hash, Trash2, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -15,6 +15,7 @@ export const ActivationsList = () => {
 
   const getClientName = (id: string) => clients.find(c => c.id === id)?.name || 'Cliente desconocido';
   const getClientRoute = (id: string) => clients.find(c => c.id === id)?.route || '';
+  const getClientNumber = (id: string) => clients.find(c => c.id === id)?.clientNumber || '';
   const getUserName = (id: string) => users.find(u => u.id === id)?.name || 'Usuario desconocido';
 
   // Terreno only sees their own activations, Escritorio sees all
@@ -174,12 +175,10 @@ export const ActivationsList = () => {
                       </div>
                     </div>
                     
-                    {currentUser?.role === 'escritorio' && (
-                      <div className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-slate-600">
-                        <UserIcon className="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-400 shrink-0" />
-                        <span className="truncate">{getUserName(activation.createdBy)}</span>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm text-slate-600">
+                      <Hash className="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-400 shrink-0" />
+                      <span className="truncate">{getClientNumber(activation.clientId) || 'Sin número'}</span>
+                    </div>
                   </div>
 
                   {activation.description && (
