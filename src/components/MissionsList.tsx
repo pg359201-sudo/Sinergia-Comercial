@@ -1,20 +1,32 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../store/AppContext';
-import { Card, Badge, Button } from './ui';
+import { Card, Badge, Button, Input } from './ui';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Store, Calendar, Plus, Trash2 } from 'lucide-react';
+import { Store, Calendar, Plus, Trash2, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const MissionsList = () => {
   const { currentUser, missions, clients, users, deleteMissions } = useAppStore();
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showConfirm, setShowConfirm] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const isEscritorio = currentUser?.role === 'escritorio';
   const displayMissions = isEscritorio ? missions : missions.filter(m => m.assignedTo === currentUser?.id);
 
-  const sortedMissions = [...displayMissions].sort((a, b) => {
+  const filteredMissions = displayMissions.filter(mission => {
+    if (!searchTerm.trim()) return true;
+    const term = searchTerm.toLowerCase();
+    const titleMatch = mission.title.toLowerCase().includes(term);
+    const client = clients.find(c => c.id === mission.clientId);
+    const clientNameMatch = client?.name.toLowerCase().includes(term);
+    const clientNumberMatch = client?.clientNumber?.toLowerCase().includes(term);
+    const descMatch = mission.description?.toLowerCase().includes(term);
+    return titleMatch || clientNameMatch || clientNumberMatch || descMatch;
+  });
+
+  const sortedMissions = [...filteredMissions].sort((a, b) => {
     if (a.status === 'completed' && b.status !== 'completed') return 1;
     if (a.status !== 'completed' && b.status === 'completed') return -1;
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -72,6 +84,18 @@ export const MissionsList = () => {
               Eliminar ({selectedIds.size})
             </Button>
           )}
+          <div className="relative w-full sm:w-64">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search className="h-4 w-4 text-slate-400" />
+            </div>
+            <Input
+              type="text"
+              placeholder="Buscar por cliente, nº o título..."
+              className="pl-9 py-2 w-full"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
           {isEscritorio && (
             <Link to="/missions/new" className="w-full sm:w-auto">
               <Button className="w-full sm:w-auto flex items-center justify-center gap-2">
