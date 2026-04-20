@@ -86,10 +86,22 @@ const AppContext = createContext<AppState | undefined>(undefined);
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [users] = useState<User[]>(mockUsers);
-  const [clients, setClients] = useState<Client[]>(mockClients);
-  const [missions, setMissions] = useState<Mission[]>(mockMissions);
-  const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
-  const [sales, setSales] = useState<TacticalSale[]>(mockSales);
+  const [clients, setClients] = useState<Client[]>(() => {
+    const saved = localStorage.getItem('app_clients');
+    return saved ? JSON.parse(saved) : mockClients;
+  });
+  const [missions, setMissions] = useState<Mission[]>(() => {
+    const saved = localStorage.getItem('app_missions');
+    return saved ? JSON.parse(saved) : mockMissions;
+  });
+  const [alerts, setAlerts] = useState<Alert[]>(() => {
+    const saved = localStorage.getItem('app_alerts');
+    return saved ? JSON.parse(saved) : mockAlerts;
+  });
+  const [sales, setSales] = useState<TacticalSale[]>(() => {
+    const saved = localStorage.getItem('app_sales');
+    return saved ? JSON.parse(saved) : mockSales;
+  });
   const [activations, setActivations] = useState<Activation[]>(() => {
     const saved = localStorage.getItem('app_activations');
     if (saved) {
@@ -103,12 +115,16 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   });
   const [dbConfigured, setDbConfigured] = useState(true);
 
-  // Save activations to localStorage whenever they change
+  // Save to localStorage whenever they change
   useEffect(() => {
     if (!dbConfigured) {
       localStorage.setItem('app_activations', JSON.stringify(activations));
+      localStorage.setItem('app_clients', JSON.stringify(clients));
+      localStorage.setItem('app_missions', JSON.stringify(missions));
+      localStorage.setItem('app_alerts', JSON.stringify(alerts));
+      localStorage.setItem('app_sales', JSON.stringify(sales));
     }
-  }, [activations, dbConfigured]);
+  }, [activations, clients, missions, alerts, sales, dbConfigured]);
 
   // Inicializar DB y cargar datos
   useEffect(() => {
