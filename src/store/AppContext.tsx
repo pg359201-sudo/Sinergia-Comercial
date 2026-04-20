@@ -132,6 +132,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
           if (Array.isArray(clientsData) && clientsData.length > 0) {
             const mappedClients = clientsData.map((c: any) => ({
               id: c.id, 
+              clientNumber: c.client_number,
               name: cleanClientName(c.name), 
               address: c.address, 
               route: c.route,

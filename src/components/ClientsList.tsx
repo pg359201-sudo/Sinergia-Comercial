@@ -89,6 +89,12 @@ export const ClientsList = () => {
                       <h3 className="font-bold text-slate-900 text-base line-clamp-1">{client.name}</h3>
                     </div>
                     <div className="flex items-center flex-wrap gap-x-3 gap-y-1 mt-1 text-[11px] text-slate-400">
+                      {client.clientNumber && (
+                        <div className="flex items-center gap-1">
+                          <span className="uppercase tracking-wider opacity-70">Nº Cliente:</span>
+                          <span className="font-medium text-slate-500">{client.clientNumber}</span>
+                        </div>
+                      )}
                       <div className="flex items-center gap-1">
                         <span className="uppercase tracking-wider opacity-70">UC 12mm:</span>
                         <span className="font-medium text-slate-500 truncate max-w-[100px]">{formatUC12mm(client.uc12mm)}</span>

@@ -73,6 +73,7 @@ export const ClientDetail = () => {
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs text-slate-600 mt-1">
               <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5 text-slate-400" /> Visita: {client.visitDay}</span>
               <span className="flex items-center gap-1.5 text-indigo-600 font-medium">{client.route}</span>
+              {client.clientNumber && <span className="flex items-center gap-1.5 text-slate-500 font-medium">Nº Cliente: {client.clientNumber}</span>}
               {client.uc12mm && <span className="flex items-center gap-1.5 text-slate-500 font-medium">UC 12mm: {formatUC12mm(client.uc12mm)}</span>}
             </div>
           </div>

@@ -8,6 +8,7 @@ export interface User {
 
 export interface Client {
   id: string;
+  clientNumber?: string;
   name: string;
   address: string;
   route: string;

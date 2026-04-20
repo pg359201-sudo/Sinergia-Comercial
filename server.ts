@@ -47,6 +47,9 @@ export async function startServer() {
         ALTER TABLE clients ADD COLUMN IF NOT EXISTS uc12mm VARCHAR(100);
       `;
       await sql`
+        ALTER TABLE clients ADD COLUMN IF NOT EXISTS client_number VARCHAR(255);
+      `;
+      await sql`
         CREATE TABLE IF NOT EXISTS missions (
           id VARCHAR(255) PRIMARY KEY,
           title VARCHAR(255) NOT NULL,
@@ -147,6 +150,7 @@ export async function startServer() {
             // Update existing client
             await sql`
               UPDATE clients SET 
+                client_number = ${c.clientNumber},
                 address = ${c.address},
                 route = ${c.route},
                 visit_day = ${c.visitDay},
@@ -158,8 +162,8 @@ export async function startServer() {
           } else {
             // Insert new client
             await sql`
-              INSERT INTO clients (id, name, address, route, visit_day, channel, gec, uc12mm)
-              VALUES (${c.id}, ${c.name}, ${c.address}, ${c.route}, ${c.visitDay}, ${c.channel}, ${c.gec}, ${c.uc12mm})
+              INSERT INTO clients (id, client_number, name, address, route, visit_day, channel, gec, uc12mm)
+              VALUES (${c.id}, ${c.clientNumber}, ${c.name}, ${c.address}, ${c.route}, ${c.visitDay}, ${c.channel}, ${c.gec}, ${c.uc12mm})
             `;
           }
           inserted++;

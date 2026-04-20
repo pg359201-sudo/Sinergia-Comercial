@@ -42,6 +42,7 @@ export const Layout = () => {
           let gecColIndex = -1;
           let rutaVentaColIndex = -1;
           let uc12mmColIndex = -1;
+          let clientNumberColIndex = -1;
           
           // Buscar dinámicamente en qué columna están los datos
           for (let c = 0; c < row2.length; c++) {
@@ -57,6 +58,8 @@ export const Layout = () => {
               rutaVentaColIndex = c;
             } else if (normalized === 'uc12mm') {
               uc12mmColIndex = c;
+            } else if (normalized === '#cliente' || normalized === 'nºcliente' || normalized === 'numerocliente') {
+              clientNumberColIndex = c;
             }
           }
 
@@ -69,10 +72,13 @@ export const Layout = () => {
               const gec = gecColIndex !== -1 ? data[i][gecColIndex] : null;
               const rutaVenta = rutaVentaColIndex !== -1 ? data[i][rutaVentaColIndex] : null;
               const uc12mm = uc12mmColIndex !== -1 ? data[i][uc12mmColIndex] : null;
+              // Provide a fallback to index 0 if not explicitly found but column headers are weird
+              const cNumValue = clientNumberColIndex !== -1 ? data[i][clientNumberColIndex] : data[i][0];
 
               if (razonSocial && typeof razonSocial === 'string' && razonSocial.trim() !== '') {
                 newClients.push({
                   id: `c${Date.now()}-${i}`,
+                  clientNumber: cNumValue ? String(cNumValue).trim() : '',
                   name: razonSocial.trim(),
                   address: 'Sin dirección',
                   route: rutaVenta ? String(rutaVenta).trim() : 'Sin ruta',
