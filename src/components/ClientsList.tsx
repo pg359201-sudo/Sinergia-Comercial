@@ -23,7 +23,9 @@ export const ClientsList = () => {
   const filteredClients = clients
     .filter(client => {
       const term = searchTerm.toLowerCase();
-      return client.name.toLowerCase().includes(term);
+      const matchName = client.name.toLowerCase().includes(term);
+      const matchNumber = client.clientNumber?.toLowerCase().includes(term);
+      return matchName || matchNumber;
     })
     .sort((a, b) => parseUC12mm(b.uc12mm) - parseUC12mm(a.uc12mm));
 
