@@ -59,11 +59,39 @@ export const NewMissionForm = () => {
             />
           </div>
 
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="isGeneral"
+                checked={isGeneral}
+                onChange={(e) => setIsGeneral(e.target.checked)}
+                className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+              />
+              <Label htmlFor="isGeneral" className="text-xs font-normal text-slate-500">
+                Misión General (Sin cliente específico)
+              </Label>
+            </div>
+
+            {!isGeneral && (
+              <div className="relative z-50">
+                <Label htmlFor="client" className="mb-2 block">Cliente (PDV)</Label>
+                <ClientSelect
+                  clients={clients}
+                  value={clientId}
+                  onChange={setClientId}
+                  disabled={isGeneral}
+                  className="focus:ring-indigo-500 focus:border-indigo-500"
+                />
+              </div>
+            )}
+          </div>
+
           <div>
             <Label htmlFor="category" className="mb-2 block">Categoría</Label>
             <select
               id="category"
-              className="block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-xl border"
+              className="block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-xl border bg-white"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               required
@@ -88,34 +116,6 @@ export const NewMissionForm = () => {
               onChange={(e) => setDescription(e.target.value)}
               required
             />
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                id="isGeneral"
-                checked={isGeneral}
-                onChange={(e) => setIsGeneral(e.target.checked)}
-                className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
-              />
-              <Label htmlFor="isGeneral" className="text-xs font-normal text-slate-500">
-                Misión General (Sin cliente específico)
-              </Label>
-            </div>
-
-            {!isGeneral && (
-              <div>
-                <Label htmlFor="client" className="mb-2 block">Cliente (PDV)</Label>
-                <ClientSelect
-                  clients={clients}
-                  value={clientId}
-                  onChange={setClientId}
-                  disabled={isGeneral}
-                  className="focus:ring-indigo-500 focus:border-indigo-500"
-                />
-              </div>
-            )}
           </div>
 
           <div className="pt-4 border-t border-slate-100 flex justify-end gap-3">
