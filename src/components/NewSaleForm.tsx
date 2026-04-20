@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/AppContext';
 import { Card, Button, Label, Input } from './ui';
+import { ClientSelect } from './ClientSelect';
 import { ArrowLeft, ShoppingCart } from 'lucide-react';
 
 export const NewSaleForm = () => {
@@ -44,17 +45,12 @@ export const NewSaleForm = () => {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <Label htmlFor="client" className="mb-2 block text-sm md:text-base">Cliente (PDV)</Label>
-            <select
-              id="client"
-              className="block w-full pl-3 pr-10 py-3 text-base border-slate-300 focus:outline-none focus:ring-[#8A7F53] focus:border-[#8A7F53] rounded-xl border bg-white"
+            <ClientSelect
+              clients={clients}
               value={clientId}
-              onChange={(e) => setClientId(e.target.value)}
-              required
-            >
-              {[...clients].sort((a, b) => a.name.localeCompare(b.name)).map(c => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-            </select>
+              onChange={setClientId}
+              className="focus:ring-[#8A7F53] focus:border-[#8A7F53]"
+            />
           </div>
 
           <div>

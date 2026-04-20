@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppStore } from '../store/AppContext';
 import { Card, Button, Label, Input } from './ui';
+import { ClientSelect } from './ClientSelect';
 import { ArrowLeft } from 'lucide-react';
 
 export const NewMissionForm = () => {
@@ -106,17 +107,13 @@ export const NewMissionForm = () => {
             {!isGeneral && (
               <div>
                 <Label htmlFor="client" className="mb-2 block">Cliente (PDV)</Label>
-                <select
-                  id="client"
-                  className="block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-xl border"
+                <ClientSelect
+                  clients={clients}
                   value={clientId}
-                  onChange={(e) => setClientId(e.target.value)}
-                  required={!isGeneral}
-                >
-                  {[...clients].sort((a, b) => a.name.localeCompare(b.name)).map(c => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
-                  ))}
-                </select>
+                  onChange={setClientId}
+                  disabled={isGeneral}
+                  className="focus:ring-indigo-500 focus:border-indigo-500"
+                />
               </div>
             )}
           </div>

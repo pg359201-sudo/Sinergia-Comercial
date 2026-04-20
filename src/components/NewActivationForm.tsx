@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/AppContext';
 import { Card, Button, Label, Input } from './ui';
+import { ClientSelect } from './ClientSelect';
 import { ArrowLeft, Camera, Upload, CheckCircle2 } from 'lucide-react';
 import { compressAndUploadImage } from '../utils/imageUpload';
 
@@ -83,17 +84,12 @@ export const NewActivationForm = () => {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <Label htmlFor="client" className="mb-2 block text-sm md:text-base">Cliente (PDV)</Label>
-            <select
-              id="client"
-              className="block w-full pl-3 pr-10 py-3 text-base border-slate-300 focus:outline-none focus:ring-[#9C7C38] focus:border-[#9C7C38] rounded-xl border bg-white"
+            <ClientSelect
+              clients={clients}
               value={clientId}
-              onChange={(e) => setClientId(e.target.value)}
-              required
-            >
-              {[...clients].sort((a, b) => a.name.localeCompare(b.name)).map(c => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-            </select>
+              onChange={setClientId}
+              className="focus:ring-[#9C7C38] focus:border-[#9C7C38]"
+            />
           </div>
 
           <div>
