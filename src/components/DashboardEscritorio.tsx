@@ -70,7 +70,7 @@ export const DashboardEscritorio = () => {
             </Link>
           </div>
           <div className="space-y-4">
-            {alerts.slice(0, 3).map(alert => (
+            {alerts.slice(0, 6).map(alert => (
               <div key={alert.id} className="p-4 rounded-xl border border-slate-100 bg-slate-50 flex flex-col gap-2">
                 <div className="flex justify-between items-start">
                   <Badge variant={alert.status === 'new' ? 'warning' : 'default'}>
@@ -93,7 +93,7 @@ export const DashboardEscritorio = () => {
             </Link>
           </div>
           <div className="space-y-4">
-            {sales.slice(0, 3).map(sale => {
+            {sales.slice(0, 6).map(sale => {
               const client = clients.find(c => c.id === sale.clientId);
               return (
                 <div key={sale.id} className="p-4 rounded-xl border border-slate-100 bg-slate-50 flex flex-col gap-2 relative">
