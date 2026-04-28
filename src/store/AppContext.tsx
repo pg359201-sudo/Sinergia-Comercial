@@ -16,7 +16,8 @@ interface AppState {
   updateMissionDetails: (id: string, title: string, description: string) => void;
   addAlert: (alert: Omit<Alert, 'id' | 'createdAt' | 'status'>) => void;
   updateAlertStatus: (id: string, status: Alert['status']) => void;
-  addSale: (sale: Omit<TacticalSale, 'id' | 'createdAt'>) => void;
+  updateSaleStatus: (id: string, status: TacticalSale['status']) => void;
+  addSale: (sale: Omit<TacticalSale, 'id' | 'createdAt' | 'status'>) => void;
   addActivation: (activation: Omit<Activation, 'id' | 'createdAt'>) => void;
   updateActivationFeedback: (id: string, feedback: string) => void;
   addClients: (newClients: Client[]) => void;
@@ -65,6 +66,7 @@ const mockSales: TacticalSale[] = [
     createdBy: 'u2',
     product: 'Whisky White Horse 750ml',
     quantity: 12,
+    status: 'pending',
     createdAt: new Date(Date.now() - 7200000).toISOString(),
   }
 ];
@@ -294,10 +296,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     } catch (error) { console.error("Error updating alert:", error); }
   };
 
-  const addSale = async (sale: Omit<TacticalSale, 'id' | 'createdAt'>) => {
+  const addSale = async (sale: Omit<TacticalSale, 'id' | 'createdAt' | 'status'>) => {
     const newSale: TacticalSale = {
       ...sale,
       id: `s${Date.now()}`,
+      status: 'pending',
       createdAt: new Date().toISOString(),
     };
     setSales(prev => [newSale, ...prev]);
@@ -308,6 +311,17 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         body: JSON.stringify(newSale)
       });
     } catch (error) { console.error("Error saving sale:", error); }
+  };
+
+  const updateSaleStatus = async (id: string, status: TacticalSale['status']) => {
+    setSales(prev => prev.map(s => s.id === id ? { ...s, status } : s));
+    try {
+      await fetch(`/api/sales/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+    } catch (error) { console.error("Error updating sale status:", error); }
   };
 
   const addActivation = async (activation: Omit<Activation, 'id' | 'createdAt'>) => {

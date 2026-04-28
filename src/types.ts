@@ -54,6 +54,7 @@ export interface TacticalSale {
   createdBy: string; // User ID (terreno)
   product: string;
   quantity: number;
+  status: 'pending' | 'completed';
   createdAt: string;
 }
 

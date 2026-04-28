@@ -7,7 +7,7 @@ import { ClipboardList, BellRing, TrendingUp, CheckCircle2 } from 'lucide-react'
 import { Link } from 'react-router-dom';
 
 export const DashboardEscritorio = () => {
-  const { missions, alerts, sales } = useAppStore();
+  const { missions, alerts, sales, clients } = useAppStore();
 
   const pendingMissions = missions.filter(m => m.status !== 'completed').length;
   const completedMissions = missions.filter(m => m.status === 'completed').length;
@@ -93,17 +93,30 @@ export const DashboardEscritorio = () => {
             </Link>
           </div>
           <div className="space-y-4">
-            {sales.slice(0, 3).map(sale => (
-              <div key={sale.id} className="p-4 rounded-xl border border-slate-100 bg-slate-50 flex flex-col gap-2">
-                <div className="flex justify-between items-start">
-                  <span className="text-sm font-bold text-slate-900">{sale.product}</span>
+            {sales.slice(0, 3).map(sale => {
+              const client = clients.find(c => c.id === sale.clientId);
+              return (
+                <div key={sale.id} className="p-4 rounded-xl border border-slate-100 bg-slate-50 flex flex-col gap-2 relative">
+                  <div className="absolute top-3 right-3">
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                      sale.status === 'completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                    }`}>
+                      {sale.status === 'completed' ? 'COMPLETADA' : 'PENDIENTE'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-start pr-20">
+                    <span className="text-sm font-bold text-slate-900">{sale.product}</span>
+                  </div>
+                  <div className="text-xs text-slate-600 bg-slate-200/50 p-2 rounded-lg truncate">
+                    {client?.name} {client?.clientNumber ? `(#${client.clientNumber})` : ''}
+                  </div>
+                  <div className="flex justify-between items-center text-xs text-slate-500 mt-1">
+                    <span className="font-medium text-slate-700">Cant: {sale.quantity}</span>
+                    <span>{format(new Date(sale.createdAt), 'HH:mm - dd MMM', { locale: es })}</span>
+                  </div>
                 </div>
-                <div className="flex justify-between items-center text-xs text-slate-500">
-                  <span>Cant: {sale.quantity}</span>
-                  <span>{format(new Date(sale.createdAt), 'HH:mm - dd MMM', { locale: es })}</span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
             {sales.length === 0 && <p className="text-sm text-slate-500 text-center py-4">No hay ventas recientes.</p>}
           </div>
         </Card>

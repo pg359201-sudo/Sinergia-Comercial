@@ -104,6 +104,7 @@ export async function startServer() {
         await sql`ALTER TABLE activations ADD COLUMN IF NOT EXISTS feedback TEXT;`;
         await sql`ALTER TABLE activations ADD COLUMN IF NOT EXISTS category VARCHAR(255);`;
         await sql`ALTER TABLE missions ADD COLUMN IF NOT EXISTS category VARCHAR(255);`;
+        await sql`ALTER TABLE sales ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'pending';`;
       } catch (e) {
         console.log("Error adding columns:", e);
       }
@@ -287,7 +288,7 @@ export async function startServer() {
       const { rows } = await sql`SELECT * FROM sales ORDER BY created_at DESC`;
       res.json(rows.map(r => ({
         id: r.id, clientId: r.client_id, createdBy: r.created_by,
-        product: r.product, quantity: r.quantity, amount: r.amount, createdAt: r.created_at
+        product: r.product, quantity: r.quantity, amount: r.amount, status: r.status, createdAt: r.created_at
       })));
     } catch (error) { res.status(500).json({ error: "Error obteniendo ventas" }); }
   });
@@ -295,13 +296,22 @@ export async function startServer() {
   app.post("/api/sales", async (req, res) => {
     if (!process.env.POSTGRES_URL) return res.status(500).json({ error: "DB no configurada" });
     try {
-      const { id, clientId, createdBy, product, quantity, amount, createdAt } = req.body;
+      const { id, clientId, createdBy, product, quantity, amount, status, createdAt } = req.body;
       await sql`
-        INSERT INTO sales (id, client_id, created_by, product, quantity, amount, created_at)
-        VALUES (${id}, ${clientId}, ${createdBy}, ${product}, ${quantity}, ${amount}, ${createdAt})
+        INSERT INTO sales (id, client_id, created_by, product, quantity, amount, status, created_at)
+        VALUES (${id}, ${clientId}, ${createdBy}, ${product}, ${quantity}, ${amount}, ${status || 'pending'}, ${createdAt})
       `;
       res.json({ success: true });
     } catch (error) { res.status(500).json({ error: "Error creando venta" }); }
+  });
+
+  app.put("/api/sales/:id", async (req, res) => {
+    if (!process.env.POSTGRES_URL) return res.status(500).json({ error: "DB no configurada" });
+    try {
+      const { status } = req.body;
+      await sql`UPDATE sales SET status = ${status} WHERE id = ${req.params.id}`;
+      res.json({ success: true });
+    } catch (error) { res.status(500).json({ error: "Error actualizando venta" }); }
   });
 
   app.delete("/api/sales", async (req, res) => {

@@ -7,7 +7,7 @@ import * as XLSX from 'xlsx';
 import { Client } from '../types';
 
 export const Layout = () => {
-  const { currentUser, logout, alerts, addClients } = useAppStore();
+  const { currentUser, logout, alerts, addClients, sales } = useAppStore();
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -116,6 +116,7 @@ export const Layout = () => {
   };
 
   const unreadAlertsCount = alerts.filter(a => a.status === 'new').length;
+  const pendingSalesCount = currentUser?.role === 'escritorio' ? sales.filter(s => s.status === 'pending').length : 0;
 
   if (currentUser.role === 'terreno') {
     const mobileNav = [
@@ -230,6 +231,11 @@ export const Layout = () => {
                   {item.name === 'Alertas' && unreadAlertsCount > 0 && (
                     <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center shadow-sm">
                       {unreadAlertsCount}
+                    </span>
+                  )}
+                  {item.name === 'Ventas Tácticas' && pendingSalesCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center shadow-sm">
+                      {pendingSalesCount}
                     </span>
                   )}
                 </div>
