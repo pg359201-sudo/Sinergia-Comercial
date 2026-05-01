@@ -3,7 +3,7 @@ import { useAppStore } from '../store/AppContext';
 import { Card, Badge, Button, Input } from './ui';
 import { Camera, Plus, Store, Calendar, Hash, Trash2, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { format } from 'date-fns';
+import { format, differenceInDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { parseImageUrls } from '../utils/imageUpload';
 
@@ -12,6 +12,9 @@ export const ActivationsList = () => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showConfirm, setShowConfirm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+
+  const now = new Date();
+  const recentActivationsCount = activations.filter(a => differenceInDays(now, new Date(a.createdAt)) <= 5).length;
 
   const getClientName = (id: string) => clients.find(c => c.id === id)?.name || 'Cliente desconocido';
   const getClientRoute = (id: string) => clients.find(c => c.id === id)?.route || '';
@@ -80,6 +83,9 @@ export const ActivationsList = () => {
             {currentUser?.role === 'terreno' 
               ? 'Tus registros fotográficos de exhibiciones y material POP.'
               : 'Monitoreo de activaciones y exhibiciones de los agentes.'}
+            <span className="inline-block ml-2 text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-medium">
+              {recentActivationsCount} en los últimos 5 días
+            </span>
           </p>
         </div>
         

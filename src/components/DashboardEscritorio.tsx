@@ -1,17 +1,20 @@
 import React from 'react';
 import { useAppStore } from '../store/AppContext';
 import { Card, Badge, Button } from './ui';
-import { format } from 'date-fns';
+import { format, differenceInDays } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { ClipboardList, BellRing, TrendingUp, CheckCircle2 } from 'lucide-react';
+import { ClipboardList, BellRing, TrendingUp, CheckCircle2, Camera } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const DashboardEscritorio = () => {
-  const { missions, alerts, sales, clients } = useAppStore();
+  const { missions, alerts, sales, clients, activations } = useAppStore();
 
   const pendingMissions = missions.filter(m => m.status !== 'completed').length;
   const completedMissions = missions.filter(m => m.status === 'completed').length;
   const newAlerts = alerts.filter(a => a.status === 'new').length;
+  
+  const now = new Date();
+  const recentActivationsCount = activations.filter(a => differenceInDays(now, new Date(a.createdAt)) <= 5).length;
 
   return (
     <div className="space-y-6">
@@ -22,7 +25,7 @@ export const DashboardEscritorio = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
         <Card className="p-6 flex items-center gap-4">
           <div className="p-3 bg-indigo-100 text-indigo-600 rounded-xl">
             <ClipboardList className="w-6 h-6" />
@@ -55,8 +58,17 @@ export const DashboardEscritorio = () => {
             <TrendingUp className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-sm font-medium text-slate-500">Ventas Tácticas (Agentes)</p>
+            <p className="text-sm font-medium text-slate-500">Ventas Tácticas</p>
             <p className="text-2xl font-bold text-slate-900">{sales.length}</p>
+          </div>
+        </Card>
+        <Card className="p-6 flex items-center gap-4">
+          <div className="p-3 bg-blue-100 text-blue-600 rounded-xl">
+            <Camera className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-slate-500">Activaciones Recientes</p>
+            <p className="text-2xl font-bold text-slate-900">{recentActivationsCount}</p>
           </div>
         </Card>
       </div>
