@@ -25,50 +25,50 @@ export const DashboardEscritorio = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-6">
-        <Card className="p-3 sm:p-4 flex flex-col gap-2 sm:gap-3">
-          <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 uppercase tracking-wide truncate">Misiones Activas</p>
-          <div className="flex items-center gap-3">
-            <div className="p-2 sm:p-3 bg-indigo-100 text-indigo-600 rounded-lg sm:rounded-xl shrink-0">
-              <ClipboardList className="w-4 h-4 sm:w-6 sm:h-6" />
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4">
+        <Card className="p-2 sm:p-3 flex flex-col gap-1.5 sm:gap-2">
+          <p className="text-[9px] sm:text-[10px] font-semibold text-slate-500 uppercase tracking-wide leading-tight">Misiones Activas</p>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="p-1.5 sm:p-2 bg-indigo-100 text-indigo-600 rounded-lg shrink-0">
+              <ClipboardList className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <p className="text-xl sm:text-3xl font-bold text-slate-900">{pendingMissions}</p>
+            <p className="text-lg sm:text-2xl font-bold text-slate-900">{pendingMissions}</p>
           </div>
         </Card>
-        <Card className="p-3 sm:p-4 flex flex-col gap-2 sm:gap-3">
-          <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 uppercase tracking-wide truncate">Misiones Cmpl.</p>
-          <div className="flex items-center gap-3">
-            <div className="p-2 sm:p-3 bg-emerald-100 text-emerald-600 rounded-lg sm:rounded-xl shrink-0">
-              <CheckCircle2 className="w-4 h-4 sm:w-6 sm:h-6" />
+        <Card className="p-2 sm:p-3 flex flex-col gap-1.5 sm:gap-2">
+          <p className="text-[9px] sm:text-[10px] font-semibold text-slate-500 uppercase tracking-wide leading-tight">Misiones Completadas</p>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="p-1.5 sm:p-2 bg-emerald-100 text-emerald-600 rounded-lg shrink-0">
+              <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <p className="text-xl sm:text-3xl font-bold text-slate-900">{completedMissions}</p>
+            <p className="text-lg sm:text-2xl font-bold text-slate-900">{completedMissions}</p>
           </div>
         </Card>
-        <Card className="p-3 sm:p-4 flex flex-col gap-2 sm:gap-3">
-          <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 uppercase tracking-wide truncate">Alertas Est.</p>
-          <div className="flex items-center gap-3">
-            <div className="p-2 sm:p-3 bg-amber-100 text-amber-600 rounded-lg sm:rounded-xl shrink-0">
-              <BellRing className="w-4 h-4 sm:w-6 sm:h-6" />
+        <Card className="p-2 sm:p-3 flex flex-col gap-1.5 sm:gap-2">
+          <p className="text-[9px] sm:text-[10px] font-semibold text-slate-500 uppercase tracking-wide leading-tight">Alertas Estratégicas</p>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="p-1.5 sm:p-2 bg-amber-100 text-amber-600 rounded-lg shrink-0">
+              <BellRing className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <p className="text-xl sm:text-3xl font-bold text-slate-900">{newAlerts}</p>
+            <p className="text-lg sm:text-2xl font-bold text-slate-900">{newAlerts}</p>
           </div>
         </Card>
-        <Card className="p-3 sm:p-4 flex flex-col gap-2 sm:gap-3">
-          <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 uppercase tracking-wide truncate">Ventas Tácticas</p>
-          <div className="flex items-center gap-3">
-            <div className="p-2 sm:p-3 bg-[#8A7F53]/10 text-[#8A7F53] rounded-lg sm:rounded-xl shrink-0">
-              <TrendingUp className="w-4 h-4 sm:w-6 sm:h-6" />
+        <Card className="p-2 sm:p-3 flex flex-col gap-1.5 sm:gap-2">
+          <p className="text-[9px] sm:text-[10px] font-semibold text-slate-500 uppercase tracking-wide leading-tight">Ventas Tácticas</p>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="p-1.5 sm:p-2 bg-[#8A7F53]/10 text-[#8A7F53] rounded-lg shrink-0">
+              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <p className="text-xl sm:text-3xl font-bold text-slate-900">{sales.length}</p>
+            <p className="text-lg sm:text-2xl font-bold text-slate-900">{sales.length}</p>
           </div>
         </Card>
-        <Card className="p-3 sm:p-4 flex flex-col gap-2 sm:gap-3">
-          <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 uppercase tracking-wide truncate">Activaciones Rec.</p>
-          <div className="flex items-center gap-3">
-            <div className="p-2 sm:p-3 bg-blue-100 text-blue-600 rounded-lg sm:rounded-xl shrink-0">
-              <Camera className="w-4 h-4 sm:w-6 sm:h-6" />
+        <Card className="p-2 sm:p-3 flex flex-col gap-1.5 sm:gap-2">
+          <p className="text-[9px] sm:text-[10px] font-semibold text-slate-500 uppercase tracking-wide leading-tight">Activaciones Recientes</p>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="p-1.5 sm:p-2 bg-blue-100 text-blue-600 rounded-lg shrink-0">
+              <Camera className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <p className={`text-xl sm:text-3xl font-bold ${recentActivationsCount === 0 ? 'text-red-500' : 'text-emerald-500'}`}>{recentActivationsCount}</p>
+            <p className={`text-lg sm:text-2xl font-bold ${recentActivationsCount === 0 ? 'text-red-500' : 'text-emerald-500'}`}>{recentActivationsCount}</p>
           </div>
         </Card>
       </div>
