@@ -27,7 +27,7 @@ export const DashboardEscritorio = () => {
 
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-6">
         <Card className="p-3 sm:p-4 flex flex-col gap-2 sm:gap-3">
-          <p className="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider truncate">Misiones Activas</p>
+          <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 uppercase tracking-wide truncate">Misiones Activas</p>
           <div className="flex items-center gap-3">
             <div className="p-2 sm:p-3 bg-indigo-100 text-indigo-600 rounded-lg sm:rounded-xl shrink-0">
               <ClipboardList className="w-4 h-4 sm:w-6 sm:h-6" />
@@ -36,7 +36,7 @@ export const DashboardEscritorio = () => {
           </div>
         </Card>
         <Card className="p-3 sm:p-4 flex flex-col gap-2 sm:gap-3">
-          <p className="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider truncate">Misiones Cmpl.</p>
+          <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 uppercase tracking-wide truncate">Misiones Cmpl.</p>
           <div className="flex items-center gap-3">
             <div className="p-2 sm:p-3 bg-emerald-100 text-emerald-600 rounded-lg sm:rounded-xl shrink-0">
               <CheckCircle2 className="w-4 h-4 sm:w-6 sm:h-6" />
@@ -45,7 +45,7 @@ export const DashboardEscritorio = () => {
           </div>
         </Card>
         <Card className="p-3 sm:p-4 flex flex-col gap-2 sm:gap-3">
-          <p className="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider truncate">Alertas Est.</p>
+          <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 uppercase tracking-wide truncate">Alertas Est.</p>
           <div className="flex items-center gap-3">
             <div className="p-2 sm:p-3 bg-amber-100 text-amber-600 rounded-lg sm:rounded-xl shrink-0">
               <BellRing className="w-4 h-4 sm:w-6 sm:h-6" />
@@ -54,7 +54,7 @@ export const DashboardEscritorio = () => {
           </div>
         </Card>
         <Card className="p-3 sm:p-4 flex flex-col gap-2 sm:gap-3">
-          <p className="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider truncate">Ventas Tácticas</p>
+          <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 uppercase tracking-wide truncate">Ventas Tácticas</p>
           <div className="flex items-center gap-3">
             <div className="p-2 sm:p-3 bg-[#8A7F53]/10 text-[#8A7F53] rounded-lg sm:rounded-xl shrink-0">
               <TrendingUp className="w-4 h-4 sm:w-6 sm:h-6" />
@@ -63,7 +63,7 @@ export const DashboardEscritorio = () => {
           </div>
         </Card>
         <Card className="p-3 sm:p-4 flex flex-col gap-2 sm:gap-3">
-          <p className="text-[11px] sm:text-xs font-semibold text-slate-500 uppercase tracking-wider truncate">Activaciones Rec.</p>
+          <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 uppercase tracking-wide truncate">Activaciones Rec.</p>
           <div className="flex items-center gap-3">
             <div className="p-2 sm:p-3 bg-blue-100 text-blue-600 rounded-lg sm:rounded-xl shrink-0">
               <Camera className="w-4 h-4 sm:w-6 sm:h-6" />
