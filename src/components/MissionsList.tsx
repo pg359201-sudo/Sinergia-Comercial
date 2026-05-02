@@ -84,7 +84,7 @@ export const MissionsList = () => {
           <h1 className="text-xl font-bold tracking-tight text-slate-900">Misiones</h1>
           <p className="mt-1 text-xs text-slate-500">
             {isEscritorio ? 'Gestiona y asigna misiones a los agentes.' : 'Tus misiones asignadas para hoy.'}
-            <span className="inline-block md:ml-2 mt-1 md:mt-0 text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-medium">
+            <span className={`inline-block md:ml-2 mt-1 md:mt-0 text-[10px] px-2 py-0.5 rounded-full font-medium ${recentMissionsCount === 0 ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`}>
               {recentMissionsCount} completadas en los últimos 5 días
             </span>
           </p>

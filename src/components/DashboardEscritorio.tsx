@@ -68,7 +68,7 @@ export const DashboardEscritorio = () => {
           </div>
           <div>
             <p className="text-sm font-medium text-slate-500">Activaciones Recientes</p>
-            <p className="text-2xl font-bold text-slate-900">{recentActivationsCount}</p>
+            <p className={`text-2xl font-bold ${recentActivationsCount === 0 ? 'text-red-500' : 'text-emerald-500'}`}>{recentActivationsCount}</p>
           </div>
         </Card>
       </div>

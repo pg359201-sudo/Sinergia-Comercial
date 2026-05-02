@@ -83,7 +83,7 @@ export const ActivationsList = () => {
             {currentUser?.role === 'terreno' 
               ? 'Tus registros fotográficos de exhibiciones y material POP.'
               : 'Monitoreo de activaciones y exhibiciones de los agentes.'}
-            <span className="inline-block ml-2 text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-medium">
+            <span className={`inline-block ml-2 text-[10px] px-2 py-0.5 rounded-full font-medium ${recentActivationsCount === 0 ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`}>
               {recentActivationsCount} en los últimos 5 días
             </span>
           </p>
