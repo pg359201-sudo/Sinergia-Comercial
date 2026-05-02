@@ -25,49 +25,49 @@ export const DashboardEscritorio = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-        <Card className="p-6 flex items-center gap-4">
-          <div className="p-3 bg-indigo-100 text-indigo-600 rounded-xl">
-            <ClipboardList className="w-6 h-6" />
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6">
+        <Card className="px-4 py-5 flex items-center gap-3 xl:gap-4">
+          <div className="p-3 bg-indigo-100 text-indigo-600 rounded-xl shrink-0">
+            <ClipboardList className="w-5 h-5 xl:w-6 xl:h-6" />
           </div>
-          <div>
-            <p className="text-sm font-medium text-slate-500">Misiones Activas</p>
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-slate-500 truncate">Misiones Activas</p>
             <p className="text-2xl font-bold text-slate-900">{pendingMissions}</p>
           </div>
         </Card>
-        <Card className="p-6 flex items-center gap-4">
-          <div className="p-3 bg-emerald-100 text-emerald-600 rounded-xl">
-            <CheckCircle2 className="w-6 h-6" />
+        <Card className="px-4 py-5 flex items-center gap-3 xl:gap-4">
+          <div className="p-3 bg-emerald-100 text-emerald-600 rounded-xl shrink-0">
+            <CheckCircle2 className="w-5 h-5 xl:w-6 xl:h-6" />
           </div>
-          <div>
-            <p className="text-sm font-medium text-slate-500">Misiones Completadas</p>
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-slate-500 truncate">Misiones Cmpl.</p>
             <p className="text-2xl font-bold text-slate-900">{completedMissions}</p>
           </div>
         </Card>
-        <Card className="p-6 flex items-center gap-4">
-          <div className="p-3 bg-amber-100 text-amber-600 rounded-xl">
-            <BellRing className="w-6 h-6" />
+        <Card className="px-4 py-5 flex items-center gap-3 xl:gap-4">
+          <div className="p-3 bg-amber-100 text-amber-600 rounded-xl shrink-0">
+            <BellRing className="w-5 h-5 xl:w-6 xl:h-6" />
           </div>
-          <div>
-            <p className="text-sm font-medium text-slate-500">Alertas Estratégicas</p>
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-slate-500 truncate">Alertas Estrateg.</p>
             <p className="text-2xl font-bold text-slate-900">{newAlerts}</p>
           </div>
         </Card>
-        <Card className="p-6 flex items-center gap-4">
-          <div className="p-3 bg-[#8A7F53]/10 text-[#8A7F53] rounded-xl">
-            <TrendingUp className="w-6 h-6" />
+        <Card className="px-4 py-5 flex items-center gap-3 xl:gap-4">
+          <div className="p-3 bg-[#8A7F53]/10 text-[#8A7F53] rounded-xl shrink-0">
+            <TrendingUp className="w-5 h-5 xl:w-6 xl:h-6" />
           </div>
-          <div>
-            <p className="text-sm font-medium text-slate-500">Ventas Tácticas</p>
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-slate-500 truncate">Ventas Tácticas</p>
             <p className="text-2xl font-bold text-slate-900">{sales.length}</p>
           </div>
         </Card>
-        <Card className="p-6 flex items-center gap-4">
-          <div className="p-3 bg-blue-100 text-blue-600 rounded-xl">
-            <Camera className="w-6 h-6" />
+        <Card className="px-4 py-5 flex items-center gap-3 xl:gap-4">
+          <div className="p-3 bg-blue-100 text-blue-600 rounded-xl shrink-0">
+            <Camera className="w-5 h-5 xl:w-6 xl:h-6" />
           </div>
-          <div>
-            <p className="text-sm font-medium text-slate-500">Activaciones Recientes</p>
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-slate-500 truncate">Activaciones Rec.</p>
             <p className={`text-2xl font-bold ${recentActivationsCount === 0 ? 'text-red-500' : 'text-emerald-500'}`}>{recentActivationsCount}</p>
           </div>
         </Card>
