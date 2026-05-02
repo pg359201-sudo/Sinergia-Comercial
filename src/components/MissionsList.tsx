@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../store/AppContext';
 import { Card, Badge, Button, Input } from './ui';
-import { format } from 'date-fns';
+import { format, differenceInDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Store, Calendar, Plus, Trash2, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -14,6 +14,9 @@ export const MissionsList = () => {
 
   const isEscritorio = currentUser?.role === 'escritorio';
   const displayMissions = isEscritorio ? missions : missions.filter(m => m.assignedTo === currentUser?.id);
+
+  const now = new Date();
+  const recentMissionsCount = displayMissions.filter(m => m.status === 'completed' && differenceInDays(now, new Date(m.createdAt)) <= 5).length;
 
   const filteredMissions = displayMissions.filter(mission => {
     if (!searchTerm.trim()) return true;
@@ -81,6 +84,9 @@ export const MissionsList = () => {
           <h1 className="text-xl font-bold tracking-tight text-slate-900">Misiones</h1>
           <p className="mt-1 text-xs text-slate-500">
             {isEscritorio ? 'Gestiona y asigna misiones a los agentes.' : 'Tus misiones asignadas para hoy.'}
+            <span className="inline-block md:ml-2 mt-1 md:mt-0 text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-medium">
+              {recentMissionsCount} completadas en los últimos 5 días
+            </span>
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
