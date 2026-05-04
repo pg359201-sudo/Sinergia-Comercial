@@ -45,7 +45,7 @@ export const RecordsList = () => {
       typePath: 'sales',
       description: `${s.product} (${s.quantity} uds)`,
       hasPhoto: false,
-      recordStatus: 'Completo',
+      recordStatus: s.status === 'completed' ? 'Completo' : 'Pendiente',
       category: '-'
     })),
     ...activations.map(a => ({
