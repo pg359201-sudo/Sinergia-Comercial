@@ -13,18 +13,17 @@ export const ActivationsList = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
+  const baseActivations = currentUser?.role === 'terreno'
+    ? activations.filter(a => a.createdBy === currentUser.id)
+    : activations;
+
   const now = new Date();
-  const recentActivationsCount = activations.filter(a => differenceInDays(now, new Date(a.createdAt)) <= 5).length;
+  const recentActivationsCount = baseActivations.filter(a => differenceInDays(now, new Date(a.createdAt)) <= 5).length;
 
   const getClientName = (id: string) => clients.find(c => c.id === id)?.name || 'Cliente desconocido';
   const getClientRoute = (id: string) => clients.find(c => c.id === id)?.route || '';
   const getClientNumber = (id: string) => clients.find(c => c.id === id)?.clientNumber || '';
   const getUserName = (id: string) => users.find(u => u.id === id)?.name || 'Usuario desconocido';
-
-  // Terreno only sees their own activations, Escritorio sees all
-  const baseActivations = currentUser?.role === 'terreno'
-    ? activations.filter(a => a.createdBy === currentUser.id)
-    : activations;
 
   const filteredActivations = baseActivations.filter(a => {
     if (!searchTerm.trim()) return true;
