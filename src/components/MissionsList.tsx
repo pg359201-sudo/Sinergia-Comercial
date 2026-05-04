@@ -16,7 +16,7 @@ export const MissionsList = () => {
   const displayMissions = isEscritorio ? missions : missions.filter(m => m.assignedTo === currentUser?.id);
 
   const now = new Date();
-  const recentMissionsCount = displayMissions.filter(m => m.status === 'completed' && differenceInDays(now, new Date(m.createdAt)) <= 5).length;
+  const recentMissionsCount = displayMissions.filter(m => m.status === 'completed' && differenceInDays(now, new Date(m.completedAt || m.createdAt)) <= 5).length;
 
   const filteredMissions = displayMissions.filter(mission => {
     if (!searchTerm.trim()) return true;

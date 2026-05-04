@@ -120,9 +120,16 @@ export const RecordDetail = () => {
               </div>
               <div>
                 <p className="text-sm text-slate-500 font-medium mb-1">Estado</p>
-                <Badge variant={recordData.status === 'completed' ? 'success' : recordData.status === 'in-progress' ? 'warning' : 'default'}>
-                  {recordData.status === 'completed' ? 'Completada' : recordData.status === 'in-progress' ? 'En Progreso' : 'Pendiente'}
-                </Badge>
+                <div className="flex items-center gap-3">
+                  <Badge variant={recordData.status === 'completed' ? 'success' : recordData.status === 'in-progress' ? 'warning' : 'default'}>
+                    {recordData.status === 'completed' ? 'Completada' : recordData.status === 'in-progress' ? 'En Progreso' : 'Pendiente'}
+                  </Badge>
+                  {recordData.completedAt && (
+                    <span className="text-xs text-slate-500">
+                      {format(new Date(recordData.completedAt), "d MMM, HH:mm 'hrs'", { locale: es })}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           )}

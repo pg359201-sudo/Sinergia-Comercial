@@ -17,12 +17,12 @@ export const RecordsList = () => {
   const allRecords = [
     ...missions.map(m => ({
       id: m.id,
-      date: m.createdAt,
+      date: m.completedAt || m.createdAt,
       clientId: m.clientId,
       type: 'Misión',
       typePath: 'missions',
       description: m.title,
-      hasPhoto: false,
+      hasPhoto: !!m.evidenceUrl,
       recordStatus: m.status === 'completed' ? 'Completo' : 'Pendiente',
       category: m.category || '-'
     })),
