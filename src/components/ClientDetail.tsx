@@ -158,8 +158,11 @@ export const ClientDetail = () => {
                           <p className="text-slate-500 text-xs mt-0.5">Cantidad: {s.quantity}</p>
                         </div>
                       </div>
-                      <div className="pt-2 border-t border-slate-100 text-xs text-slate-500">
-                        Vendido por: <span className="font-medium text-slate-700">{getUserName(s.createdBy)}</span>
+                      <div className="flex flex-wrap gap-2 items-center text-xs pt-2 border-t border-slate-100">
+                        <Badge variant={s.status === 'completed' ? 'success' : 'warning'} className="text-[10px] px-1.5 py-0">
+                          {s.status === 'completed' ? 'Completada' : 'Pendiente'}
+                        </Badge>
+                        <span className="text-slate-500">Vendido por: <span className="font-medium text-slate-700">{getUserName(s.createdBy)}</span></span>
                       </div>
                     </div>
                   </Card>
