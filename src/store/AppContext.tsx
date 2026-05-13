@@ -442,7 +442,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   return (
     <AppContext.Provider value={{
       currentUser, users, clients, missions, alerts, sales, activations,
-      login, logout, addMission, updateMissionStatus, updateMissionDetails, addAlert, updateAlertStatus, addSale, addActivation, updateActivationFeedback, addClients,
+      login, logout, addMission, updateMissionStatus, updateMissionDetails, addAlert, updateAlertStatus, updateSaleStatus, addSale, addActivation, updateActivationFeedback, addClients,
       deleteMissions, deleteAlerts, deleteSales, deleteActivations
     }}>
       {children}
