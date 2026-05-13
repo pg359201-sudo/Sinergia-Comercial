@@ -314,12 +314,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   };
 
   const updateSaleStatus = async (id: string, status: TacticalSale['status']) => {
-    setSales(prev => prev.map(s => s.id === id ? { ...s, status } : s));
+    const completedAt = status === 'completed' ? new Date().toISOString() : undefined;
+    setSales(prev => prev.map(s => s.id === id ? { ...s, status, completedAt } : s));
     try {
       await fetch(`/api/sales/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status })
+        body: JSON.stringify({ status, completedAt })
       });
     } catch (error) { console.error("Error updating sale status:", error); }
   };

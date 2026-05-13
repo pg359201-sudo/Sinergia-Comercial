@@ -105,6 +105,7 @@ export async function startServer() {
         await sql`ALTER TABLE activations ADD COLUMN IF NOT EXISTS category VARCHAR(255);`;
         await sql`ALTER TABLE missions ADD COLUMN IF NOT EXISTS category VARCHAR(255);`;
         await sql`ALTER TABLE sales ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'pending';`;
+        await sql`ALTER TABLE sales ADD COLUMN IF NOT EXISTS completed_at TIMESTAMP;`;
       } catch (e) {
         console.log("Error adding columns:", e);
       }
@@ -288,7 +289,7 @@ export async function startServer() {
       const { rows } = await sql`SELECT * FROM sales ORDER BY created_at DESC`;
       res.json(rows.map(r => ({
         id: r.id, clientId: r.client_id, createdBy: r.created_by,
-        product: r.product, quantity: r.quantity, amount: r.amount, status: r.status, createdAt: r.created_at
+        product: r.product, quantity: r.quantity, amount: r.amount, status: r.status, createdAt: r.created_at, completedAt: r.completed_at
       })));
     } catch (error) { res.status(500).json({ error: "Error obteniendo ventas" }); }
   });
@@ -308,8 +309,12 @@ export async function startServer() {
   app.put("/api/sales/:id", async (req, res) => {
     if (!process.env.POSTGRES_URL) return res.status(500).json({ error: "DB no configurada" });
     try {
-      const { status } = req.body;
-      await sql`UPDATE sales SET status = ${status} WHERE id = ${req.params.id}`;
+      const { status, completedAt } = req.body;
+      if (completedAt) {
+        await sql`UPDATE sales SET status = ${status}, completed_at = ${completedAt} WHERE id = ${req.params.id}`;
+      } else {
+        await sql`UPDATE sales SET status = ${status} WHERE id = ${req.params.id}`;
+      }
       res.json({ success: true });
     } catch (error) { res.status(500).json({ error: "Error actualizando venta" }); }
   });

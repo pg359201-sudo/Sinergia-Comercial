@@ -144,6 +144,11 @@ export const SalesList = () => {
                   }`}>
                     {sale.status === 'completed' ? 'COMPLETADA' : 'PENDIENTE'}
                   </span>
+                  {sale.status === 'completed' && sale.completedAt && (
+                    <span className="text-[10px] text-slate-500 font-medium">
+                      {new Date(sale.completedAt).toLocaleDateString('es-AR')} {new Date(sale.completedAt).toLocaleTimeString('es-AR', {hour: '2-digit', minute:'2-digit'})}
+                    </span>
+                  )}
                 </div>
 
                 {isEscritorio && sale.status === 'pending' && (
