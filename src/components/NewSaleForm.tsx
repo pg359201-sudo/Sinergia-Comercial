@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../store/AppContext';
-import { Card, Button, Label, Input } from './ui';
+import { Card, Button, Label, Input, Textarea } from './ui';
 import { ClientSelect } from './ClientSelect';
 import { ArrowLeft, ShoppingCart } from 'lucide-react';
 
@@ -54,13 +54,13 @@ export const NewSaleForm = () => {
           </div>
 
           <div>
-            <Label htmlFor="product" className="mb-2 block text-sm md:text-base">Producto</Label>
-            <Input
+            <Label htmlFor="product" className="mb-2 block text-sm md:text-base">Producto(s)</Label>
+            <Textarea
               id="product"
-              className="py-3 h-12 text-base rounded-xl"
+              className="py-3 text-base rounded-xl min-h-[120px]"
               value={product}
               onChange={(e) => setProduct(e.target.value)}
-              placeholder="Ej: Whisky White Horse 750ml"
+              placeholder="Ej:&#10;Whisky White Horse 750ml&#10;Vodka Smirnoff 1L"
               required
             />
           </div>
