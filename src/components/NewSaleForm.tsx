@@ -56,7 +56,7 @@ export const NewSaleForm = () => {
             <Label htmlFor="product" className="mb-2 block text-sm md:text-base">Producto(s)</Label>
             <Textarea
               id="product"
-              className="py-3 text-base rounded-xl min-h-[120px]"
+              className="py-3 text-base rounded-xl min-h-[160px] md:min-h-[200px] resize-y"
               value={product}
               onChange={(e) => setProduct(e.target.value)}
               placeholder="Ej:&#10;Whisky White Horse 750ml&#10;Vodka Smirnoff 1L"
