@@ -43,7 +43,7 @@ export const RecordsList = () => {
       clientId: s.clientId,
       type: 'Venta Táctica',
       typePath: 'sales',
-      description: `${s.product} (${s.quantity} uds)`,
+      description: s.product,
       hasPhoto: false,
       recordStatus: s.status === 'completed' ? 'Completo' : 'Pendiente',
       category: '-'

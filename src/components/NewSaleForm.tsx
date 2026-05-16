@@ -10,16 +10,15 @@ export const NewSaleForm = () => {
   const { clients, addSale, currentUser } = useAppStore();
   
   const [product, setProduct] = useState('');
-  const [quantity, setQuantity] = useState(1);
   const [clientId, setClientId] = useState(clients[0]?.id || '');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!product || !clientId || quantity <= 0) return;
+    if (!product || !clientId) return;
 
     addSale({
       product,
-      quantity,
+      quantity: 1,
       clientId,
       createdBy: currentUser!.id,
     });
@@ -61,19 +60,6 @@ export const NewSaleForm = () => {
               value={product}
               onChange={(e) => setProduct(e.target.value)}
               placeholder="Ej:&#10;Whisky White Horse 750ml&#10;Vodka Smirnoff 1L"
-              required
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="quantity" className="mb-2 block text-sm md:text-base">Cantidad</Label>
-            <Input
-              id="quantity"
-              type="number"
-              min="1"
-              className="py-3 h-12 text-base rounded-xl"
-              value={quantity}
-              onChange={(e) => setQuantity(Number(e.target.value))}
               required
             />
           </div>

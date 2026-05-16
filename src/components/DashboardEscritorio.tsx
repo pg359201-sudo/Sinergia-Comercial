@@ -122,8 +122,7 @@ export const DashboardEscritorio = () => {
                   <div className="text-xs text-slate-600 bg-slate-200/50 p-2 rounded-lg truncate">
                     {client?.name} {client?.clientNumber ? `(#${client.clientNumber})` : ''}
                   </div>
-                  <div className="flex justify-between items-center text-xs text-slate-500 mt-1">
-                    <span className="font-medium text-slate-700">Cant: {sale.quantity}</span>
+                  <div className="flex justify-end items-center text-xs text-slate-500 mt-1">
                     <span>{format(new Date(sale.createdAt), 'HH:mm - dd MMM', { locale: es })}</span>
                   </div>
                 </div>

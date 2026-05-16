@@ -90,16 +90,10 @@ export const SalesList = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm font-semibold text-slate-500 mb-1">Cantidad Total:</p>
-                  <p className="text-base text-slate-900">{detailSale.quantity}</p>
-                </div>
                 <div>
                   <p className="text-sm font-semibold text-slate-500 mb-1">Agente:</p>
                   <p className="text-base text-slate-900">{getUserName(detailSale.createdBy)}</p>
                 </div>
-              </div>
 
               <div>
                 <p className="text-sm font-semibold text-slate-500 mb-1">Fecha de Registro:</p>
@@ -183,10 +177,7 @@ export const SalesList = () => {
                 </span>
               </div>
               
-              <h3 className="text-base md:text-lg font-bold text-slate-900 mb-1">{sale.product}</h3>
-              <div className="flex justify-between items-end mb-2 md:mb-4">
-                <span className="text-xs md:text-sm text-slate-600">Cant: {sale.quantity}</span>
-              </div>
+              <h3 className="text-base md:text-lg font-bold text-slate-900 mb-2 md:mb-4">{sale.product}</h3>
               
               <div className="space-y-1.5 md:space-y-2 mt-auto pt-2 md:pt-3 border-t border-slate-100">
                 <div className="flex items-start gap-1.5 md:gap-2 text-xs md:text-sm text-slate-600">

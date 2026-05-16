@@ -155,7 +155,6 @@ export const ClientDetail = () => {
                       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mt-1 mb-3">
                         <div>
                           <p className="text-slate-800 font-medium text-sm">{s.product}</p>
-                          <p className="text-slate-500 text-xs mt-0.5">Cantidad: {s.quantity}</p>
                         </div>
                       </div>
                       <div className="flex flex-wrap gap-2 items-center text-xs pt-2 border-t border-slate-100">

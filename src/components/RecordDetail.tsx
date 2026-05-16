@@ -157,14 +157,10 @@ export const RecordDetail = () => {
 
           {type === 'sales' && (
             <div className="space-y-4 bg-slate-50 p-5 rounded-xl border border-slate-100">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4">
                 <div>
-                  <p className="text-sm text-slate-500 font-medium">Producto Vendido</p>
-                  <p className="font-bold text-slate-900 text-lg">{recordData.product}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-slate-500 font-medium">Cantidad</p>
-                  <p className="font-bold text-slate-900 text-lg">{recordData.quantity} unidades</p>
+                  <p className="text-sm text-slate-500 font-medium">Producto(s) Vendido(s)</p>
+                  <p className="font-bold text-slate-900 text-lg whitespace-pre-wrap">{recordData.product}</p>
                 </div>
               </div>
             </div>
