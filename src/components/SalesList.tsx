@@ -10,7 +10,7 @@ export const SalesList = () => {
   const { currentUser, sales, clients, users, deleteSales, updateSaleStatus } = useAppStore();
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showConfirm, setShowConfirm] = useState(false);
-  const [saleToComplete, setSaleToComplete] = useState<string | null>(null);
+  const [selectedSaleDetail, setSelectedSaleDetail] = useState<string | null>(null);
 
   const isEscritorio = currentUser?.role === 'escritorio';
   const displaySales = isEscritorio ? sales : sales.filter(s => s.createdBy === currentUser?.id);
@@ -31,6 +31,13 @@ export const SalesList = () => {
     setShowConfirm(false);
   };
 
+  const getUserName = (id: string) => {
+    return users.find(u => u.id === id)?.name || 'Usuario desconocido';
+  };
+
+  const detailSale = sales.find(s => s.id === selectedSaleDetail);
+  const detailClient = detailSale ? clients.find(c => c.id === detailSale.clientId) : null;
+
   return (
     <div className="space-y-6 relative">
       {showConfirm && (
@@ -50,21 +57,75 @@ export const SalesList = () => {
         </div>
       )}
 
-      {saleToComplete && (
+      {selectedSaleDetail && detailSale && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-          <div className="bg-white rounded-xl p-6 max-w-sm w-full shadow-xl">
-            <h3 className="text-lg font-bold text-slate-900 mb-2">Completar venta</h3>
-            <p className="text-slate-600 mb-6">
-              ¿Estás seguro de que deseas marcar esta venta como completada?
-            </p>
-            <div className="flex justify-end gap-3">
-              <Button variant="ghost" onClick={() => setSaleToComplete(null)}>Cancelar</Button>
-              <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => {
-                updateSaleStatus(saleToComplete, 'completed');
-                setSaleToComplete(null);
-              }}>
-                Completar
+          <div className="bg-white rounded-xl p-6 max-w-lg w-full shadow-xl max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-xl font-bold text-slate-900">Detalle de Venta</h3>
+              <div className="flex items-center gap-2">
+                <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${
+                  detailSale.status === 'completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                }`}>
+                  {detailSale.status === 'completed' ? 'COMPLETADA' : 'PENDIENTE'}
+                </span>
+              </div>
+            </div>
+            
+            <div className="space-y-4 mb-6">
+              <div className="bg-slate-50 p-4 rounded-lg">
+                <div className="flex items-start gap-2 mb-2">
+                  <Store className="w-5 h-5 text-slate-400 shrink-0" />
+                  <div>
+                    <p className="font-bold text-slate-900">{detailClient?.name || 'Cliente desconocido'}</p>
+                    <p className="text-sm text-slate-500">{detailClient?.address}</p>
+                    {detailClient?.clientNumber && <p className="text-sm text-slate-500">Nº {detailClient.clientNumber}</p>}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold text-slate-500 mb-1">Producto(s):</p>
+                <div className="bg-slate-50 p-3 rounded-lg text-sm text-slate-800 whitespace-pre-wrap select-all">
+                  {detailSale.product}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm font-semibold text-slate-500 mb-1">Cantidad Total:</p>
+                  <p className="text-base text-slate-900">{detailSale.quantity}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-slate-500 mb-1">Agente:</p>
+                  <p className="text-base text-slate-900">{getUserName(detailSale.createdBy)}</p>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold text-slate-500 mb-1">Fecha de Registro:</p>
+                <p className="text-base text-slate-900">{format(new Date(detailSale.createdAt), "d 'de' MMMM, yyyy HH:mm", { locale: es })}</p>
+              </div>
+
+              {detailSale.status === 'completed' && detailSale.completedAt && (
+                <div>
+                  <p className="text-sm font-semibold text-slate-500 mb-1">Fecha de Completado:</p>
+                  <p className="text-base text-slate-900">{format(new Date(detailSale.completedAt), "d 'de' MMMM, yyyy HH:mm", { locale: es })}</p>
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+              <Button variant="ghost" onClick={() => setSelectedSaleDetail(null)}>
+                {detailSale.status === 'completed' ? 'Cerrar' : 'Cancelar'}
               </Button>
+              {detailSale.status === 'pending' && (
+                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => {
+                  updateSaleStatus(detailSale.id, 'completed');
+                  setSelectedSaleDetail(null);
+                }}>
+                  Completar Venta
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -151,12 +212,12 @@ export const SalesList = () => {
                   )}
                 </div>
 
-                {isEscritorio && sale.status === 'pending' && (
+                {isEscritorio && (
                   <div className="flex gap-2 mt-2 md:mt-4">
-                    <Button variant="primary" className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-xs md:text-sm h-8 md:h-10" onClick={() => {
-                      setSaleToComplete(sale.id);
+                    <Button variant="primary" className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-xs md:text-sm h-8 md:h-10" onClick={() => {
+                      setSelectedSaleDetail(sale.id);
                     }}>
-                      Marcar Completada
+                      Ver
                     </Button>
                   </div>
                 )}
