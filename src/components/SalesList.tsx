@@ -213,8 +213,8 @@ export const SalesList = () => {
                 </div>
 
                 {isEscritorio && (
-                  <div className="flex gap-2 mt-2 md:mt-4">
-                    <Button variant="primary" className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-xs md:text-sm h-8 md:h-10" onClick={() => {
+                  <div className="flex justify-end mt-2 md:mt-4">
+                    <Button variant="primary" className="bg-indigo-600 hover:bg-indigo-700 text-xs md:text-sm h-8 md:h-10 px-6" onClick={() => {
                       setSelectedSaleDetail(sale.id);
                     }}>
                       Ver
